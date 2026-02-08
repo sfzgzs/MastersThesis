@@ -1,0 +1,14 @@
+This section is a first step towards proving that elementary functions are acceptable.
+In this section, we present an inductive construction for an effective open exhaustion for the domain of any arbitrary elementary function.
+To simplify the proofs, we will strengthen the claim and prove the following statement:
+\begin{center}
+    For any open set $U$ with an \effectiveopenexhaustion{}, $f^{-1}(U)$ has an effective open exhaustion.
+\end{center}
+In particular, this stronger formulation makes the composition case trivial.
+\begin{definition}[Exhaustion-reflecting function]
+\label{def::effectively_open_functions}
+    Let $f:\Reals\to\Reals$. We call $f$ \textit{exhaustion-reflecting} if for any open set $U$ with an effective open exhaustion, $f^{-1}(U)\neq \emptyset$ implies that $f^{-1}(U)$ has an effective open exhaustion.
+\end{definition}
+\begin{remark}
+    If $f$ is \effectivelyOpen, since $\Reals$ is an open set with an open exhaustion, $f^{-1}(\Reals)=\dom(f)$ has an effective exhaustion.
+\end{remark}    

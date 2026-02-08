@@ -1,0 +1,122 @@
+\subsection{\WhileCC-Approximability of sin(x)}
+    Since the function $\sin(x)$ is analytic on $\Reals$, we can compute sufficiently many terms of its Taylor series to get a ``sufficiently close'' approximation.
+    Considering the Taylor expansion of $\sin(x)$ expanded around $x = 0$, we get:
+    \begin{equation}
+    \label{eq::sin}
+        \sin(x) = \sum_{n=0}^{\infty} (-1)^n \frac{x^{2n+1}}{(2n+1)!}
+    \end{equation}
+    
+    To approximate $\sin(x)$, we need to figure out how many iterations of the summation above need to be calculated to achieve the desired precision.
+    Let us define the \WhileCC-procedure $\isProperIndex : \nat\times\real\times\nat\to\bool$ below:
+   \[
+   \isProperIndex \equiv 
+        \BLOCK{
+        \PROC\\
+            \INDENT{
+            \IN N:\nat\ x:\real\ c:\nat\\
+            \OUT r:\bool}\\
+        \BEGIN\\
+            \INDENT{
+            r := 
+            \BLOCK{
+            {x^{N}}\slash{\factorial(N)} \realLess\ {2}^{-c}\\
+            \land\ 2 \times x < N \\
+            \land\ 2 \times - x < N}\\
+            \RETURN r}\\
+        \END} 
+   \]
+   The semantics of the procedure $\isProperIndex$ is as below:
+    \[
+    \isProperIndex^\algebraR(N,x,c) = \curlybrac{ \true } \quad \iff \quad 
+    x^{N}/N! < 2^{-c}\ \land\ 2\abs{x} < N.
+    \]
+    The procedure $\isProperIndex$ returns true only if calculating the first $N$ terms of the series will produce a sufficiently precise approximation.
+    
+   \begin{lemma}
+   \label{lemma::isProperIndex_sin}
+       Let $c\in \Nats$ and $x \in\Reals$. Then for any $N\in\Nats$
+       \[
+       \isProperIndex^\algebraR(N, x, c) = \{\true\} \then \abs{\sin(x) - \sum_{n=0}^N (-1)^n \frac{x^{2n + 1}}{(2n + 1)!}}<2^{-c}.
+       \]
+   \end{lemma}
+   \begin{proof}
+    Let us assume $\isProperIndex^\algebraR(N, x, c) =\{\true\}$. By definition, this means that 
+    \begin{enumerate}[(i)]
+        \item 
+        \label{item::ispropindex::1-sin}
+            $x^{N}/N! < 2^{-c}$, and
+        \item 
+        \label{item::ispropindex::2-sin}
+            $2\abs{x}< N$.
+    \end{enumerate}
+    Then,
+           \begin{align*}
+                \abs{\sin(x) - \sum_{n = 0}^{N}{(-1)^n\frac{x^{2n + 1}}{(2n + 1)!}}}
+                & =\abs{\sum_{n = N + 1}^{\infty}(-1)^n\frac{x^{2n + 1}}{(2n + 1)!}}\\
+                & =\abs{\sum_{k = 1}^{\infty}(-1)^{n + k}\frac{x^{2N+2k+1}}{(2N+2k+1)!}}\\
+                & \leq\sum_{k = 1}^{\infty}\frac{\abs{x}^{2N+2k+1}}{(2N+2k+1)!} \tag{by triangle inequality} \\
+                & < \sum_{k = 1}^{\infty}\frac{1}{2^{N+2k+1}}\cdot \frac{\abs{x}^N}{N!}\tag{by assumption (\ref{item::ispropindex::2-sin}) and Lemma \ref{lemma::sum::g}}\\
+                 & < \sum_{k = 1}^{\infty}\frac{1}{2^k}\cdot\frac{\abs{x}^{N}}{N!}\\
+                 & =1 \cdot \frac{\abs{x}^{N}}{N!} \\
+                 &< 2^{-c} \tag{by assumption (\ref{item::ispropindex::1-sin})}
+            \end{align*}
+    \end{proof}
+    \begin{lemma}
+    \label{lemma::existence::sin}
+        For any $c\in \Nats$ and arbitrary $x\in\Reals$, there is some $N\in \Nats$ for which
+        \[\quad \isProperIndex^\algebraR(N, x, c) = \{ \true\}.\]
+    \end{lemma}
+   \begin{proof}
+         By Theorem \ref{thm::spivak_theorem}, choosing $\epsilon = 2^{-c}$, there exists an index $N>2\abs{x}$ sufficiently large such that $x^{N}/N! < 2^{-c}$.
+   \end{proof}
+   Now we know that for arbitrary inputs $x\in\Reals$, we \textit{can} find the necessary number of terms to calculate to get the desired precision. 
+    
+    \begin{definition}
+    \label{def::sin}
+    The \WhileCC-procedure
+    \[ 
+    \Sine\equiv 
+            \BLOCK{
+            \PROC \\
+                \INDENT{
+                \IN x:\real\ c:\nat \\
+                \AUX \counter:\nat\ N:\nat\ \summ:\real}\\
+            \BEGIN \\
+                \INDENT{
+                \counter := \natZero \\
+                \summ := \realZero \\
+                N := \CHOOSE (k : \nat) : \isProperIndex(k,x,c)\\
+                \WHILE \counter \natLess N \DO \\
+                    \INDENT{
+                    \summ := 
+                        \BLOCK{\summ\ +\\
+                            ({-1}^{\counter} \times {x^{2 \times \counter + 1}}\slash{\factorial(2 \times \counter + 1)})}\\
+                    \counter := \counter + 1}\\
+                od \\
+                \RETURN \summ}\\
+            \END}\\
+    \]
+    of type $\real\times\nat\to\real$ has the semantics
+    \[
+        \Sine^\algebraR(x,c) = \mleft\{ \sum_{n=0}^N \frac{x^{2n+1}}{(2n+1)!}  \mid \isProperIndex(N,x,c) =\{ \true\} \mright\}.
+    \] 
+\end{definition}
+The procedure $\Sine$ approximates $\sin(x)$ for any $x\in\Reals$ by calculating the first $N$ terms of the series \ref{eq::sin} where $N$ is chosen to satisfy $\isProperIndex$.
+\begin{corollary}
+\label{cor::sin}
+    For any $c\in\Nats$ and $x\in\Reals$, 
+    Using Lemma \ref{lemma::existence::sin} and Definition \ref{def::sin}, it immediately follows that 
+    \[ \Sine^\algebraR(x,c) \neq \emptyset.
+    \]
+\end{corollary}
+
+\begin{lemma}
+\label{lemma::sin-neighbourhood}
+    For any $n\in\Nats$ and $x\in\Reals$ we have 
+    \[
+    \Sine^\algebraR(x,n) \subseteq \Nbd(\sin(x), 2^{-n})
+    \]
+\end{lemma}
+\begin{proof}
+    Follows immediately from Definition \ref{def::sin} and Lemma \ref{lemma::isProperIndex_sin}.
+\end{proof}

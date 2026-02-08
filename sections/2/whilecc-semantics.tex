@@ -1,0 +1,212 @@
+\subsection{Semantics}
+In this section, we briefly review the \WhileCCprogramminglanguagesemantics{} originally given in \citet{AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004}.
+It's worth mentioning that \WhileCC-statements are interpreted as countably-many-valued state transformations, and procedures are interpreted as countably-many-valued functions on $\algebraR$.
+
+We begin by formally defining the concept of a state, then we define semantics for terms, and then for statements. We then conclude this section by giving the semantics of procedures.
+
+
+Let us review the definition of a state:
+\begin{definition}[States of an algebra, \citep{AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004}]
+    Let $A$ be a standard $\Sigma$-algebra. Then a \textit{state} on $A$ is a family $\langle \sigma_s \mid s\in \SortOfSigma \rangle$ of functions $\sigma_s: \mathbf{Var_s}\to A_s$ that maps each variable of sort $s$ to an element of $A_s$. The set of states on $A$ is called \State($A$).    
+\end{definition}
+\paragraph*{\large Notation}
+For any set $A$, $A^*$ is the set of all finite sequences in $A$, and $\powerset_\omega^+(A)$ is the set of all countable non-empty subsets of $A$. Also, let $\uparrow$ denote divergence and $\downarrow$ be an infix binary symbol denoting convergence to the second argument. 
+For a variable $v$ of type $s$, we write $\sigma(v)$ for $\sigma_s(v)$ since the type of $v$ is unambiguous.
+For a tuple $\bar{x}$ with $\abs{\bar{x}} = m$, we write $\sigma\brac{\bar{x}}$ for the tuple $(\sigma(x_1), \ldots, \sigma(x_m))$.
+Let $\sigma$ be a state on $A$, $\bar{x}:\bar{u}$ with $\abs{\bar{x}} = m$, and $\bar{a} \in A_{u_1}\times\cdots\times A_{u_m}$. The \textit{variant} $\sigma\{\bar{x}/\bar{a}\}$ is defined as
+\begin{align*}
+\sigma\{\bar{x}/\bar{a}\}(y) = &
+    \begin{cases*}
+        a_i\ & if $y\equiv x_i $\\
+        \sigma(y)\ & otherwise.\\    
+    \end{cases*}
+\end{align*}
+
+\begin{definition}[Semantics of terms, \citep{AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004}]
+The meaning of a term $t \in \Term_s$ in a \standardalgebra{} $A$    is a function 
+\[
+    \sem{t}: \State(A) \to \powerset_\omega^+(A_s\cup \{\uparrow\}).
+\]
+The definition is by structural induction on terms:
+\begin{align*}
+    \sem{x}\sigma &= \{ \sigma(x)\}\\
+    % \llb c \rrb^A\sigma &= \{ c^A\}\\
+    \sem{F(t_1, \ldots , t_m)} \sigma 
+        &= \curlybrac{y \mid \exists x_1 \in A \cap \sem{t_1} \sigma, \ldots, x_m \in A \cap \sem{t_m} \sigma : F(x_1, \ldots , x_m) \downarrow y}
+        \\ & \quad \cup 
+        \curlybrac{{\uparrow} \mid \exists x_1 \in A \cap \sem{t_1} \sigma, \ldots, x_m \in A \cap \sem{t_m} \sigma : F(x_1, \ldots , x_m) {\uparrow}}
+        \\ & \quad \cup
+        \curlybrac{{\uparrow} \mid \exists\  1 \leq i \leq m\quad {\uparrow} \in \sem{t_i}\sigma}\\
+    \sem{\mathsf{if}(b,t_1, t_2)}\sigma 
+        &= \curlybrac{ y\mid (\true \in \sem{b}\sigma \land y\in \sem{t_1}\sigma )\ \lor\ (\false \in \sem{b}\sigma \land y\in \sem{t_2}\sigma)} 
+        \\ & \quad \cup
+        \curlybrac{{\uparrow} \mid {\uparrow} \in \sem{b}\sigma}
+\end{align*}
+\end{definition}
+In order to define the semantics for statements, the algebraic operational method described in \citet{ComputableFunctionsAndSemicomputableSetsOnManySortedAlgebras-TuckerAndZucker_Handbook_2001} is used.
+Using this method, in order to define statements as state transformations,
+one should provide two main components, which will be defined below in Definition \ref{def::semantics_wcc_first_and_rest}:
+\begin{itemize}
+    \item a strict subset of statements, \textit{atomic statements} written $\AtSt$, along with a meaning function
+     $\atomicSem{\_} : \AtSt \to \State(A)\to \State(A)$
+     , and 
+    \item functions
+    \[
+        \mathbf{First: \Stmt \to AtSt}
+    \] 
+    and 
+    \[
+        \mathbf{Rest: \Stmt\times State(A) \to \powerset_{\omega}^+(\Stmt}):
+    \]
+    $\First(S)$ intuitively gives the first step in execution of $S$ in any state, and $\Rest(S, \sigma)$ is a finite set of statements that gives the rest of the execution of statement $S$ in state $\sigma$. 
+    The result of $\Rest$ depends on the start state for if-then-else statements and while loops,
+    where the condition needs to be evaluated in that state to determine the remaining statements to execute.
+    %
+    In these cases, $\First$ produces the skip statement, and can therefore be deterministic.
+    % takes a state as an argument as well as the statement, and returns a finite set of statements which represents the remaining statements to execute from that state. 
+    % \edcomm{WK}{Is ``that state'' the state after $First\ S$?}
+\end{itemize}
+\begin{definition}[Semantics of atomic statements, \citep{AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004}]
+A statement is \textit{atomic} if it is of the form $\mathsf{skip}$, $x := t$, or $x := \chooseOp (z:nat):P(z,\bar{t})$. The set of all atomic statements is denoted by $\AtSt$.
+The meaning of atomic statements in a \standardalgebra{} $A$ is a function 
+\[
+    \atomicSem{}: \AtSt \to \State(A) \to \powerset_\omega^+(\State(A)\cup \{\uparrow\})
+\]
+defined by 
+\begin{align*}
+    \atomicSem{\diverge}\sigma &= \{ {\uparrow} \}\\
+    \atomicSem{\mathsf{skip}}\sigma &= \{ \sigma\}\\
+    \atomicSem{x := t} \sigma 
+        &= \curlybrac{ \sigma\{x / a\} \mid a \in A \cap \sem{t}\sigma }
+        \\ & \quad \cup
+        \curlybrac{\uparrow\ \mid\ \uparrow\ \in \sem{t}\sigma}\\
+        \atomicSem{x := \chooseOp (z:nat):P(z,\bar{t})}\sigma &=
+    \curlybrac{ \sigma\{ x/n \} \mid n\in\Nats \land  \true \in \sem{P}(n,\sigma\brac{\bar{t}})}
+    \\ & \quad \cup
+    \curlybrac{ \uparrow\ \mid \forall n \in \Nats (\true \notin \sem{P}(n,\sigma\brac{\bar{t}}))}
+\end{align*}
+\end{definition}
+Now we need to provide the functions $\First$ and $\Rest$ for each of the non-atomic statements.
+
+\begin{definition}[The functions $\First$ and $\Rest$, \citep{AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004}]
+\label{def::semantics_wcc_first_and_rest}
+    Let $A$ be a \standardalgebra{}, $S\in \Stmt(\Sigma)$, and $\sigma\in \State(A)$. Then the function 
+    \[
+        \First: \Stmt\to\AtSt
+    \] is defined as
+    \begin{align*}
+    \First(S)= &
+        \begin{cases*}
+            S\ & if $S$ is atomic\\
+            \First(S_1)\ & if $S \equiv S_1S_2$\\
+            \mathsf{skip} \ & otherwise.
+        \end{cases*}
+    \end{align*}
+    The function 
+    \[
+        \Rest^A:\Stmt \times \State(A)\to \powerset_\omega^+(\Stmt)
+    \]
+    is defined as follows:
+    
+    \begin{itemize}
+        \item
+            If $S$ is atomic, then $\Rest^A(S, \sigma) = \curlybrac{ \mathsf{skip}}$.
+        \item
+            If $S \equiv S_1S_2$ and $S_1$ is atomic, then $\Rest^A(S, \sigma) = \curlybrac{ S_2}$. If $S \equiv S_1S_2$ and $S_1$ is not atomic, then
+            $\Rest^A(S, \sigma) = \curlybrac{ S'S_2 \mid S' \in\Rest(S_1, \sigma)} \cup \curlybrac{\diverge \mid \diverge \in \Rest^A(S_1, \sigma)}$.
+        \item 
+            If $S \equiv \mathsf{if}\ b \ \mathsf{then}\ S_1 \ \mathsf{else}\ S_2\ \mathsf{fi}$, then
+            \[
+                \Rest^A(S, \sigma) = \curlybrac{ S_1 \mid \true \in \sem{b}\sigma} \cup
+                \curlybrac{ S_2 \mid \false \in \sem{b}\sigma } \cup
+                \curlybrac{ \diverge \mid {\uparrow} \in \sem{b}\sigma}
+            \]
+        \item 
+            If $S \equiv \mathsf{while}\ b\ \mathsf{do}\ S_0\ \mathsf{od}$, then
+            \[
+                \Rest^A(S, \sigma) = \curlybrac{ S_0S \mid \true \in \sem{b}\sigma} \cup
+                \curlybrac{ \mathsf{skip} \mid \false \in \sem{b}\sigma } \cup
+                \curlybrac{ \diverge \mid {\uparrow} \in \sem{b}\sigma}
+            \]
+    \end{itemize}
+\end{definition}
+
+The above three components induce a semantics for the statements  
+$\sem{\ } : \Stmt\to\State(A)\to \powerset_\omega^+(\State(A)\cup \curlybrac{\uparrow})$.
+
+In order to define the semantics of statements, we need to define the concepts ``computation step'', ``computation tree stage'' and ``computation tree''.
+\begin{definition}[Computation step function, \citep{AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004}]
+    Let $A$ be a \standardalgebra{}. We define the \emph{computation step} function
+    \[
+        \CompStepA : \Stmt \times \State(A) \totalTo \powerset_\omega^+(A \cup \{\uparrow\})
+    \]
+    by 
+    \[
+        \CompStepA(S, \sigma) = \atomicSem{\First(S)}\sigma
+    \]
+\end{definition}
+\begin{definition}[Computation tree stage, \citep{AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004}]
+    Let $A$ be a \standardalgebra{}.  
+    We define a \emph{computation tree stage} function 
+    \[
+        \CompTreeStageA:\Stmt \times \State(A)\times \Nats \totalTo \powerset_\omega^+(\State(A\cup \{\uparrow\})^*)
+    \]
+    by induction 
+    \begin{itemize}
+        \item Induction base: $\CompTreeStageA(S, \sigma, 0) = \{ \sigma\}$
+        \item Induction step: $\CompTreeStageA(S, \sigma, n)$ is formed by attaching to the root $\{\sigma\}$ the following:
+        \begin{itemize}
+            \item if $S$ is atomic: the leaf $\{ \sigma'\}$ for each $\sigma' \in \atomicSem{S}\sigma$;
+            \item if $S$ is not atomic: the subtree $\CompTreeStageA(S',\sigma',n-1)$, for each $\sigma' \in \CompStepA(S, \sigma)$ with $\sigma\neq{} \uparrow$ and $S'\in\Rest^A(S,\sigma)$, as well as the leaf $\{\uparrow\}$ if $\uparrow \in \CompStepA(S, \sigma)$
+        \end{itemize}
+    \end{itemize}
+\end{definition}
+
+\begin{definition}[Computation tree, \citep{AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004}]
+    \label{def::comp-tree}
+    Let $A$ be a \standardalgebra{}. Then we define the function $\CompTreeA$ by 
+    \[
+        \CompTreeA(S, \sigma) \stackrel{def}= \lim_{n \to \infty} \CompTreeStageA(S, \sigma, n).
+    \] 
+\end{definition}
+\begin{remark}
+    Definition \ref{def::comp-tree} defines an $\omega$-branching tree, branching according to possible output states. Each node of this tree is labeled by either a state, or ``$\uparrow$''. Furthermore, ``$\uparrow$'' can only be a leaf node of this tree. 
+
+    Note that the limit above is well-defined, since each computation stage tree 
+    \[
+        \CompTreeStageA(S, \sigma, n+1)
+    \]
+    is an extension of 
+    \[
+        \CompTreeStageA(S, \sigma, n),
+    \] where exactly one layer of leaves is attached to leaves in $\CompTreeStageA(S, \sigma, n)$.
+    
+    Any actual computation of a statement $S$ at state $\sigma$ corresponds to one of the paths in this tree.
+\end{remark}
+\begin{definition}[Semantics of \WhileCC-statements, \citep{AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004}]
+    Let $A$ be a \standardalgebra{}. Then we define the semantics function 
+    \[
+        \sem{\  }:\Stmt\to\State(A)\to \powerset_\omega^+(\State(A\cup\{\uparrow\}))
+    \]
+    as 
+    \[
+        \sem{S}\sigma \stackrel{def}= \{ \text{leaves in }\CompTreeA(S, \sigma)\} \cup \{ \uparrow \mid \text{$\CompTreeA(S, \sigma)$ has an infinite path}\}.
+    \]
+\end{definition}
+
+
+Finally we can define the semantics for \WhileCC-procedures: 
+\begin{definition}[Semantics of \WhileCC-procedures, \citep{AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004}]
+\label{def::semantics_of_whilecc}
+    The semantics of a \WhileCC-procedure $P$ of type $\bar{u}\to\bar{v}$ with the definition
+    \[
+    P ::= \mathsf{proc} \ \mathsf{in}\ \bar{a}:\bar{u}\ \mathsf{out}\ \bar{b}:\bar{v}\ \mathsf{aux}\ \bar{c}:\bar{w}\ \mathsf{begin}\ S\ \mathsf{end}
+    \]
+    is a (many-valued) function:
+    \[
+    P^\algebraR: \algebraR_{\bar{u}} \to \mathcal{P}_\omega^+(\algebraR_{\bar{v}} \cup \{ \uparrow\})
+    \]
+    defined as
+    \[P^A(x) = \curlybrac{ \sigma'(b) \mid \sigma' \in \sem{S}\sigma} \cup \curlybrac{\uparrow\ \mid\ \uparrow\ \in \sem{S}\sigma }\]
+\end{definition}
+  

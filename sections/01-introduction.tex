@@ -1,0 +1,52 @@
+\chapter{Introduction}
+\label{sec::intro}
+% [partial, define, and why they matter?]
+
+    In this thesis, we study models of computation for the reals. Previous work \citep{ConcreteModelsTopologicalAlgebra_Tucker1999, ComputableTotalFunctionsOnMetricAlgebras_JohnTuckerAndJeffZucker} 
+    focuses on computational models for total functions. However, the class of total functions is too restrictive: many standard functions in real analysis (such as the logarithmic, square root, and inverse trigonometric functions) are partial and cannot be studied under such models. Thus, in this thesis, we focus on the computability of partial functions.
+
+% [computability classes: x, y, z, w]
+
+    Existing work \citep{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker, ComputationByWhileProgramsOnTopologicalPartialAlgebras_TuckerAndZucker, AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004}
+    studies classes of computable partial functions on $\Reals$, namely 
+\begin{itemize}
+    \setlength\itemsep{-5pt}
+    \item GL-computability,
+    \item tracking computability,
+    \item multipolynomial
+    approximability, and
+    \item \WhileCC-approximability.
+\end{itemize}
+    The first two classes correspond to concrete models of computation. In concrete models, computability depends on the representation of data. For example, an $\alpha$-tracking computable function represents each real number as a natural number. In contrast, abstract models (such as \WhileCC-programs) allow functions to be defined independently of such implementation details. For a programmer, this would be akin to writing programs against an abstract interface instead of dealing with specific implementations.
+% [What abstract vs. concrete means: Why do we care?]
+    Abstract models are easier to program in, but may not be as expressive as their concrete counterparts.
+    
+
+% [Acceptability: Why do we care?]
+    \citet{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker} show that all these four models of computation are equivalent when we restrict our attention to a specific class of functions we call ``acceptable'' functions.
+    This means, within the realm of acceptable functions, we can work with \WhileCC-approximability without giving up expressivity and transfer results amongst the models.
+    
+
+% [Are these conditions useful?]
+    However, it has been unknown whether the class of acceptable functions is sufficiently large to include many common functions, such as the elementary functions.
+    In this thesis, we solve the conjecture posed by \citet{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker} and show that all elementary functions are acceptable. We also prove that the elementary functions are \WhileCC-approximable and therefore computable in all the aforementioned models of computation. 
+
+    The contributions of this thesis are as follows:
+    \begin{itemize}
+        \item We prove that all elementary functions are \WhileCC-approximable.
+        \item We prove that all elementary functions are acceptable.
+        \item We present an alternative characterization of acceptable functions.
+    \end{itemize}
+% [Outline for the rest of the thesis]
+
+    The structure of this thesis is as follows.
+    In chapter \ref{sec::Preliminaries}, we provide some background by recalling the related definitions. In chapter \ref{sec::WhileCC-appx-elem-function}, we start by suggesting minor modifications to the definition of elementary functions and prove that these slightly modified elementary functions are \WhileCC-approximable (Definition \ref{def::whileCC-approximable}).
+    Then, in chapter \ref{sec::open_exhaustion_for_domain_of_elem_functions} we present
+    effective open exhaustions for the domains
+    of elementary functions
+    and in chapter \ref{sec::acceptability_of_elem_functions},
+    we prove that elementary functions are continuous
+    with respect to the specific open exhaustions
+    we presented inductively for their domains
+    back in chapter \ref{sec::open_exhaustion_for_domain_of_elem_functions}.
+    This concludes our proof of acceptability of elementary functions and implies that elementary functions are computable in all four models of computation mentioned above. In chapter \ref{sec::ConclusionAndFutureWork}, we conclude the thesis and discuss potential directions for future research. Then, in Appendix \ref{sec::appendix}, we provide some additional lemmas that are used in chapter \ref{sec::WhileCC-appx-elem-function}. Also, the Index at the end of this thesis provides an alphabetical listing of key terms and topics discussed, allowing for quick reference. 

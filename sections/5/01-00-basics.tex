@@ -1,0 +1,39 @@
+\section{Continuity for Basic Functions}
+\begin{theorem}[Continuity for basic functions]
+\label{thm::effective_local_uniform_continuity_basics}
+    The functions
+        \begin{itemize}
+            \item 
+                constant,
+            \item 
+                identity,
+            \item
+                 $\inv(x)=1/x$,
+            \item 
+                 $\log$,
+            \item 
+                $\exp(x)=e^x$,
+            \item 
+                $\arcsin$, and
+            \item 
+                natural root 
+        \end{itemize}
+        are effectively locally uniformly continuous w.r.t to their respective effective open exhaustions for their domains.
+\end{theorem}
+\begin{proof}
+    In each case, we can prove the alternative form of effective local uniform continuity defined in Theorem \ref{thm::alternative_characterization_for_eluc}.
+    All of the functions above are monotone on any closed interval in their domain, so we can use Lemma \ref{lemma::WCC-approximation-gives-rec-func--for-cont-on-monotone-intervals} to provide the requested recursive function for us in each case.
+\end{proof}
+
+\begin{theorem}[Continuity for $\sin$]
+\label{thm::effective_local_uniform_continuity_sin}
+    The function $\sin(x)$ is effectively locally uniformly continuous w.r.t to the effective open exhaustion given in \ref{thm::OEX_sin}.
+\end{theorem}
+\begin{proof}
+    We know that the for any $x,y\in\Reals$, the inequality $\abs{\sin(x)-\sin(y)}\leq \abs{x-y}$ holds. Hence, we can simply define the function $M(k,l) = k$ for any $k, l\in \Nats$.
+    Then for any $k, l\in \Nats$:
+    \[
+        \abs{x-y} < 2^{-k} \then \abs{\sin(x)-\sin(y)}\leq \abs{x-y} < 2^{-k} 
+    \]
+    which gives us the effective local uniform continuity.
+\end{proof}

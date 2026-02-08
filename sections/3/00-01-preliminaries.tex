@@ -1,0 +1,182 @@
+\section{Preliminary Lemmas}
+\label{sec4::subsection::preliminary-lemmas}
+
+\begin{definition}
+\label{def::fIsLessThan-fIsMoreThan}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and $x,b\in \Reals$.
+    We define $(F(-)<-)$ of type $\real\times\real\to\bool$ as
+    \[
+    (F(-) < -) \equiv \\
+            \BLOCK{
+            \PROC \\
+                \INDENT{
+                \IN x:\real\ b:\real \\
+                \AUX c:\nat}\\
+            \BEGIN \\
+                \INDENT{
+                c := \CHOOSE (k:\nat) : 
+                        F(x, k) + 2^{-k} < b \\
+                \text{/* If terminates it means} f(x) < b \text{ */} \\
+                \RETURN tt}\\
+            \END}\\
+    \]
+     The semantics of the procedure above is
+    \[
+        (F(x)<b)^\algebraR = \{ \true \mid \exists y,n \quad y\in F^\algebraR(x,n) \land y+2^{-n}<b\}. 
+    \]
+    Note that instead of $(F(-)<-)^\algebraR(x,b)$, we write $(F(x) < b)^\algebraR$.
+    \end{definition}
+
+    \begin{definition}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and and $x,b\in \Reals$.
+    We define $(F(-)>-)$ of type $\real\times\real\to\bool$ as 
+     \[
+        (F(-) > -) \equiv 
+                    \BLOCK{
+                    \PROC \\
+                        \INDENT{
+                        \IN r:\real\ b:\real \\
+                        \AUX c:\nat}\\
+                    \BEGIN \\
+                        \INDENT{
+                        c := \CHOOSE (k:\nat) : F(r, k) - 2^{-k} > b \\
+                        \text{/* If terminates it means $f(r) > b$ */} \\
+                        \RETURN \true}\\
+                    \END}\\
+    \]
+    The semantics of the procedure above is
+    \[
+        (F(x)>b)^\algebraR = \{ \true \mid \exists y,n \quad y\in F^\algebraR(x,n) \land y-2^{-n}>b\}. 
+    \]
+    Note that instead of $(F(-)>-)^\algebraR(x,b)$, we write $(F(x)>b)^\algebraR$.
+\end{definition}
+
+\begin{lemma}
+\label{lemma::prelim::under-over-approxaimation}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$. 
+    Then we have:
+    \begin{equation}
+    \label{pre::lemma::1}
+        f(x) < y\quad \iff \quad \exists n \in \Nats \quad  \exists y' \in F^{\algebraR}(x,n) \quad y'+2^{-n} < y \quad \iff \quad (F(x)<y)^\algebraR = \{\true\}.
+    \end{equation}
+    Similarly, 
+    \begin{equation}
+    \label{pre::lemma::2}
+        y < f(x)\quad \iff \quad \exists n \in \Nats \quad  \exists y' \in  F^\algebraR (x,n) \quad y < y'-2^{-n} \quad \iff \quad (y<F(x))^\algebraR = \{\true\}.
+    \end{equation}
+\end{lemma}
+\begin{proof} We begin by proving (\ref{pre::lemma::1}).
+    \begin{description}
+        \item[($\Rightarrow$)]
+            If $f(x) < y$ then $y - f(x)>0$, and there is $n\in \Nats$ such that $2^{-n} < \frac{y - f(x)}{2}$. Then, for any $y' \in F^\algebraR(x,n)$ we have $f(x)-2^{-n}<y'<f(x)+2^{-n}$ and hence:
+            \begin{align*}
+                y' + 2^{-n} & < f(x) + 2^{-n+1}\\
+                            & < f(x) + 2\mleft(\frac{y-f(x)}{2}\mright)\\
+                            & \leq f(x) + y - f(x)\\
+                            & \leq y
+            \end{align*}
+        \item[($\Leftarrow$)] We assume that $ \exists n \in \Nats \ \exists y' \in F^\algebraR(x,n) \quad y'+2^{-n} < y\quad$ (*).
+        \begin{align*}
+                f(x) & = f(x)-2^{-n} + 2^{-n} \\
+                            & < y'+2^{-n} \tag{$y' \in F^\algebraR(x,n)$}\\
+                            & < y \tag{assumption (*)}
+        \end{align*}
+    \end{description}
+    Proof of (\ref{pre::lemma::2}) is similar to  (\ref{pre::lemma::1}).
+\end{proof}
+\begin{remark}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and $x\in\Reals$. 
+    Then 
+    \begin{itemize}
+        \item 
+            If $x\notin \dom(f)$, regardless of the value of $b$, we have \[(F(x)<b)^\algebraR = (F(x)>b)^\algebraR=\emptyset.\] 
+        \item 
+            Assuming $x\in \dom(f)$, we have
+                \[(F(x)<b)^\algebraR = \emptyset\ \iff\ f(x)\geq b,\]
+            and respectively,
+            \[(F(x)>b)^\algebraR = \emptyset\ \iff\ f(x)\leq b.\]
+    \end{itemize}
+\end{remark}
+\begin{remark}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$ and $x\in\Reals$. Then, Lemma \ref{def::fIsLessThan-fIsMoreThan} is particularly useful for getting an upperbound for $f(x)$ using the statement 
+    \[
+    \upper := \CHOOSE (r: \real): F(x)<r
+    \]
+    and respectively, getting a lowerbound for $f(x)$ using the statement 
+    \[
+    \lowerr := \CHOOSE (r: \real): F(x)>r.
+    \] 
+\end{remark}
+
+\begin{definition}
+\label{def::fIsLessThanG}
+    Let $F,G:\real\times\nat\to\real$ be \WhileCC-procedures and $x_1, x_2\in \Reals$.
+    We define the \WhileCC-procedure $F(-)<G(-)$ as a shorthand for
+    \[
+        (F(-)<G(-)) \equiv  
+                    \BLOCK{
+                    \PROC \\
+                        \INDENT{
+                        \IN x_1:\real\ x_2:\real  \\
+                        \AUX c:\nat}\\
+                    \BEGIN \\
+                        \INDENT{
+                        c := \CHOOSE (k:\nat) : F(x_1, k) + 2^{-k} < G(x_2, k) - 2^{-k} \\
+                        \text{/* If terminates it means  $f(x_1) < g(x_2)$ */} \\
+                        \RETURN tt}\\
+                    \END}\\
+    \]
+    The semantics of the procedure above is
+    \[
+        (F(x_1)<G(x_2))^\algebraR = \{ \true \mid 
+        \BLOCK{\exists  k\in \Nats \ \exists y_1\in F^\algebraR(x_1,k)\ \exists y_2\in F^\algebraR(x_2,k)\\
+        \INDENT{
+            y_1+2^{-k}<y_2 -2^{-k}\}.}} 
+    \]
+     Note that instead of $(F(-)<G(-))^\algebraR(x_1,x_2)$ (resp. $(F(-)>G(-))^\algebraR(x_1,x_2)$) we write $(F(x_1) < G(x_2))^\algebraR$ (resp. $(F(x_1)>G(x_2))^\algebraR$).
+\end{definition}
+
+\begin{lemma}
+\label{lemma::prelim::under-over-approxaimation-2}
+    Let $F,G:\real\times\nat\to\real$ be \WhileCC-procedures approximating the functions $f,g:\Reals\to\Reals$ respectively, and $x_1, x_2\in\Reals$.
+    Then we have:
+    \begin{align*}
+        f(x_1) < g(x_2)\quad  \ifff & \exists n \in \Nats \quad  \exists y_1 \in F^\algebraR(x_1,n)\ \exists y_2 \in G^\algebraR(x_2,n)\\
+        &  y_1 + 2^{-n} < y_2 - 2^{-n}\\
+         \ifff & (F(x_1)<G(x_2))^\algebraR = \{\true\}
+    \end{align*}
+\end{lemma}
+\begin{proof} The proof is similar to Lemma \ref{lemma::prelim::under-over-approxaimation}.
+    \begin{description}
+        \item[($\Rightarrow$)]
+            If $f(x_1) < g(x_2)$ then $g(x_2) - f(x_1)  >0$, and there is $n\in \Nats$ such that 
+            \[2^{-n} < (g(x_2) - f(x_1))/{2}.\]
+            Then, for any $y_1 \in F^\algebraR(x_1,n)$ and any $y_2 \in G^\algebraR(x_2,n)$ we have $f(x_1)-2^{-n}<y_1<f(x_1)+2^{-n}$ and hence:
+            \begin{align*}
+                y_1 + 2^{-n} & < f(x_1) + 2^{-n+1}\\
+                            & < f(x_1) + 2\mleft((g(x_2)-f(x_1))/{2}\mright)\\
+                            & = f(x_1) + g(x_2) - f(x_1)\\
+                            & = g(x_2)
+            \end{align*}
+        \item[($\Leftarrow$)] We assume that $ \exists n \ \exists y_1 \in F^\algebraR(x_1,n)\ \exists y_2 \in G^\algebraR(x_2,n) $ such that $y_1+2^{-n} < g(x_2) - 2^{-n}$ (*). Then:
+        \begin{align*}
+                f(x_1) & = f(x_1)-2^{-n} + 2^{-n} \\
+                            & < y_1+2^{-n} \tag{$y_1 \in F^\algebraR(x_1,n)$}\\
+                            & < g(x_2)-2^{-n} \tag{assumption (*)} \\
+                            & < g(x_2)
+        \end{align*}
+    \end{description}
+\end{proof}
+\begin{remark}
+    Let $F,G:\real\times\nat\to\real$ be \WhileCC-procedures approximating the functions $f,g:\Reals\to\Reals$ respectively, and $x_1,x_2\in\Reals$. 
+    Then 
+    \begin{itemize}
+        \item 
+            If $x_1\notin \dom(f)$ or $x_2\notin \dom(g)$, regardless of the value of $y$, we have \[(F(x_1)<G(x_2))^\algebraR = (F(x_1)>G(x_2))^\algebraR=\emptyset.\] 
+        \item 
+            Assuming $x_1\in \dom(f)$ and $x_2\in \dom(g)$, we have
+                \[(F(x_1)<G(x_2))^\algebraR = \emptyset\ \iff\ f(x_1)\geq g(x_2),\]
+            and respectively,
+            \[(F(x_1)>G(x_2))^\algebraR = \emptyset\ \iff\ f(x_1)\leq g(x_2).\]
+    \end{itemize}
+\end{remark}

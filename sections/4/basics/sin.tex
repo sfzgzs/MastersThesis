@@ -1,0 +1,54 @@
+\begin{lemma}
+    \label{lemma::arcsin-over-pi-has-OEX}
+        Let $f(x) = \sin(\pi x)$ and $I=(a,b)$ with $a,b\in \Rationals$ and $-1<a<b<1$. Then there is an effective open exhaustion for $f^{-1}(I)$.
+    \end{lemma}
+    \begin{proof}
+        Let us consider $f^{-1}(x) = \arcsin(x)/\pi$. The function $f^{-1}$ is clearly \WhileCC-approximable.
+        We know that
+        \begin{itemize}
+            \item The function $f^{-1}$ is monotonically increasing.
+            \item The function $f^{-1}$ is defined on $(a,b)$.
+        \end{itemize}
+        Hence, Theorem \ref{thm::OEX_by_WCC_approximability} gives us an open exhaustion for $f^{-1}(I)$, and this completes the proof.
+    \end{proof}
+    \begin{theorem}
+    \label{thm::OEX_sin}
+       The function $\sin(x)$ is \effectivelyOpen{}. 
+    \end{theorem}
+    \begin{proof}
+        It suffices to show that $f(x)=\sin(\pi x)$ is \effectivelyOpen{}.
+        Using Remark \ref{remark::OEX_for_interval_implies_OEX_for_all_open_sets}, we only need to prove that $f^{-1}(I)$, if nonempty, has an effective open exhaustion for any $I=(a,b)$ with $a<b \in \Rationals$. Let us consider the value of $a$ and $b$: 
+        \begin{itemize}
+            \item $-1<a<1<b$:
+                In this case we can use Theorem \ref{remark::OEX_for_interval_implies_OEX_for_all_open_sets} along with Lemma \ref{lemma::arcsin-over-pi-has-OEX}, we can get an open exhaustion for $f^{-1}((a,1/2))$. We modify each $(a_i, b_i)$ to 
+                \begin{center}
+                    $(a_i-2i, -1-a_i-2i)\cup \cdots \cup (a_i-2, -1-a_i-2)$\\
+                    ${}\cup(a_i, -1-a_i)$\\
+                    ${}\cup (a_i+2, -1-a_i+2) \cdots (a_i+2i, -1-a_i+2i)$
+                \end{center}
+                Note that the reason we are modifying each interval is that the open exhaustion $f^{-1}((a,1/2))$ does not cover $x=1/2$, so stretching $(a_i, b_i)$ to $(a_i, 1- a_i)$ will help cover the point $x = 1/2$ as well as the mirrored interval $(1/2, 1-f(a))$.
+                \input{images/4/sin-explanation}
+                The reason we are adding $(a_i-2i, -1-a_i-2i)\cup \cdots \cup (a_i-2, -1-a_i-2)$ and $(a_i+2, -1-a_i+2) \cdots (a_i+2i, -1-a_i+2i)$ is that $f(x)$ is a periodic function and we would want to eventually cover all the $x$s in $\Reals$ for which $f(x)$ falls in $(a,1]$.
+                The intuition for building up the stages is shown in Figure \ref{fig::sin-explanation}.
+                \input{images/4/sin-a1bPlot}
+            \item $-1<a<b<1$:
+                In this case we can use Theorem \ref{remark::OEX_for_interval_implies_OEX_for_all_open_sets} we can get an open exhaustion for $f^{-1}(I)$. For each stage we modify each $(a_i, b_i)$ to 
+                \begin{center}
+                    $(a_i - 2i, b_i-2i) \cup \cdots \cup (a_i, b_i) \cup \cdots \cup (a_i+2i, b_i+2i)$
+                \end{center}
+            \item $a,b >1$ or $a,b<-1$: In this case $f^{-1}(I) = \emptyset$.
+            \item $a<-1<b<1$:
+                In this case we can use Theorem \ref{remark::OEX_for_interval_implies_OEX_for_all_open_sets} we can get an open exhaustion for $f^{-1}\paren{(-1/2,b)}$. We modify each $(a_i, b_i)$ to 
+                \begin{center}
+                    $(-1-b_i-2i, b_i-2i)\cup \cdots \cup (-1-b_i-2, b_i-2)$\\
+                    $\cup(-1-b_i, b_i)$\\
+                    $\cup (-1-b_i+2, b_i+2) \cdots (-1-b_i+2i, b_i+2i)$
+                \end{center}
+                
+            \item $a<-1<1<b$: In this case the open exhaustion is 
+                \[
+                ((-1, 1), \ldots, (-k-1, k+1), \ldots).
+                \]
+                This gives us an effective open exhaustion for $f^{-1}(U)$ for any open set $U$.
+        \end{itemize}
+    \end{proof}

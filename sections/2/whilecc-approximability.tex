@@ -1,0 +1,45 @@
+Now let us review the concept of \WhileCCapproximability{} defined in \citet{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}.
+Let $P: \real \times \nat \to \real$ be a \WhileCC-procedure. Then $P_n^\algebraR$ is defined by $P_n^\algebraR \stackrel{def}= P^\algebraR(\cdot, n):\Reals \to \mathcal{P}_\omega^+(\Reals \cup \{ \uparrow\})$. 
+
+\begin{definition}[\WhileCC-approximability, \citep{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}]
+\label{def::whileCC-approximable}
+    A \WhileCC-procedure $P$ of type $\real\times\nat \to \real$ on $\algebraR$ is said to \textit{approximate} a function $f:\Reals\to\Reals$ iff for all $n\in \Nats$ and all $x\in \Reals$:
+    \begin{enumerate}[(i)]
+        \item $x \in \dom(f) \then \uparrow\ \notin P_n^\algebraR(x)$, and
+        \item $x \in \dom(f) \then P_n^\algebraR(x) \subseteq \Nbd(f(x), 2^{-n})$
+          % \edcomm{WK}{Why so much stronger than standard convergence?
+          %   I estimate that this will make your life hard.}\edcomm{FG}{I am re-using the concept of \WhileCC-approximability defined in \citet{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker} which also matches (and is a special case of) the \WhileCC*-approximability definition in \citet{AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004}. Before, it sounded Like I was the one defining a new concept in this Definition myself. I cited the paper (colored text above) which fixes that issue.}%
+            % \edcomm{WK}{Do any of these sources explain why a standard convergence condition is not used?}\edcomm{FG}{What do we mean by standard convergence condition?}%
+            % \edcomm{WK}{$\forall\ \epsilon : \Reals \ |\ \epsilon > 0\ \bullet\ %
+            %      \exists\ n : \Nats\ \bullet\ P_n^\algebraR(x) \subseteq \Nbd(f(x), \epsilon)$}
+            % \edcomm{FG}{Using the standard definition, we do not necessarily get a computable function that would give us such an $n$ for each $\epsilon$. If we did, setting the bound to $\epsilon$ or to $2^{-n}$ would have been equivalent.}
+            , and
+        \item $x \notin \dom(f) \then P_n^\algebraR(x)=\{\uparrow\}$
+          % \edcomm{WK}{This is strong.}
+    \end{enumerate}
+    where $\Nbd(y,r)$ has the standard definition of neighborhood on $\Reals$ i.e., \[\Nbd(y,r) = \{ z\in \Reals\ \mid \abs{y-z}<r \}.\]
+    % \st{We denote the function calculated by the procedure $P$ approximating function $f$ with the multi-valued function $\widetilde{f}_P(x,n)$ where $\widetilde{f}_P(x,n) = P_n^\algebraR(x) \setminus \{\uparrow\} $. Any such function is called an \textit{approximator} for $f$. The subscript $P$ is removed when $P$ is given in the context.}
+\end{definition}
+\begin{definition}[\WelldefinedWhileCCprocedures{}]
+\label{def::well-defined-WCC-procedures}
+    We call a procedure $P:\bar{u}\to\bar{v}$ \textit{well-defined} iff for $\bar{x}:\bar{u}$ we have 
+    \begin{center}
+    $P^\algebraR(\bar{x}) = \{\uparrow\}$, or $\uparrow\ \notin P^\algebraR(\bar{x})$.
+    \end{center}
+\end{definition}
+In this thesis, since all \WhileCC-procedures of interest are well-defined \footnote{This can be easily proven, although we do not provide a proof for it.}, we consider the semantics of a procedure $P:\bar{u}\to\bar{v}$ to be a function
+\[ P^\algebraR: \algebraR_{\bar{u}} \to \mathcal{P}_\omega(\algebraR_{\bar{v}})
+\]
+where $P^\algebraR(\bar{x}) = \emptyset$ iff $P$ does not terminate on input $\bar{x}$.
+\begin{definition}[\WhileCC-computability on $\Nats$]
+    \label{def::whilecc_computability}
+    A function $f:\Nats^k\to\Nats$ is \WhileCCcomputable{} if there is a \WhileCC{} procedure $P$ such that $f = P^\algebraR$.
+\end{definition}
+% \begin{definition}[Recursive Function]
+%     \label{def::recursive_func_on_nats}
+%     A function $f:\Nats^k\to\Nats$ is called recursive if and only if it is computable by a Turing machine.
+% \end{definition}
+
+\begin{remark}
+    The classical \citet{FlowDiagramsTuringMachinesAndLanguagesWithOnlyTwoFormationRules_Bohm_Corrado_Jacopini_1966} theorem states that Turing Machines can be simulated in any programming language with composition and iteration. This, along with the Church-Turing thesis, implies that \WhileCC-computability of a function of type $\Nats^k\to\Nats$ is equivalent to computability via any effective method. This means that from here on, in order to show that a (total) function of type $\Nats^k\to\Nats$ is recursive, it suffices to give a (necessarily terminating) algorithm for computing it \citep{Cutland1980}. Note that the terms ``recursive'', ``computable'', and ``\WhileCC-computable'' could be used interchangeably for functions of type $\Nats^k\to\Nats$. In other words, we do not care which model of computation is used to compute functions of this type. As long as a function is computable in some model, it is computable in every model.
+\end{remark}

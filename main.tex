@@ -1,0 +1,121 @@
+% \documentclass[12pt]{extarticle}
+\documentclass[10pt, oneside]{book}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    % total={170mm,257mm},
+    left=1in,
+    top=1.5in,
+    bottom=1in,
+    right=1in
+}
+ \usepackage{fancyhdr}
+ \pagestyle{fancy}
+ \fancyhead{}
+ \fancyhead[RO,LE]{M.Sc. Thesis - F. Ghasemi; McMaster University - Computer Science}
+ \usepackage{listings}
+ \usepackage[color=yellow]{todonotes}
+ \usepackage{amsmath}
+ \usepackage{amssymb}
+ \usepackage{amsthm}
+ \usepackage{minted}
+ \usepackage{tcolorbox}
+ \usepackage{titlesec}
+ \usepackage{mathtools}
+ \usepackage{float}
+ \usepackage{enumerate}%
+ \usepackage{tipa}
+ \usepackage{apxproof}
+\usepackage{imakeidx}
+\makeindex[intoc]
+ \usepackage[colorlinks,allcolors=blue,pagebackref=true]{hyperref}
+ \usepackage{mathpartir}
+ \usepackage{mleftright}
+ \usepackage{color}
+ \usepackage[verbose]{placeins}
+ \usepackage[T1]{fontenc}
+ \usepackage{titling}
+ \usepackage{tcolorbox}
+ \usepackage{tgadventor}
+ \usepackage{pifont}
+ \usepackage{soul}
+ \usepackage{natbib}
+ \usepackage{doi}
+ \usepackage{stmaryrd} % for commands \llbracket \rrbracket \llparenthesis \rrparenthesis^A
+\usepackage{appendix}
+\usepackage{lastpage}
+% \usepackage{setspace} \doublespacing
+\usepackage{pgfplots}
+\usepackage{edcomms}
+\usetikzlibrary{patterns, external}
+\tikzexternalize[prefix=tikz/,optimize command away=\includepdf]
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{mathpartir}
+\tikzifexternalizing{%
+  \renewcommand\index[2][]{}%
+  \renewcommand\printindex{}%
+  \renewcommand\makeindex[1][]{}%
+  }{}
+
+
+ \BeforeBeginEnvironment{minted}{\tcolorbox}%
+ \AfterEndEnvironment{minted}{\endtcolorbox}%
+
+ \setcounter{secnumdepth}{4}
+\input{definitions}
+\setlength {\marginparwidth }{2cm}
+\begin{document}
+    \pagestyle{empty}
+    \mbox{}
+    \vspace{3in}
+    \begin{center}
+        WHILECC-APPROXIMABILITY AND ACCEPTABILITY OF ELEMENTARY FUNCTIONS\\
+    \end{center}
+    \frontmatter
+    \pagestyle{plain}
+    \input{titlepage}
+
+    \input{descriptive-notes}
+    \chapter*{Lay Abstract}
+    Several models of computability were previously proposed for partial functions over the reals. Some of these models were proved to be equivalent for functions satisfying specific conditions we call ``acceptability''.
+    In this thesis, we prove that at least the class of elementary functions satisfies this ``acceptability'' condition. This shows that the acceptability conditions are sufficiently general.
+    \chapter*{Abstract}
+    \input{sections/00-abstract}
+    \chapter*{Acknowledgements}
+    \input{sections/000-acknowledgement}
+    \tableofcontents
+    \listoffigures
+    \label{LastRomanPage}
+    \pagestyle{fancy}
+    \mainmatter
+    \newpage
+    \input{sections/01-introduction}
+    \newpage
+    \input{sections/02-preliminaries}
+    \newpage
+    \input{sections/03-proof-for-elem-functions}
+    \newpage
+    \input{sections/04-open-exhaustion-for-elem-functions}
+    \newpage
+    \input{sections/05-acceptability-of-elem-functions}
+    \newpage
+    \input{sections/06-conclusion}
+    \newpage
+
+    % \appendix
+    \begin{appendix}
+    \input{sections/07-appendix}
+    \end{appendix}
+
+    % \clearpage
+    \addcontentsline{toc}{chapter}{References}
+    \bibliographystyle{abbrvnat}
+    \bibliography{refs}
+    \label{LastArabicPage}
+    \printindex
+
+\end{document}

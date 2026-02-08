@@ -1,0 +1,23 @@
+
+\begin{theorem} 
+\label{thm::OEX_logarithm}
+   The function $\ln(x)$ is \effectivelyOpen{}.
+   % \edcomm{WK}{This is one of the times where I'd like to have an index. Where is ``function $\_$ is effectively open'' defined? And, separate question, what is it needed for?}\edcomm{FG}{Added a bit of explanation at the beginning of Section \ref{sec4::subsection::basics}. Do you know of a way I could make an index without having to $\backslash$index every single time I use the important words?}
+   % \edcomm{WK}{You'd index only the important occurrences, in particular the defining occurrence.}
+\end{theorem}
+\begin{proof}
+    Let us take any arbitrary open set $U$ with an effective open exhaustion.
+    We want to come up with an effective open exhaustion for $\ln^{-1}(U) = \exp(U)$.
+    
+    Using Remark \ref{remark::OEX_for_interval_implies_OEX_for_all_open_sets}, we only need to prove that the preimage of any open interval $I =(a,b)$ with $a,b \in \mathbb{Q}$ has an effective open exhaustion.
+    
+    The pre-image function for $\ln$ is $\exp$.
+    
+    We know that
+    \begin{itemize}
+        \item The function $\exp$ is monotonically increasing.
+        \item The function $\exp$ is \WhileCC-approximable (Using Theorem \ref{theorem::exp}).
+        \item The function $\exp$ is defined on any arbitrary interval $(a,b)$.
+    \end{itemize}
+    Hence, Theorem \ref{thm::OEX_by_WCC_approximability} gives us an open exhaustion for $\exp(I)$, and this completes the proof.
+\end{proof}

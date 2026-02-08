@@ -1,0 +1,64 @@
+
+
+\begin{definition}
+\label{def::ln-of-f-of-x}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and and $x\in \Reals$. Then the \WhileCC-procedure 
+    \[ 
+    \Ln_F \equiv
+            \BLOCK{
+            \PROC \\
+                \INDENT{
+                \IN x:\real\ n:\nat \\
+                \AUX \res:\real}\\ 
+            \BEGIN \\
+                \INDENT{
+                \res := \CHOOSE (y : \real) :
+                        \BLOCK{
+                        \Exp(y)<F(x)\boolAnd F(x) < \Exp(y+{2}^{-n})}\\
+                \RETURN \res}\\
+            \END}\\
+    \]
+    of type $\real\times\nat\to\real$ has the semantics
+    \[
+        \Ln_F^\algebraR(x,n) = \{ y \in \mathbb{Q} \mid
+          \ \exp(y) < f(x) < \exp(y + 2^{-n}) \}
+    \]
+    \end{definition}
+The \WhileCC-procedure $\Ln_F$ approximates $\ln_f(x)$.
+\begin{claim}
+\label{claim::log::1}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and $x \in \dom(\ln_f)$. Then for any $n\in \Nats$, we have $\mathsf{Ln}_F^\algebraR(x,n)\neq \emptyset$.
+\end{claim}
+\begin{proof}
+    Since $x \in \dom(\ln_f)$, then $f(x)>0$. Then there must be some $y \in \Rationals$ satisfying $\exp(y) < f(x)$, and we can choose $y$ such that $\exp(y)$ is arbitrarily close to $f(x)$. Since $\exp$ is monotonically increasing, we can choose $y$ to satisfy $f(x) < \exp(y + 2^{-n})$. Therefore $\mathsf{Ln}_F^\algebraR(x,n)\neq \emptyset$.
+\end{proof}
+\begin{claim}
+\label{claim::log::2}
+     Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$. For any real $x \notin \dom(\ln_f)$ and $n\in\Nats$, we have $\mathsf{Ln}_F^\algebraR(x,n)= \emptyset$.
+\end{claim}
+\begin{proof}
+     Since $x \notin \dom(\ln_f)$, it means that at least $x\notin\dom(f)$, or $f(x)\leq 0$. In the case $x\notin\dom(f)$, the procedure $\Exp(y)<F(x)$ does not terminate and hence $\mathsf{Ln}_F^\algebraR(x,n)= \emptyset$. In the case where $f(x)$ is defined but $f(x)\leq 0$, since $\exp(y)$ is positive, $\Exp(y)<F(x)$ cannot terminate and hence $\mathsf{Ln}_F^\algebraR(x,n)= \emptyset$.
+\end{proof}
+\begin{claim}
+\label{claim::log::3}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$. Then  $\forall x\in \dom(f),\ \forall n \in \Nats,\ \forall y\in \mathsf{Ln}_F^\algebraR(x,n) :$
+    \[
+     \abs{\ln(f(x)) - y} < 2^{-n}.
+    \]
+\end{claim}
+\begin{proof}
+    Using the definition of $\mathsf{Ln}_F$, we have
+    \begin{align*}
+    \exp(y) < f(x) < \exp(y + 2^{-n}) & \then 
+    y < \ln(f(x)) < y+2^{-n} \\
+    & \then \abs{\ln(f(x)) - y} < 2^{-n}.
+    \end{align*}
+\end{proof}
+
+\begin{theorem}
+\label{theorem::log}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$. Then $\mathsf{Ln}_F^\algebraR$ \WhileCC-approximates the function $\ln_f$.
+\end{theorem}
+\begin{proof}
+    Follows from Lemmas \ref{claim::log::1}, \ref{claim::log::2}, \ref{claim::log::3}.
+\end{proof}

@@ -1,0 +1,18 @@
+\caption{four neighbouring squares}
+\label{Figure::filler_square_four}
+\begin{tikzpicture}[scale=0.3]
+    % Define parameters
+    \def\xmin{0}
+    \def\xmax{8}
+    \def\ymin{0}
+    \def\ymax{8}
+
+    \fill[\stepOneColor] (2,2) rectangle (6, 6);
+    
+    \fill[\fillerColor] (3,3) rectangle (5, 5);
+    \draw[step=2.0,gray,thin] (\xmin,\ymin) grid (\xmax,\ymax);
+
+    \draw[dashed,thick, red](3,3) rectangle (5, 5);
+    
+    \draw[dashed, thick, black](2,2) rectangle (6, 6);
+\end{tikzpicture}

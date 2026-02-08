@@ -1,0 +1,116 @@
+\subsection{\WhileCC-Approximability of exp(f(x))}
+\begin{definition}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and $x\in \Reals$. Then
+    the \WhileCC-procedure 
+    \[
+    \Exp_F \equiv 
+                \BLOCK{
+                \PROC \\
+                    \INDENT{
+                    \IN n:\nat\ x:\real\\
+                    \AUX \res:\real\ m:\nat\ z:\nat}\\
+                \BEGIN\\
+                    \INDENT{
+                    z := \CHOOSE (k:nat): F(x) < k\\
+                    m := \CHOOSE (k:nat): \Exp(2^{-k}) < 2^{-n-1-2z}+1\\
+                    res := \Exp(F(x, m), n+1)\\
+                    \RETURN \res}\\
+                \END}\\
+    \]
+    of type $\real\times\nat\to\real$ has the semantics
+    \[
+    \Exp_F^\algebraR(x,n)  =  \{
+    \begin{aligned}[t]
+        & y \in \Exp^\algebraR(r, n+1) \mid \\
+        & \exists z \in \Nats \quad f(x) < z \land {} \\
+        & \exists m \in \Nats \quad e^{(2^{-m})} < 2^{-n - 1 - 2z} + 1 \land {} \\
+        & r \in F^\algebraR(x, m)\}
+    \end{aligned}
+    \]
+\end{definition}
+Intuitively, $\Exp_F$ approximates $\exp(f(x))$ by invoking $\Exp(F(x, m), n + 1)$, where $m$ is sufficiently large to ensure
+\[
+	\abs{e^{f(x)} - y}< 2^{-n}
+\]
+for any output $y$ of $\Exp(F(x, m), n + 1)$.
+\begin{lemma}
+\label{lemma::condition-exp}
+        Let the \WhileCC-procedure $F:\real\times\nat\to\real$ approximate $f:\Reals\to\Reals$ and $x\in\dom(f)$.
+        Now let $m, z \in \Nats$, $r \in F^\algebraR(x, m)$, and $y \in \Exp^\algebraR(r,n+1)$ satisfy the two conditions
+	\begin{enumerate}[(i)]
+            \item \label{expf::item::cond-1}
+		$e^{(2^{-m})}<2^{-n - 1 - 2z}+ 1,$ and 
+            \item \label{expf::item::cond-2}
+		$f(x) < z$.
+	\end{enumerate}
+	Then
+    \[
+        \abs{e^{f(x)} - y} < 2^{-n}.
+    \]
+\end{lemma}
+\begin{proof}
+First, we can see that
+    \begin{align*}
+        \abs{e^{f(x)}-y} = &\ \abs{e^{f(x)} - e^{r}+e^{r}-y} \\
+        \leq &\ \abs{e^{f(x)}-e^{r}}+\abs{e^r - y}.
+    \end{align*}
+    Now, to prove $\abs{e^{f(x)} - y} < 2^{-n}$ it suffices to prove $\abs{e^r - y}<2^{-n-1}$ and $\abs{e^{f(x)}-e^{r}}<2^{-n-1}$.
+    \begin{enumerate}[(i)]
+        \item $\abs{e^r - y}<2^{-n-1}$: This is easily seen by assumption $y \in \Exp^\algebraR(r,n+1)$.
+        \item $\abs{e^{f(x)}-e^{r}}<2^{-n-1}$: First observe the following:
+        \begin{align*}
+         \abs{e^{f(x)} - e^{r}} \leq &\ \abs{e^{f(x)} - e^{f(x)+2^{-m}}} \tag{by Lemma \ref{lemma::exp-comparison}}\\
+         = &\ \abs{e^{f(x)} - e^{f(x)}e^{2^{-m}}}\\
+         = &\ \abs{e^{f(x)}(1 - e^{2^{-m}})}\\
+         = &\ \abs{e^{f(x)}}\abs{(1 - e^{2^{-m}})}\\
+         = &\ e^{f(x)}(e^{2^{-m}}-1)\tag{since $e^{2^{-m}} \ge 1$}\\
+         <  &\ e^{z}(e^{2^{-m}}-1)\tag{by (\ref{expf::item::cond-2})}\\
+         <  &\ 4^{z}(e^{2^{-m}}-1)\\
+         =  &\ 2^{2z}(e^{2^{-m}}-1)
+    \end{align*}
+    Now using (\ref{expf::item::cond-1}), we have
+    \begin{align*}
+        e^{2^{-m}} < 2^{-n-1-2z}+1
+          \then & e^{2^{-m}}-1 < 2^{-n-1-2z}\\
+          \then & e^{2^{-m}}-1 < 2^{-n-1}\cdot 2^{-2z}\\
+          \then & 2^{2z}(e^{2^{-m}}-1) < 2^{-n-1}
+    \end{align*}
+    which implies $\abs{e^{f(x)} - e^{r}} < 2^{-n-1}$.
+        
+    \end{enumerate}
+\end{proof}
+
+Now we prove that the \WhileCC-procedure  $\Exp_F^\algebraR$ approximates $\exp_f(x)$.
+\begin{claim}
+\label{claim::existanceOfMForExp}
+    For any real $x \in \dom(e^f)$ and for any $n\in \Nats$, we have $\Exp_F^\algebraR(x,n)\neq \emptyset$.
+\end{claim}
+\begin{proof}
+    Assuming $x \in \dom(\exp_f)$, this means $x \in \dom(f)$. Since $F$ approximates $f(x)$, we can find a $z>f(x)$.
+     Now looking at the constraint $e^{(2^{-m})}<2^{-n - 1 - 2z}+ 1$, we know that $2^{-n-1-2z}>0$ and hence $2^{-n-1-2z}+1>1$. This means we can find an index $m$ sufficiently large so that $e^{(2^{-m})}<2^{-n-1-2z}+1$ since $\lim_{m \to \infty} e^{(2^{-m})} = 1$. Now since $x\in\dom(f)$, we know that $F^\algebraR(x,m)\neq \emptyset$ so we can choose an $r \in F^\algebraR(x,m)$. We also know that $\dom(\exp) = \Reals$, so $\Exp_F^\algebraR \neq\emptyset$ and hence $\Exp_F^\algebraR(x, n) \neq \emptyset$.
+\end{proof}
+\begin{claim}
+\label{claim::exp::2}
+    For any real $x \notin \dom(e^{f(x)})$ and $n\in\Nats$, we have $ \Exp_F^\algebraR(x,n)= \emptyset$.
+\end{claim}
+\begin{proof}
+    Assuming $x \notin \dom(e^{f(x)})$, this means $x \notin \dom(f)$. So we have $F^\algebraR(x,m) = \emptyset$. This shows that $F(x)<z$ does not terminate and hence $\Exp_F^\algebraR(x,n) = \emptyset$ for any $n\in \Nats$.  
+\end{proof}
+\begin{claim}
+\label{claim::exp::3}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$. Then $\forall x\in \dom(f),\ \forall n \in \Nats,\ \forall y\in \Exp_F^\algebraR(x,n) :$
+    \[
+     \abs{e^{f(x)} - y} < 2^{-n}.
+    \]
+\end{claim}
+\begin{proof}
+Follows directly from Lemma \ref{lemma::condition-exp}.
+\end{proof}
+
+\begin{theorem}
+\label{theorem::exp}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$. Then the \WhileCC-procedure  $\Exp_F^\algebraR$ approximates $\exp_f(x)$.
+\end{theorem}
+\begin{proof}
+    Follows directly from Lemmas \ref{claim::existanceOfMForExp}, \ref{claim::exp::2}, \ref{claim::exp::3}.
+\end{proof}

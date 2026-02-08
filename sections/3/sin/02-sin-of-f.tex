@@ -1,0 +1,65 @@
+\subsection{\WhileCC-Approximability of sin(f(x))} 
+\label{section::WCC-appx-of-sin-of-f}
+Here, we build a \WhileCC-procedure that approximates $\sin(f(x))$ using the \WhileCC-procedure $\Sine$ we constructed in the previous section.
+\begin{definition}
+        Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and and $x\in \Reals$. Then
+    the \WhileCC-procedure 
+\[ 
+    \Sine_F\equiv
+        \BLOCK{
+                \PROC \\
+                    \INDENT{
+                    \IN x:\real\ n:\nat}\\
+                \BEGIN \\
+                    \INDENT{
+                    \RETURN \Sine(F(x, n + 1), n+1)}\\
+                \END}\\
+\] 
+of type $\real\times\nat\to\real$ has the semantics
+\[\Sine_F^\algebraR(x,n) \stackrel{def}= \{ 
+        y \in \Sine^\algebraR(r, n+1)\mid r \in F^\algebraR(x,n + 1)\}.
+    \]
+\end{definition}
+Let us prove that $\Sine_F$ approximates $\sin(f(x))$:
+\begin{claim}
+\label{claim::sin::1}
+    For any real $x \in \dom(\sin(f))$ and for any $n\in \Nats$, we have $ \Sine_F^\algebraR(x,n)\neq \emptyset$.
+\end{claim}
+\begin{proof}
+    Assuming $x \in \dom(\sin(f(x)))$, this means $x \in \dom(f)$.
+    Since $x \in \dom(f)$, we know that $F^\algebraR(x,n + 1) \neq \emptyset$. So for any choice of $r \in F^\algebraR(x,n + 1)$, since we know that $\dom(\sin) = \Reals$, there exists a $y \in \Sine^\algebraR(r, n+1)$. Hence, we have $ \Sine_F^\algebraR(x,n)\neq \emptyset$.
+\end{proof}
+\begin{claim}
+\label{claim::sin::2}
+    For any real $x \notin \dom(\sin(f))$ and $n\in\Nats$, we have $\Sine_F^\algebraR(x,n)= \emptyset$.
+\end{claim}
+\begin{proof}
+    Since $F$ approximates $f$ and $x \notin \dom(f)$, $F^\algebraR(x,n+1)$ is empty and hence no $r \in F^\algebraR(x,n+1)$ can be chosen which means $\Sine_F^\algebraR(x,n)= \emptyset$.
+\end{proof}
+\begin{claim}
+\label{claim::sin::3}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, then
+    $\forall x\in \dom(f),\ \forall n \in \Nats,\ \forall y\in \Sine_F^\algebraR(x,n) :$
+    \[
+     \abs{\sin(f(x)) - y} < 2^{-n}.
+    \]
+
+\end{claim}
+\begin{proof}
+    For any \WhileCC-prodecure approximating $f:\Reals\to\Reals$, arbitrary $x\in \dom(f)$ and $n\in \Nats$, and for any arbitrary  $y \in \Sine_F^\algebraR(x,n) $, we have $y \in \Sine^\algebraR(r, n+1)$ where $r \in F^\algebraR(x,n + 1)$. Now, let us calculate the error of the approximator function  below:
+    \begin{align*}
+        &\ \abs{\sin(f(x))-y}\\
+         = &\ \abs{\sin(f(x)) - \sin(r) + \sin(r) -y}\\
+        \leq &\ \abs{\sin(f(x)) - \sin(r)} + \abs{\sin(r) -y}\\
+        \leq &\ \abs{f(x) - r}+\abs{\sin(r) -y} \tag{by the mean value theorem} \\
+        < &\ 2^{-n-1}+\abs{\sin(r) -y}\tag{since $r \in F^\algebraR(x, n+1)$}\\
+        < &\ 2^{-n-1}+ 2^{-n-1} \ =\ 2^{-n}& &\tag{since $y \in \Sine^\algebraR_F(r, n+1)$}
+    \end{align*}
+\end{proof}
+\begin{theorem}
+\label{theorem::sin}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$. Then the \WhileCC-procedure  $\Sine_F^\algebraR$ approximates $\sin_f(x)$.
+\end{theorem}
+\begin{proof}
+    Follows from Lemmas \ref{claim::sin::1}, \ref{claim::sin::2}, \ref{claim::sin::3}.
+\end{proof}

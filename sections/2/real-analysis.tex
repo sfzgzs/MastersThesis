@@ -1,0 +1,58 @@
+\section{Basic Real Analysis Concepts: Open Exhaustion, Effective Open Exhaustions, Continuity and Acceptability}
+
+In this thesis, we call a function \textit{acceptable} (Definition \ref{def::acceptable_function}) if it has the properties previously defined in \citet{ComputableTotalFunctionsOnMetricAlgebras_JohnTuckerAndJeffZucker} and referred to as \textit{the global assumptions} by \citet{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}.
+
+Effective uniform continuity (not to be confued with ``effective local uniform continuity'' in Definition \ref{def::effective-local-uniform-continuity}) 
+% \edcomm{WK}{replacing effective uniform continuity (undefined?) with \emph{effective local uniform continuity}?}\edcomm{FG}{Yes, the reason I am not defining ``effective uniform continuity'' is that I'm not using it directly here \ldots }%
+% \edcomm{WK}{Do Zucker \textsl{et al.}\null{} explain the point/purpose of that generalisation?}
+is central to the standard definition of \emph{total} computable functions on reals given by Gryzegorczyk and Lacombe, as published in \cite{ComputabilityInAnalysisAndPhysics_Poure-El_Richards}.
+
+As mentioned in \citet{ComputableTotalFunctionsOnMetricAlgebras_JohnTuckerAndJeffZucker}, acceptability is a natural generalization of effective uniform continuity to \emph{partial} functions.
+
+In this section, we review the relevant definitions needed for defining acceptability.
+
+\paragraph*{\large Notation.}
+Throughout this work, all topological terms like openness and closure of sets on $\Reals$, are considered with respect to the standard (Euclidean) topology. The closure of a set $U$ is denoted by $\overline{U}$.
+
+\begin{definition}[Open exhaustion, \citep{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}]
+\label{def::open_exhaustion}
+    Let $U$ be an open subset of $\Reals$, and $X=(U_0, U_1, U_2,...)$ a sequence of open subsets of $\Reals$.
+    Then the sequence $X$ is called an \textit{\openexhaustion{} of $U$} iff:
+    % \edcomm{WK}{Do you mean ``for each $l \in \Nats$'', or ``for $l$ being the sequence of all natural numbers''?
+    % If the former, than $U_l$ overlaps with $U_0, U_1, U_2$ from above \ldots
+    % If that overlap is intentional, then not the $U_i$ are primitive, but the $I^i_j$.
+    % (Also, ``$l$'' is best avoided as a variable name.)}}
+    \begin{enumerate}
+        \item $ U = \bigcup_{l=0}^\infty U_l$, and
+        \item for each $l \in \Nats$,
+          $U_l$ is a finite union of non-empty open finite intervals $I_1^l, I_2^l,...,I_{k_l}^l $ whose closures are pairwise disjoint, and
+        \item for each $l \in \Nats$,
+           $\overline{U_l} = \bigcup_{i=1}^{k_l} \overline{I_i^l} \subseteq U_{l+1}$.
+    \end{enumerate}
+    For each $l$, $U_l$ is called a \emph{stage} of the exhaustion, with \emph{components} $I_1^l, I_2^l,...,I_{k_l}^l$.
+\end{definition}
+% \edcomm{WK}{Do Zcker \textsl{et al.}\null{} ever explain why the third condition involves closure? Or why there is that disjointness condition, and why that disjointness condition involves closures?}
+
+
+Now that we have the definition of open exhaustion, we also want to be able to \textit{compute} the intervals in each stage of an open exhaustion.
+
+\begin{definition}[Effective open exhaustion, \citep{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}]
+\label{def::effecive-open-exhaustion}
+An \openexhaustion{} $(U_1, U_2, \ldots)$ of an open set $U\subseteq \Reals$ is called an \textit{\effectiveopenexhaustion{}} if 
+\begin{itemize}
+    \item 
+    for all $l$, the components $I_i^l$ that are intervals  building up the stage $U_l$, are \textit{rational} and \textit{ordered} i.e., $I_i^l = (a_i^l, b_i^l)$ for some $a_i^l, b_i^l \in \Rationals$ where $b_i^l < a_{i+1}^l$ for $i=1,...,k_l-1$, and
+    \item the map
+    \[l\mapsto ( a_1^l , b_1^l, ...,
+     a_{k_l}^l, b_{k_l}^l) \]
+    which delivers the sequence of stages $U_l = I_1^l\cup ...\cup I_{k_l}^l$ is recursive.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Effective local uniform continuity, \citep{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}]
+\label{def::effective-local-uniform-continuity}
+    A function $f$ on $U$ is \textit{ \effectivelylocallyuniformlycontinuous{} w.r.t.\null{} an effective exhaustion} $(U_n)_{n \in \Nats}$ of $U$, if there is a recursive function $M:\Nats^2\totalTo \Nats$ such that for all $k,l \in \Nats$ and all $x,y \in U_l$:
+    \[
+    \abs{x-y}<2^{-M(k,l)} \then \abs{f(x)-f(y)}<2^{-k}
+    \]
+\end{definition}

@@ -1,0 +1,24 @@
+\begin{theorem}
+\label{thm::OEX_is_OEX}
+   Let $f:\Reals\to\Reals$ be an \elementaryfunction{}, then for any open set $U$ with an \effectiveopenexhaustion{}, $f^{-1}(U)$ has an \effectiveopenexhaustion{}.
+\end{theorem}
+\begin{proof}
+    We define the effective open exhaustion for $f^{-1}(U)$ inductively using the following theorems:
+    \begin{itemize}
+        \item Base Cases:\\
+            Theorem \ref{thm::OEX_const} (constant fuction), Theorem \ref{thm::OEX_identity} (Identity)
+            Theorem \ref{thm::OEX_inv} (inverse), \\
+            Theorem \ref{thm::OEX_natural_root} (natural root), \\
+            Theorem \ref{thm::OEX_logarithm} (logarithm), \\
+            Theorem \ref{thm::OEX_exponential} (exponential), \\
+            Theorem \ref{thm::OEX_sin} (sin), \\
+            Theorem \ref{thm::OEX_arcsin} (arcsin).
+        \item Induction Steps:\\
+            Theorem \ref{thm::composition_has_OEX} (composition of functions), \\
+            Theorem \ref{thm::addition_has_OEX} (addition), \\
+            Theorem \ref{thm::multiplication_has_OEX} (multiplication). 
+    \end{itemize}
+\end{proof}
+\begin{corollary}
+     Let $f:\Reals\to\Reals$ be an \elementaryfunction{}, then for any open set $U$ with an open exhaustion, $\dom(f)= f^{-1}(\Reals)$ has an effective open exhaustion.
+\end{corollary}

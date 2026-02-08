@@ -1,0 +1,113 @@
+
+\section{Computability on \texorpdfstring{$\mathbf{\Reals}$}{R}: \texorpdfstring{$\mathbf{\alpha}$}{alpha}-tracking Computability}
+\label{sec::alpha-computability}
+In this section, we review the concept of $\alpha$-computability, which is central to the definition of elementary functions defined in \ref{sec::elementary-functions}, and an equivalence lemma by \citet{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}.
+
+\begin{definition}[Standard enumeration of $\Rationals$, \citep{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}]
+\label{def::standard-enumeration}
+    Let $\alpha:\Nats\to\Rationals$. We call $\alpha$ a \textit{\standardenumeration{}} for $\Rationals$ if $\alpha$ is bijective, and the field operations on $\Rationals$ ($+, \cdot, -, /$) are recursive under $\alpha$, i.e.,
+    \begin{itemize}
+        \item there is a recursive function $\mathit{add}:\Nats\times\Nats\to\Nats$ such that 
+        \[
+        \forall n_1, n_2\in \Nats\quad \alpha(n_1)+\alpha(n_2) = \alpha(\mathit{add}(n_1, n_2)),
+        \]
+        \item there is a recursive function $\mathit{mult}:\Nats\times\Nats\to\Nats$ such that 
+        \[
+        \forall n_1, n_2\in \Nats\quad \alpha(n_1)\cdot\alpha(n_2) = \alpha(\mathit{mult}(n_1, n_2)),
+        \]
+        \item there is a recursive function $\mathit{sub}:\Nats\times\Nats\to\Nats$ such that 
+        \[
+        \forall n_1, n_2\in \Nats\quad \alpha(n_1)-\alpha(n_2) = \alpha(\mathit{sub}(n_1, n_2)),\]
+        and
+        \item there is a recursive function $\mathit{div}:\Nats\times\Nats\to\Nats$ such that 
+        \[
+        \forall n_1, n_2\in \Nats\quad n_2\neq 0 \then  \alpha(n_1)/\alpha(n_2) = \alpha(\mathit{div}(n_1, n_2))
+        \]
+    \end{itemize}
+\end{definition}
+\begin{theorem}
+    There is a \standardenumeration{} for $\Rationals$.
+\end{theorem}
+\begin{proof}
+Let us consider G\"odel's pairing function $g(x/y)=2^x(2y+1)-1$. This is a bijection between positive rationals and $\Nats$. We can tweak this to give us a bijection $f$ between $\Rationals$ and $\Nats$. Let us define
+\begin{equation*}
+    f(x/y) =
+    \begin{cases*}
+        2(g(x/y)+1)-1 & if $x/y>0$ \\
+        2g(x/y) & if $x/y<0$, 
+    \end{cases*}
+\end{equation*}
+This maps positive rationals to odd natural numbers and negative rationals to evens.
+The bijection $f^{-1}$ is a standard enumeration for $\Rationals$ since
+the functions $\mathit{add}, \mathit{mult}, \mathit{sub}, \mathit{div}$ are easily proven to be recursive.
+\end{proof}
+\begin{definition}[Computable reals codes $\Omega$, \citep{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}]
+    Let $\langle -,-\rangle:\Nats\times\Nats\to\Nats$ be a recursive encoding of pairs.
+    The set $\Omega \subset \Nats$ is the set of all codes $\langle e, m \rangle$ such that
+    \begin{itemize}
+        \item \( e \) is an index for a total recursive function \( \phi_e : \mathbb{N} \to \mathbb{N} \) generating a Cauchy sequence\index{$\phi$}
+        \[
+        \alpha(\phi_e(0)), \alpha(\phi_e(1)), \alpha(\phi_e(2)), \ldots
+        \]
+        of elements of \( \Rationals \).
+        \item \( m \) is the index of a computable modulus of convergence \( \phi_m : \Nats\totalTo\Nats \), ensuring:
+        \[
+        \forall k, l \geq \phi_m(n), \quad |\alpha(\phi_e(k)) - \alpha(\phi_e(l))| < 2^{-n}.
+        \]
+    \end{itemize}
+\end{definition}
+\begin{definition}[$\alpha$-(tracking) computable reals $\Reals_c$, \citep{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}]
+    For any \standardenumeration{} $\alpha$, we define an enumeration of computable reals $\bar{\alpha}:\Omega\to\Reals$ to be \index{$\phi$} 
+     \[
+        \bar{\alpha}( \langle e, m \rangle ) = \lim_{i\rightarrow \infty} \alpha(\phi_e(i)).
+    \]
+    The range of $\bar{\alpha}$ is called \textit{the set of $\alpha$-tracking computable reals (or \alphacomputablereals{})} and is denoted with $\Reals_c$. 
+\end{definition}
+
+\begin{definition}[$\alpha$-tracking function, \citep{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}]
+    Let \( \alpha \) be a \standardenumeration{} of \( \Rationals \). For functions \( f : \mathbb{R} \to \mathbb{R} \) and \( \tau : \mathbb{N} \to \mathbb{N} \), \( \tau \) is an \( \alpha \)-tracking function for \( f \) if:
+    \begin{enumerate}
+        \item If \( f(\bar{\alpha}(k)) \) is defined, then \( \tau(k) \) is defined, and:
+        \[
+        f(\bar{\alpha}(k)) = \bar{\alpha}(\tau(k)).
+        \]
+        \item If \( f(\bar{\alpha}(k)) \) is undefined, then \( \tau(k) \) is undefined.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}[$\alpha$-(tracking) computability, \citep{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}]
+\label{def::alpha-bar-comp}
+    The function $f:\mathbb{R}\to\mathbb{R}$ is an \emph{$\alpha$-tracking computable (also called an \alphacomputablefunction{})} iff it has a recursive $\alpha$-tracking function. 
+\end{definition}
+
+
+\begin{corollary}
+    \label{corollary::soundness}
+    \footnote{This is a corollary to Theorem (A) in \citet{AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004}
+    }
+    Let $f:\Reals\to\Reals$ be a \WhileCC-approximable function and $\alpha:\Nats\to\Rationals$ be any standard enumeration for $\Rationals$.
+    Then $f$ is $\alpha$-computable.
+\end{corollary}
+Note that corollary \ref{corollary::soundness} implies that
+for any two standard enumerations $\alpha_1$ and $\alpha_2$ for $\Rationals$,
+the set of $\alpha_1$-computable and $\alpha_2$-computable functions coincide under the assumption of \WhileCC-approximability.
+
+
+Using the Definition \ref{def::alpha-bar-comp}, we can easily see the $\alpha$-computability of the constant function(for $\alpha$-computable reals) and the identity function: 
+\begin{lemma}
+\label{lemma::const_is_alpha_comp}
+    The constant function $f(x) = c$ for any \alphacomputablereal{} $c$ is $\alpha$-computable.
+\end{lemma}
+\begin{proof}
+    Using the definition of ${\alpha}$-computability, it suffices to show that the constant function has a recursive $\alpha$-tracking function.\\
+    Since $c$ is an $\alpha$-computable real, this means $c \in \mathbb{R}_c$. 
+    ‌Since by definition, $\alpha$ is a surjection, $\alpha^{-1}(c) \neq \emptyset$. So let's take an arbitrary $y \in \alpha^{-1}(c)$ and let us define $\tau(x) = y$ for all $x$. Then $\tau$ is a recursive $\alpha$-tracking function for $f$.
+\end{proof}
+\begin{lemma}
+\label{lemma::id_is_alpha_comp}
+    The identity function $id(x) = x$ is ${\alpha}$-computable.
+\end{lemma}
+\begin{proof}
+    Using the definition of ${\alpha}$-computability, it suffices to show that the identity function has a recursive $\alpha$-tracking function.\\    
+    let $\tau$ be the identity function on $\mathbb{N}$. Then $\tau$ is a recursive $\alpha$-tracking function‌ for $id(x)$.
+\end{proof}

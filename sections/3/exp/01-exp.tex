@@ -1,0 +1,130 @@
+\subsection{\WhileCC-Approximability of exp(x)}
+Since the function $e^x$ is analytic on $\Reals$, we can compute sufficiently many terms of its Taylor series to get a `sufficiently close' approximation. The Taylor expansion of $e^x$ is as follows:
+\begin{equation}
+\label{eq::exp}
+    e^x = \sum_{n=0}^\infty \frac{x^n}{n!}
+\end{equation}
+\noindent
+To approximate $e^x$, we need to figure out how many iterations of the summation above need to be calculated to achieve the desired precision.
+Let us define the \WhileCC-procedure $\mathsf{isProperIndex}:\nat\times\real\times\nat\to\real$ below:
+\[
+    \mathsf{isProperIndex} \equiv  \\
+                \BLOCK{
+                \PROC  \\
+                    \INDENT{
+                    \IN N:\nat\ x:\real\ c:\nat \\
+                    \AUX \res:\bool}\\
+                \BEGIN \\
+                    \INDENT{
+                    \res := 
+                    \BLOCK{
+                    x^{N}\slash{\factorial(N)}  < (2^{-c}) \\
+                    \boolAnd
+                    (2\ \times\ x) < N \\ \boolAnd
+                    (2\ \times\ - x) < N}\\
+                    \RETURN \res}\\
+                \END}
+\]
+The semantics of the procedure $\mathsf{isProperIndex}$ is as below:
+\[
+    \mathsf{isProperIndex}^\algebraR(N,x,c) = \curlybrac{ \true } \quad \iff \quad 
+    x^n/N! < 2^{-c}\ \land\ 2\abs{x} < N.
+\]
+The procedure \isProperIndex returns true only if calculating the first $n$ terms of the series will
+produce a sufficiently precise approximation.
+
+\begin{lemma}
+\label{lemma::isProperIndex_exp}
+    For all $N \in \Nats$, $x \in \Reals$, and $c \in \Nats$, we have
+    \[
+    \isProperIndex^\algebraR(N, x, c) =\{\true\}\then \abs{e^x - \sum_{n = 0}^{N}{\frac{x^n}{n!}}}<2^{-c}
+    \]
+\end{lemma}
+\begin{proof}
+    Let us assume $\isProperIndex^\algebraR(N, x, c) =\{\true\}$. By definition, this means that 
+    \begin{enumerate}[(i)]
+        \item 
+        \label{item::ispropindex::1}
+            $x^n/N! < 2^{-c}$, and
+        \item 
+        \label{item::ispropindex::2}
+            $2\abs{x}< N$
+    \end{enumerate}
+    We compute an upper bound for the error of the Taylor series approximation up to the $N$th term:
+    \begin{align*}
+        \abs{e^x - \sum_{n = 0}^{N}{\frac{x^n}{n!}}} & =  \abs{\sum_{n = N+1}^{\infty}{\frac{x^n}{n!}}}\\
+        & =\abs{\sum_{k = 1}^{\infty}\frac{x^{N+k}}{(N+k)!}} \\
+        & \leq \sum_{k = 1}^{\infty}\frac{\abs{x}^{N+k}}{(N+k)!} \tag{by triangle inequality}\\
+        & < \sum_{k = 1}^{\infty}\frac{1}{2^k}\cdot\frac{\abs{x}^{N}}{N!} \tag{by assumption (\ref{item::ispropindex::2}) and Lemma \ref{lemma::sum::g}}\\
+        & =1 \cdot \frac{\abs{x}^{N}}{N!} \\
+        & < 2^{-c} \tag{by assumption (\ref{item::ispropindex::1})}
+    \end{align*}
+\end{proof}
+Now we need to make sure that the premise in Lemma \ref{lemma::isProperIndex_exp} can actually be satisfied.
+
+\begin{lemma}
+    \label{lemma::existence::exp}
+    For any $c\in \Nats$ and arbitrary $x\in \Reals$, there is some $N\in \Nats$ for which
+    \[\quad \isProperIndex^\algebraR(N, x, c) = \{ \true\}.\]
+\end{lemma}
+\begin{proof}
+     By Theorem \ref{thm::spivak_theorem}, choosing $\epsilon = 2^{-c}$, there exists an index $N>2\abs{x}$ such that $\frac{x^N}{N!} < 2^{-c}$.
+\end{proof}
+Now we know that for arbitrary inputs $x$, we can find the necessary
+number of terms we must calculate to get the desired precision.
+\begin{definition}
+\label{expOfX}
+    The \WhileCC-procedure
+    \[
+        \Exp \equiv  \\
+                    \BLOCK{
+                    \PROC \\
+                        \INDENT{
+                        \IN x:\real\ c:\nat  \\
+                        \AUX \counter:\nat\ N:\nat\ \summ:\real}\\
+                    \BEGIN \\
+                        \INDENT{
+                        \counter := \natZero \\
+                        \summ := \realZero \\
+                        N := \CHOOSE (k : \nat) : 
+                                \isProperIndex(k,x,c) \\
+                        \WHILE \counter \natLess N \DO \\
+                            \INDENT{
+                            \summ := \summ + x^{\counter}\slash \factorial(\counter) \\
+                            \counter := \counter + 1}\\
+                        \OD \\
+                        \RETURN \summ}\\
+                    \END}\\
+    \]
+    of type $\real\times\nat\to\real$ has the semantics
+    \[
+    \Exp^\algebraR(x,c) = \mleft\{
+    \sum_{n=0}^N \frac{x^n}{n!} \mid \isProperIndex(N,x,c)
+    \mright\} 
+    \]
+\end{definition}
+    The procedure $\Exp$ approximates $e^x$ for $x\in\Reals$ by calculating the first $N$ terms of the series (\ref{eq::exp}) where $N$ is chosen to satisfy $\isProperIndex$.
+\begin{claim}
+\label{claim::exponential::1}
+    For any real $x \in \Reals$ and for any $n\in \Nats$, we have $\Exp^\algebraR(x, n)\neq \emptyset$.
+\end{claim}
+\begin{proof}
+    Follows directly from the definition of $\Exp^\algebraR$ and Lemma \ref{lemma::existence::exp}.
+\end{proof}
+\begin{claim}
+\label{claim::exponential::2}
+    For any $x\in \dom(\exp) = \Reals$, $n\in\Nats$, and $y \in \Exp^\algebraR(x,n)$ we have
+    \[
+    \abs{e^x - y} < 2^{-n}.
+    \]
+\end{claim}
+\begin{proof}
+Follows directly from the definition of $\Exp^\algebraR$ and Lemma \ref{lemma::isProperIndex_exp}.
+\end{proof}
+\begin{theorem}
+\label{theorem::exponential}
+    The \WhileCC-procedure $\Exp$ given in Definition \ref{expOfX} approximates $\exp$.
+\end{theorem}
+\begin{proof}
+    Follows directly from Lemmas \ref{claim::exponential::1}, \ref{claim::exponential::2} and the fact that $\dom(\exp) = \Reals$.
+\end{proof}

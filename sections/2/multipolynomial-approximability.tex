@@ -1,0 +1,39 @@
+\section{Computability on \texorpdfstring{$\mathbf{\Reals}$}{R}: Multipolynomial approximability}
+\label{sec::multipolynomial}
+In this section, we review the concept of multipolynomial computability, which is only used in section \ref{sec::continuity_for_composition}.
+During this section, whenever we refer to a ``polynomial'', we mean a $\Rationals$-polynomial. The symbol $\upharpoonright$ is used for domain restriction.
+\begin{definition}[Multipolynomial, \citep{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}]
+    Given a finite sequence of polynomials $(p_1, p_2, \ldots, p_k)$ and a sequence of open intervals $(I_1, I_2, \ldots, I_k)$ with disjoint closures, we define a ($\Rationals$-)\multipolynomial{} $q(x)$ with domain $\bigcup_{i=1}^k \overline{I_i}$ as follows:
+    \begin{equation*}
+        q(x) =
+        \begin{cases}
+            p_1(x)& \text{if } x\in \overline{I_1}\\
+            p_2(x)& \text{if } x\in \overline{I_2}\\
+            \ldots&\\
+            p_k(x)& \text{if } x\in \overline{I_k}\\
+            \text{undefined} & \text{otherwise.}
+        \end{cases}
+    \end{equation*}
+    We denote this polynomial by
+    \[
+    q = [p_1 \upharpoonright \overline{I_1}, \ldots, p_k \upharpoonright \overline{I_k}].
+    \]
+\end{definition}
+
+\begin{definition}[Effective sequence of multipolynomials, \citep{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}]
+    Given an \effectiveopenexhaustion{} $(U_n)_{n \in \Nats}$ of $U$, a sequence of polyomials $(q_l)$ is called an \emph{\effectivesequenceofmultipolynomials{}} if 
+    \[
+        q_l = \brac{ p_1^l \upharpoonright \overline{I_1^l}, \ldots, p_k^l \upharpoonright \overline{I_{k_l}^l}}
+    \]
+    where for any $l\in\Nats$, we have $U_l = I_1^l \cup \cdots \cup I_{k_l}^l$ and $(p_1, p_2, \ldots, p_k)$ is an effective sequence of tuples of polynomials.
+\end{definition}
+
+\begin{definition}[Effective local multipolynomial approximability, \citep{ModelOfCompForPartFunc_MingQuanFuAndJeffZucker}]
+    Let $f:\Reals\to\Reals$ and $X=(U_1, U_2, \ldots)$ be an \effectiveopenexhaustion{} of $\dom(f)$, and let $(q_n)_{n\in\Nats}$ be an \effectivesequenceofmultipolynomials{}. If there is a recursive function $M:\Nats\times\Nats\to\Nats$ such that for all $k,l,n\in\Nats$ and $x\in\overline{U_l}$ we have
+    \[
+    n  \geq M(k,l) \then \abs{q_n(x)- f(x)}<2^{-k},
+    \]
+     we say $f$ is \emph{\effectivelylocallymultipolynomiallyapproximable{} w.r.t. $X$ by $(q_l)$ via $M$} and write $(q_l) \rightarrowtriangle_{M, X} f$.
+     
+    We say \emph{$f$ is effectively locally multipolynomially approximable w.r.t. $X$ by $(q_l)$} if $f$ is effectively locally multipolynomially approximable w.r.t. $X$ via some recursive function $M$ and write $(q_l) \rightarrowtriangle_{X} f$.
+\end{definition}

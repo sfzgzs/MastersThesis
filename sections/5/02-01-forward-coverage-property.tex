@@ -1,0 +1,172 @@
+Intuitively, we say a function satisfies the forwad coverage property if when applying the function on a point, based on which stage of the open exhaustion of the domain the point appears in, we can systematically anticipate the state of the open exhaustion for the range in which we can expect the value to fall in.  
+
+\begin{definition}[Forward coverage property w.r.t some effective open exhaustion]
+\label{def::forward-coverage-property}
+    Let $f:\Reals\to\Reals$, $U$ an open set with an effective open exhaustion $X=(U_1, U_2, \ldots)$, and $f^{-1}(U)$ have an effective open exhaustion $(U'_1, U'_2, \ldots)$. Then $f$ satisfies the \emph{\forwardcoverageproperty{} w.r.t $X$}, if there is a recursive function $S_f:\Nats\to\Nats$ where 
+    \[
+        x\in U'_l \then f(x) \in U_{S_f(l)}.
+    \]
+\end{definition}
+\begin{definition}[Interval forward coverage property w.r.t some open exhaustion]
+    Let $f:\Reals\to\Reals$, $U$ an open set with an \effectiveopenexhaustion{} $(U_1, U_2, \ldots)$. Then $f$ satisfies the \emph{\intervalforwardcoverageproperty{}}, if there is a recursive function $S_f:\Rationals\times\Rationals\times\Nats\to\Nats$ where 
+    \[
+        x\in (a,b) \then f(x) \in U_{S_f(a,b,l)}
+    \]
+     for any $a,b\in \Rationals$ and $[a,b] \subseteq f^{-1}(U)$.
+\end{definition}
+\begin{lemma}
+\label{lemma::interval_fp_implies_fp}
+    Let $f:\Reals\to\Reals$ be a function with \intervalforwardcoverageproperty{} with respect to some \effectiveopenexhaustion{} $X$. Then $f$ has \forwardcoverageproperty{} with respect to $X$ as well.
+\end{lemma}
+\begin{proof}
+    Let $U$ an open set with an effective open exhaustion $X=(U_1, U_2, \ldots)$, and $f^{-1}(U)$ have an effective open exhaustion $(U'_1, U'_2, \ldots)$. There is a recursive function $S_f:\Rationals\times\Rationals\times\Nats\to\Nats$ that, for any $a,b\in \Rationals$ and $[a,b] \subseteq U'_l$ and for any $x\in (a,b)$, satisfies
+    \[
+        x\in (a,b) \then f(x) \in U_{S_f(a,b,l)}.
+    \]
+    Let the stage $U'_l = (a_1,b_1)\cup \cdots \cup (a_{n_l}, b_{n_1})$.
+    Let us define
+    \[
+        S(l) \stackrel{def}= \max\{S_f(a_1,b_1,l), \ldots S_f(a_{n_l},b_{n_l},l) \}
+    \]
+    then clearly
+    \[
+        x\in U'_l \then f(x) \in U_{S(l)}.
+    \]
+    This proves the forward coverage property.
+\end{proof}
+\begin{definition}[Estimation of max and min over a closed interval]
+\label{def::estimate_max_min_eluc_function_over_iunteval}
+    Let $f_0:\Rationals\times\Nats\to\Rationals$ and $N:\Rationals\times\Rationals\times\Nats\to\Nats$. Then we define $\Max_{f_0, N}:\Rationals\times\Rationals\times\Nats\to\Rationals$ as 
+    \[
+        \Max_{f_0, N}(a,b,n) \stackrel{def}=\max\curlybrac{ f_0(q,n+1) \mid q\in \{a_1, \ldots, a_m\} },
+    \] 
+    and respectively, $\Min_{f_0,N} :\Rationals\times\Rationals\times\Nats\to\Rationals$ as 
+    \[
+        \Min_{f_0, N}(a,b,n) \stackrel{def}= \min\curlybrac{ f_0(q,n+1) \mid q\in \{a_1, \ldots, a_m\} },
+    \]
+    where we divide $[a,b]$ into segments $[a_1, a_2],[a_2, a_3],\ldots,[a_{m-1}, a_{m}]$ such that 
+    \[
+        \forall i\in\{1,\ldots, m-1\} \quad \abs{a_{i+1}- a_i}<2^{-N(a,b,n+1)-1}.
+    \]
+\end{definition}
+
+\begin{theorem}
+\label{thm::min_max}
+    Let $f:\Reals\to\Reals$ and $f_0:\Rationals\times\Nats\to\Rationals$ satisfy, for any $n\in\Nats$ and any $x\in \dom(d)\cap \Rationals$,
+    \[
+        \abs{f_0(x,n) - f(x)} < 2^{-n}.
+    \]
+    Let us also assume we have a recursive function $N:\Rationals\times\Rationals\times\Nats\to\Nats$ that for any $n\in\Nats$ and $a,b\in\Rationals$ with $[a,b]\subseteq \dom(f)$, we have
+    \[
+        \abs{x - y}<2^{-N(a,b,n)} \then \abs{f(x)-f(y)}<2^{-n}.
+    \]
+    Then 
+    \[
+        \abs{\Max_{f_0, N}(a,b,n) - \max_{x\in [a,b]} {f(x)}}<2^{-n}
+    \]
+    and 
+    \[
+        \abs{\Min_{f_0, N}(a,b,n) - \min_{x\in [a,b]} {f(x)}}<2^{-n}.
+    \]
+
+    % Let us consider the following \WhileCC-procedure:
+    % \[
+    % \mathsf{Max}_{F,N} \equiv\\
+    %     \BLOCK{
+    %     \PROC\\
+    %         \INDENT{
+    %             \IN a: \real \ b:\real\ \error:\nat\\
+    %             \OUT retVal:\real\\
+    %             \AUX \BLOCK{\intervalCount:nat\ \intervalLength:\real\ \comparisonError:\real\\
+    %             \pointToCheck:\real\ \Fmax:real\ f:\real}}\\
+    %     \BEGIN\\
+    %         \INDENT{
+    %         \intervalCount := \CHOOSE (K:\nat): (b-a)/k < 2^{-N(a,b,\error+1)-1}\\
+    %         \intervalLength := (b-a)/\intervalCount\\
+    %         \comparisonError := \CHOOSE (r:\real) : \intervalCount\times r< 2^{-N(a,b,error+1)-1}\\
+    %         \pointToCheck := a\\
+    %         \Fmax := F(a, \error+1)\\
+    %         \WHILE \intervalCount>0\\
+    %         \DO\\
+    %             \INDENT{
+    %             \pointToCheck := \pointToCheck + \intervalLength\\
+    %             f := F(\pointToCheck, \error+1)+2^{-error-1}\\
+    %             \Fmax := \CHOOSE (r:\real) :
+    %             \BLOCK{
+    %             r>\Fmax \boolAnd r > f \boolAnd\\
+    %             (r < \Fmax+\comparisonError \boolOr r < f+\comparisonError)}\\
+    %             \intervalCount := \intervalCount - 1}\\
+    %         \OD\\
+    %         \RETURN \Fmax\\
+    %         \END}}\\
+    % \]
+\end{theorem}
+\begin{proof}
+    We prove 
+    \[
+        \abs{\Max_{f_0, N}(a,b,n) - \max_{x\in [a,b]} {f(x)}}<2^{-n}.
+    \]
+    The case of minimum is similar.
+    
+    Let us divide $[a,b]$ into segments $[a_1, a_2],[a_2, a_3],\ldots,[a_{m-1}, a_{m}]$, where $a_1 = a$ and $a_m = b$, such that 
+    \[
+        \forall i\in\{1,\ldots, m-1\} \quad \abs{a_{i+1}- a_i}<2^{-N(a,b,n+1)-1}.
+    \]
+    since $[a,b]\subseteq \dom(f)$ is a closed interval, we know that $f(x)$ will have its maximum in $[a,b]$. Since we have $[a,b] = [a_1, a_2], \ldots, [a_{m-1}, a_m]$, the maximum of $f(x)$ will occur at least in one interval $[a_j, a_{j+1}]$. Now:
+    \begin{align*}
+        &\quad \abs{\Max_{f_0, N}(a,b,n) - \max_{x\in [a,b]}f(x)}\\
+        & = \abs{\max\curlybrac{ f_0(q,n+1) \mid q\in \{a_1, \ldots, a_m\}} - \max_{x\in [a,b]}f(x)}\\
+        & = \abs{\max\curlybrac{ f_0(q,n+1) - \max_{x\in [a,b]}f(x) \mid q\in \{a_1, \ldots, a_m\} }}\\
+        % & = \abs{\max\curlybrac{ f_0(a_j,n+1) - \max_{x\in [a_j,a_{j+1}]}f(x)}}\\
+        & = \abs{f_0(a_j,n+1) - \max_{x\in [a_j,a_{j+1}]}f(x)}\\
+        & = \abs{f_0(a_j,n+1) - f(a_j) + f(a_j) - \max_{x\in [a_j,a_{j+1}]}f(x)}\\
+        & \leq \abs{f_0(a_j,n+1) - f(a_j)} + \abs{f(a_j) - \max_{x\in [a_j,a_{j+1}]}f(x)}\\
+        & < 2^{-n-1} + 2^{-n-1}\\
+        & = 2^{-n}
+    \end{align*}
+    % Since the length of each segment is less than $2^{-N(a,b,n)-1}$ and hence less than $2^{-N(a,b,n)}$, $\Max_f(a,b,n)$ (resp. $\Min_f(a,b,n)$) gives us an estimation with precision $2^{-n}$ for the actual maximum (resp minimum) of $f(x)$ over $[a,b]$.
+\end{proof}
+\begin{lemma}
+\label{lemma::def_f_0}
+    Let $f:\Reals\to\Reals$ be effectively locally multipolynomially approximable w.r.t. $(U_1, U_2, \ldots)$ by $(q_n)_{n\in\Nats}$ via $M$ where $(U_1, U_2, \ldots)$ is an effective open exhaustion of $\dom(f)$. Then there is a function $f_0:\Rationals\times\Nats\to\Nats$ such that 
+    \[
+        \abs{f_0(x,n) - f(x)} < 2^{-n}.
+    \]
+\end{lemma}
+\begin{proof}
+    Let us define $f_0:\Rationals\times\Nats\to\Nats$ to be 
+    \[
+        f_0(x,n) \stackrel{def}= q_{M(n, \min \{ l \mid x\in U_l\})}(x).
+    \]
+    Then $f_0$ satisfies $\abs{f_0(x,n) - f(x)} < 2^{-n}$ by the definition of effective local multipolynomial approximability.
+\end{proof}
+\begin{theorem}
+    \label{thm::eluc_implies_interval_fp}
+    All \acceptable{} \WhileCCapproximable{} functions satisfy the \intervalforwardcoverageproperty{} with respect to any \effectiveopenexhaustion{}.
+\end{theorem}
+\begin{proof}
+    Let $f:\Reals\to\Reals$ be an acceptable \WhileCC-approximable function. Let $U$ be an open set with an effective open exhaustion $(U_1, U_2, \ldots)$. Then, in order to prove that $f$ satisfies the interval forward coverage property, we need to give a recursive function $S_f:\Rationals\times\Rationals\times\Nats\to\Nats$ that, for any $a,b\in\Rationals$ with $[a,b]\subseteq f^{-1}(U)$, satisfies
+    \[
+        x\in (a,b) \then f(x) \in U_{S_f(a,b,l)}.
+    \]
+    By Fu and Zucker's equivalence Theorem \ref{lemma::equivalence_alpha_tracking_wcc_appx} and Lemma \ref{lemma::def_f_0}, there is a function $f_0$ satisfying $\abs{f_0(x,n) - f(x)} < 2^{-n}$.
+    Since $f$ is effectively locally uniformly continuous, we have a recursive function $N:\Rationals\times\Rationals\times\Nats\to\Nats$ that for any $n\in\Nats$ and $a,b\in\Rationals$ with $[a,b]\subseteq \dom(f)$, we have
+    \[
+        \abs{x - y}<2^{-N(a,b,n)} \then \abs{f(x)-f(y)}<2^{-n}.
+    \]
+    Let us define 
+    \[
+    S_f(a,b,l) \stackrel{def}= \min\curlybrac{n \mid [\Min_{f_0, N}(a,b,n), \Max_{f_0, N}(a,b,n)]\subseteq U_n}.
+    \]
+    Since $[a,b]\subseteq f^{-1}(U)$, it follows that $f([a,b])\subseteq U$. Since $f$ is continuous and defined on $[a,b]$, $f([a,b])$ must be a closed interval $[\min_{x\in [a,b]}f(x), \max_{x\in [a,b]}f(x)]$ which falls under some stage $U_m$. and since $U_m$ is open, then by Theorem \ref{thm::min_max} there must be some $k \geq m$ such that 
+    \[
+    [\min_{x\in [a,b]}f(x), \max_{x\in [a,b]}f(x)]\subseteq[\Min_{f_0, N}(a,b,k)-2^{-k}, \Max_{f_0,N}(a,b,k)+2^{-k}] \subseteq U_m \subseteq U_k.
+    \]
+\end{proof}
+\begin{corollary}
+\label{corollary::eluc_functions_satisfy_forward_coverage_property}
+    All $\WhileCC$-approximable, effectively locally uniform continuous functions satisfy the \forwardcoverageproperty{}.
+\end{corollary}
+\begin{proof}
+    Follows directly from Theorem \ref{thm::eluc_implies_interval_fp} and Lemma \ref{lemma::interval_fp_implies_fp}.
+\end{proof}

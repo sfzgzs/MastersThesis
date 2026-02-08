@@ -1,0 +1,80 @@
+\chapter{Auxiliary Theorems}
+\label{sec::appendix}
+
+% for section 3, exp(x)
+ Theorem \ref{thm::spivak_theorem} is used in both Sections \ref{sec4::subsection::exp} and \ref{sec4::subsection::sin}, and Lemmas \ref{lemma::exp-subtraction}, \ref{lemma::exp-comparison}, and \ref{lemma::sum::g} are used in Section \ref{sec4::subsection::exp}.
+\begin{theorem}[\citep{spivak2006calculus}, page 308]
+\label{thm::spivak_theorem}
+For any arbitrary $\epsilon, a\in \Reals$ with $\epsilon > 0$, there exists some $n' \in \Nats$ such that, for all $n > n'$, we have $\frac{a^n}{n!}< \epsilon$.
+\end{theorem}
+\begin{proof}
+    Let $a, \epsilon\in\Reals$ with $\epsilon > 0$.
+    Notice that for any arbitrary fixed $b\in \Reals$, and for any $m \in \Nats$, if $m\geq 2b$ then
+    \[
+    \frac{b^{m+1}}{(m+1)!}= \frac{b}{m+1}\cdot\frac{b^m}{m!}<\frac{1}{2}\cdot\frac{b^m}{m!}.
+    \]
+    Now, let us fix $n_0$ to be any natural number with $n_0>2a$. Then, we have:
+    \begin{align*}
+         \frac{a^{n_0+1}}{(n_0+1)!} & < \frac{1}{2}\cdot\frac{a^{n_0}}{n_0!}\\
+         \frac{a^{n_0+2}}{(n_0+2)!} & < \frac{1}{2}\cdot\frac{a^{n_0+1}}{(n_0+1)!} < \frac{1}{2}\cdot\frac{1}{2}\cdot\frac{a^{n_0}}{n_0!}\\
+         \vdots\\
+         \frac{a^{n_0+k}}{(n_0+k)!} & < \frac{1}{2^k}\cdot\frac{a^{n_0}}{n_0!}
+    \end{align*}
+    Let $2^k$ be the first power of 2 for which $\frac{a^{n_0}}{(n_0)!\epsilon}<2^k$ holds, then $\frac{a^{n_0+k'}}{(n_0+k')!} < \epsilon$ for any $k'>k$, which is the desired result.
+\end{proof}
+
+\begin{lemma}
+\label{lemma::exp-subtraction}
+    For any $x,y\in\Reals$, we have
+    \[ e^{x}-e^{x-y}\leq e^{x+y} - e^x. \]
+\end{lemma}
+\begin{proof}
+    \begin{align*}
+        & e^{x}-e^{x-y}\leq e^{x+y} - e^x\\
+        \ifff & e^x(1-e^{-y}) \leq e^x(e^y - 1)\\
+        \ifff & 1-e^{-y} \leq e^y - 1\\
+        \ifff & 2 \leq e^y + e^{-y}\\
+        \ifff & 1 \leq (e^y + e^{-y})/2\\
+        \ifff & 1 \leq \cosh(x)\\
+        \ifff & \textrm{true}
+    \end{align*}
+\end{proof}
+
+\begin{lemma}
+\label{lemma::exp-comparison}
+    Let the \WhileCC-procedure $F:\real\times\nat\to\real$ approximate $f:\Reals\to\Reals$, $x\in\dom(f)$, and $r \in F^\algebraR(x,m)$. Then $\abs{e^{f(x)}- e^r} < \abs{e^f(x)- e^{f(x)+2^{-m}}}$.
+\end{lemma}
+\begin{proof}
+    We prove this by cases:
+    \begin{itemize}
+        \item $ r\leq f(x)$:
+        \begin{align*}
+            \abs{e^{f(x)} - e^r} & < \abs{e^{f(x)}- e^{f(x)-2^{-m}}} \tag{since $e^r > e^{f(x)-2^{-m}}$}\\
+            & \leq \abs{e^{f(x)}- e^{f(x)+2^{-m}}} \tag{by Lemma \ref{lemma::exp-subtraction}}
+        \end{align*}
+        \item $ r > f(x)$:
+        \begin{align*}
+            \abs{e^{f(x)} - e^r} & = \abs{e^r - e^{f(x)}}\\
+            & < \abs{e^{f(x)+2^{-m}} - e^{f(x)}}\tag{since $e^r < e^{f(x)+2^{-m}}$}\\
+            & = \abs{e^{f(x)}- e^{f(x)+2^{-m}}}
+        \end{align*}
+
+    \end{itemize}
+\end{proof}
+\begin{lemma}
+\label{lemma::sum::g}
+    Let $x\in\Reals$ and $N\in\Nats$. Then for any $k\in\Nats$
+    \[
+    \abs{2x}< N \then
+    \frac{\abs{x}^{N+k}}{(N+k)!} < \frac{1}{2^{k}}\frac{\abs{x}^N}{N!}.
+    \]
+\end{lemma}
+\begin{proof}
+The proof is inspired by the proof of Theorem \ref{thm::spivak_theorem}.
+    \begin{align*}
+        \abs{2x}< N \then & \frac{\abs{x}}{N}<\frac{1}{2}\\
+        \then & \forall k\in\Nats \quad\frac{\abs{x}^k}{(N+1)\cdots (N+k)} < \frac{1}{2^k}\\
+        \then & \forall k\in\Nats \quad \frac{\abs{x}^N}{N!}\cdot\frac{\abs{x}^k}{(N+1)\cdots (N+k)} < \frac{1}{2^k} \cdot \frac{\abs{x}^N}{N!}\\
+        \then & \forall k\in\Nats \quad \frac{\abs{x}^{N+k}}{(n+k)!} < \frac{1}{2^k} \cdot \frac{\abs{x}^N}{N!}
+    \end{align*}
+\end{proof}

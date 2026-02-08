@@ -1,0 +1,36 @@
+\begin{theorem}
+\label{thm::continuity_wrt_OEX}
+   Let $f:\Reals\to\Reals$ be an \elementaryfunction{}, then $f$ is effectively locally uniformly continuous w.r.t. any \effectiveopenexhaustion{} for its domain. 
+\end{theorem}
+\begin{proof}
+    Follows directly from
+    \begin{itemize}
+        \item Theorem \ref{thm::effective_local_uniform_continuity_basics} (constant, identity, inverse, logarithm, exp, arcsine and natural root functions),
+        \item
+            Theorem \ref{thm::effective_local_uniform_continuity_sin} ($\sin$ function),
+        \item
+            Theorem \ref{thm::effective_local_uniform_continuity_composition} (composition of functions),
+        \item
+            Theorem \ref{thm::effective_local_uniform_continuity_addition} (addition of functions), and
+        \item
+            Theorem \ref{thm::effective_local_uniform_continuity_multiplication} (multiplication of functions).
+    \end{itemize}
+\end{proof}
+
+\begin{theorem}
+\label{thm::elem_funcs_are_acceptable} 
+    All \elementaryfunctions{} $f:\Reals\to\Reals$ are \acceptable{}.
+\end{theorem}
+\begin{proof}
+Follows directly from Theorem \ref{thm::OEX_is_OEX} and Theorem \ref{thm::continuity_wrt_OEX}. 
+\end{proof}
+
+\begin{corollary}
+   Using Theorem \ref{thm::elem_funcs_are_WCC_approximable} and Theorem \ref{thm::elem_funcs_are_acceptable}, along with the equivalence lemma \ref{lemma::equivalence_alpha_tracking_wcc_appx}, we can immediately conclude that any unary elementary function is also:
+   \begin{itemize}
+    \setlength\itemsep{0.3 em}
+        \item GL-computable w.r.t. an effective open exhaustion for its domain,
+        \item tracking computable, and
+        \item multipolynomially approximable w.r.t. an effective open exhaustion for its domain.
+    \end{itemize}
+\end{corollary}

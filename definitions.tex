@@ -1,0 +1,264 @@
+\newtheoremstyle{bfnote}%
+  {}{}
+  {\upshape}{}
+  {\bfseries}{.}
+  { }{\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}
+
+\theoremstyle{bfnote}
+% \theoremstyle{definition}
+
+% -- Theorem definitions
+\newtheorem{definition}{Definition}[section]
+\newtheorem{claim}[definition]{Lemma}
+\newtheorem{conjecture}[definition]{Conjecture}
+\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheoremrep{proposition}[definition]{Proposition}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{remark}[definition]{Remark}
+
+% -- While, WhileCC Typesetting 
+\newcommand\While{\textit{\textbf{While}}}
+
+% -- Carrier sets
+\newcommand\Reals{\mathbb{R}}
+\newcommand\Nats{\mathbb{N}}
+\newcommand\Bools{\mathbb{B}}
+\newcommand\Rationals{\mathbb{Q}}
+\newcommand\Integers{\mathbb{Z}}
+
+
+\newcommand\real{\mathsf{real} }
+\newcommand\nat{\mathsf{nat}}
+\newcommand\bool{\mathsf{bool}}
+
+% -- Algebras
+\newcommand\algebraR{\mathcal{R}}
+\newcommand\algebraB{\ensuremath{\mathcal{B}} }
+
+
+% -- Function Types
+\newcommand\totalTo{\twoheadrightarrow}
+
+% -- Function names
+\newcommand\chooseOp{\mathsf{choose}}
+\newcommand\returnOp{\mathsf{return}}
+
+\newcommand\realZero{\mathsf{0_{real}}}
+\newcommand\natZero{\mathsf{0_{nat}}}
+
+\newcommand\realOne{\ensuremath{\mathsf{1_{real}}} }
+\newcommand\natOne{\ensuremath{\mathsf{1_{nat}}} }
+\newcommand\realMinusOne{\ensuremath{\mathsf{-1_{real}}} }
+\newcommand\realPlus{\mathsf{+_{real}}}
+\newcommand\realTimes{\mathsf{\times_{real}}}
+
+\newcommand\realInv{\ensuremath{\mathsf{inv_{real}}} }
+\newcommand\natSuc{\ensuremath{\mathsf{suc_{nat}}} }
+\newcommand\true{\mathsf{tt}}
+\newcommand\false{\mathsf{ff}}
+\newcommand\boolAnd{\mathrel{\mathsf{and}}}
+\newcommand\boolOr{\mathrel{\mathsf{or}}}
+\newcommand\boolNot{\ensuremath{\mathsf{not}} }
+\newcommand\natEq{\mathrel{=_\mathsf{nat}}}
+\newcommand\natLess{\mathbin{<_\mathsf{nat}}}
+\newcommand\realEq{\mathbin{\ensuremath{\mathsf{eq_{real}}} }}
+\newcommand\realLess{\mathbin{\mathsf{<_\mathsf{real}}}}
+\newcommand\natPlus{\mathbin{+_\mathsf{nat}}}
+\newcommand\natTimes{\mathbin\times_{\mathsf{nat}}}
+
+\newcommand\realtoNatPow{\mathsf{pow}}
+\newcommand\isProperIndex{\ensuremath{\mathsf{isProperIndex}} }
+\newcommand\isProperIndexOne{\mathsf{isProperIndex1} }
+\newcommand\isProperIndexTwo{\mathsf{isProperIndex2} }
+\newcommand\factorial{\mathsf{Factorial}}
+\newcommand\toReal{\mathsf{toReal}}
+
+% WhileCC procedures
+\newcommand\Exp{\mathsf{Exp}}
+\newcommand\Sine{\mathsf{Sine}}
+\newcommand\Ln{\mathsf{Ln}}
+
+% Functions
+\newcommand\division{\mathrm{div}}
+\newcommand\inv{\mathrm{inv}}
+\newcommand\id{\mathrm{id}}
+\newcommand\CartProd{(f\times g)}
+\newcommand\Add{\mathrm{Add}}
+\newcommand\Mult{\mathrm{Mult}}
+\newcommand\Diag{\mathrm{Diag}}
+\newcommand\inner{\mathrm{inner}}
+\newcommand\isIn{\mathrm{in}}
+\newcommand\nbox{\mathrm{box}}
+\newcommand\REC{\mathrm{REC}}
+\newcommand\Max{\mathrm{Max}}
+\newcommand\Min{\mathrm{Min}}
+
+
+
+\newcommand\ceilApprox{\ensuremath{\mathsf{ceil}} } 
+
+\newcommand\dom{\mathbf{dom}} 
+\newcommand\range{\mathbf{range}} 
+
+\newcommand\ifff{\ \Longleftrightarrow \ }
+\newcommand\then{\ \Longrightarrow \ }
+\newcommand\Nbd{\mathbf{Nbd}}
+
+
+\newcommand\procOne{\mathsf{proc1}}
+\newcommand\procTwo{\mathsf{proc2}}
+\newcommand\ifOp[3]{\ensuremath{\mathsf{if \ #1 \ then \ #2 \ else \ #3 \ fi}} }
+\newcommand\procF{\mathsf{procF}}
+\newcommand\procP{\mathsf{procP}}
+\newcommand\procG{\mathsf{procG}}
+
+\newcommand\abs[1]{{\mleft\lvert #1 \mright\rvert}}
+\newcommand\curlybrac[1]{\mleft\{ #1 \mright\}}
+\newcommand\brac[1]{{\mleft[ #1 \mright]}}
+\newcommand\paren[1]{\mleft( #1 \mright)}
+
+\newcommand\ceil[1]{{\lceil #1 \rceil}}
+\newcommand\intervalCount{\mathit{intervalCount}}
+\newcommand\error{\mathit{error}}
+\newcommand\intervalLength{\mathit{intervalLength}}
+\newcommand\comparisonError{\mathit{err}}
+\newcommand\pointToCheck{\mathit{pointToCheck}}
+\newcommand\Fmax{\mathit{F_{max}}}
+\newcommand\intervals{\mathit{intervals}}
+
+
+\newcommand\OEX[2]{\textit{OEX}_{#1}(#2)}
+% \newcommand\barr[1]{\bar{#1\vphantom{b}}}
+\usepackage{ stmaryrd }
+
+\newcommand\todobox[1]{
+\hspace{0.5em}
+\begin{tcolorbox}[colback = yellow]
+\small{
+    #1
+    }
+    \end{tcolorbox}
+}
+
+\newcommand\newtodobox[1]{
+\begin{tcolorbox}[colback = orange]
+\small{
+    #1
+}
+    \end{tcolorbox}
+}
+\newcommand\uncheckedBox{
+\item[$\square$]
+}
+\newcommand\inProgressBox{
+\item[\rlap{\raisebox{0.5ex}{\hspace{0.5ex}\tiny \ding{56}}}$\square$]
+}
+
+\newcommand\checkedBox{
+\item[\rlap{\raisebox{0.5ex}{\hspace{0.5ex}\tiny \ding{52}}}$\square$]
+}
+
+
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+% \definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+
+\newcommand\res{\mathit{res}}
+\newcommand\arraySize{\mathit{arraySize}}
+\newcommand\Stage{\mathit{Stage}}
+\newcommand\tmp{\mathit{tmp}}
+\newcommand\chosenVal{\mathit{chosenVal}}
+\newcommand\summ{\mathit{sum}}
+\newcommand\tmpNat{\mathit{tmpNat}}
+\newcommand\tmpReal{\mathit{tmpReal}}
+\newcommand\counter{\mathit{counter}}
+\newcommand\upper{\mathit{upper}}
+\newcommand\lowerr{\mathit{lower}}
+
+\newcommand\SortOfSigma{\mathbf{Sort(\Sigma)}}
+\newcommand\VarOfSigma{\mathbf{Var(\Sigma)}}
+\newcommand\TermOfSigma{\mathbf{Term(\Sigma)}}
+\newcommand\StatementOfSigma{\mathbf{Stmt(\Sigma)}}
+\newcommand\ProcOfSigma{\mathbf{Proc(\Sigma)}}
+\newcommand\SIGMA{\mathbf{\Sigma}}
+
+
+
+\newcommand\llb{\llbracket}
+\newcommand\rrb{\rrbracket}
+\newcommand\sem[1]{ \llb #1 \rrb^A}
+\newcommand\atomicSem[1]{\llparenthesis\ #1\ \rrparenthesis^A}
+\newcommand\State{\textbf{State}}
+\newcommand\Term{\textbf{Term}}
+\newcommand\First{\mathbf{First}}
+\newcommand\Rest{\mathbf{Rest}}
+\newcommand\AtSt{\mathbf{AtSt}}
+\newcommand\powerset{\mathcal{P}}
+\newcommand\Stmt{\mathbf{Stmt}}
+\newcommand\diverge{\mathsf{div}}
+\newcommand\isCloseEnough{\mathsf{isCloseEnough}}
+\newcommand\CompStepA{\mathbf{CompStep^{A}}}
+\newcommand\CompTreeA{\mathbf{CompTree^{A}}}
+\newcommand\CompTreeStageA{\mathbf{CompTreeStage^{A}}}
+
+
+
+
+\newcommand\BLOCK[1]{
+    \begin{array}[t]{@{}l@{}}
+        #1
+    \end{array}}
+\newcommand\INDENT[1]{\quad\BLOCK{#1}}
+
+\newcommand\PROC{\textcolor{blue}{\mathsf{proc}}\ }
+\newcommand\BEGIN{\textcolor{blue}{\mathsf{begin}}\ }
+\newcommand\END{\textcolor{blue}{\mathsf{end}}\ }
+\newcommand\IN{\textcolor{blue}{\mathsf{in}}\ }
+\newcommand\OUT{\textcolor{blue}{\mathsf{out}}\ }
+\newcommand\AUX{\textcolor{blue}{\mathsf{aux}}\ }
+\newcommand\CHOOSE{\textcolor{blue}{\mathsf{choose}}\ }
+\newcommand\IF{\textcolor{blue}{\mathsf{if}}\ }
+\newcommand\THEN{\ \textcolor{blue}{\mathsf{then}}\ }
+\newcommand\ELSE{\textcolor{blue}{\mathsf{else}}\ }
+\newcommand\FI{\textcolor{blue}{\mathsf{fi}}\ }
+\newcommand\WHILE{\textcolor{blue}{\mathsf{while}}\ }
+\newcommand{\DO}{\textcolor{blue}{\ \mathsf{do}}\ }
+\newcommand{\OD}{\textcolor{blue}{\mathsf{od}}\ }
+\newcommand{\RETURN}{\textcolor{blue}{\mathsf{return}}\ }
+\newcommand\COMMENT[1]{\textnormal{\textcolor{teal}{/* #1 */}}}
+\input{index}
+
+\newcommand{\teal}{\color{teal}}
+
+\newif\ifrevision
+\revisiontrue
+
+\ifrevision
+\newcommand{\needsRevision}{\textcolor{red}}
+\else
+\newcommand{\needsRevision}[1]{#1}
+\fi
+
+\ifrevision
+\newenvironment{NeedsRevision}{\color{red}}{}
+\else
+\newenvironment{NeedsRevision}{}{}
+\fi
+
+
+
+\newif\ifrevisiontwo
+\revisiontwotrue
+
+\ifrevisiontwo
+\newcommand{\needsRevisionTwo}{\textcolor{purple}}
+\else
+\newcommand{\needsRevisionTwo}[1]{#1}
+\fi
+
+\ifrevision
+\newenvironment{NeedsRevisionTwo}{\color{purple}}{}
+\else
+\newenvironment{NeedsRevisionTwo}{}{}
+\fi

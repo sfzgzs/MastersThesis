@@ -1,0 +1,19 @@
+\section{Natural Root}
+
+\label{sec4::subsection::nth-root}
+As mentioned in Definition \ref{def::elementary_functions}, we modify the common definition of $n$-th root function root$_{n,f}(x)$ for $n\in \Nats$ to a totalized version
+\begin{equation}    
+\text{root}_{n,f}(x) \stackrel{def}=
+    \begin{cases*}
+        \sqrt[n]{f(x)} & if $n$ is odd\\
+        \sqrt[n]{f(x)} & if $n$ is even and $f(x)> 0$\\
+        0 & if $n$ is even and $f(x)\leq0$\\
+    \end{cases*} \label{eq::root-modification}
+\end{equation}
+
+to obtain a continuous function with an open domain.\\
+Now depending on the parity of $n$, different \WhileCC-procedures are devised to approximate the function $\text{root}_{n,f}(x)$.
+
+
+\input{sections/3/root/01-odd-root}
+\input{sections/3/root/02-even-root}

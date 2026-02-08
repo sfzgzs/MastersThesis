@@ -1,0 +1,60 @@
+\caption{step 3}
+\label{Figure::inner_decision_step3}
+\begin{tikzpicture}[scale=0.75]
+
+    % Define parameters
+    \def\xmin{-4}
+    \def\xmax{4}
+    \def\ymin{-2}
+    \def\ymax{4}
+
+    % level 1
+    \fill[\stepOneColor] (-1, 0) rectangle (0, 2);
+    
+    \fill[\stepOneColor] (0, -1) rectangle (2, 1);
+    % level 2
+
+    \fill[\stepTwoColor] (-1,-0.5) rectangle (-0.5,0);
+    \fill[\stepTwoColor] (-0.5,-1) rectangle (0,0);
+    \fill[\stepTwoColor] (0.5,-1.5) rectangle (1.5,-1);
+    \fill[\stepTwoColor] (2,-1) rectangle (2.5,1);
+    \fill[\stepTwoColor] (0,1) rectangle (2,1.5);
+    \fill[\stepTwoColor] (0,1.5) rectangle (0.5,2);
+    \fill[\stepTwoColor] (-1.5,0) rectangle (-1,3);
+    \fill[\stepTwoColor] (-1,2) rectangle (0,2.5);
+    \fill[\stepTwoColor] (-2.5,1.5) rectangle (-1.5,2.5);
+    \fill[\stepTwoColor] (-3,1.5) rectangle (-2.5,2);
+    % level 3
+    \fill[\stepThreeColor] (-0.5,-1.25) rectangle (0.5,-1);
+    \fill[\stepThreeColor] (0.25,-1.5) rectangle (0.5,-1.25);
+    \fill[\stepThreeColor] (1.5,-1.5) rectangle (1.75,-1);
+    \fill[\stepThreeColor] (1.75,-1.25) rectangle (2.25,-1);
+    \fill[\stepThreeColor] (2.5,-1) rectangle (2.75,1);
+    \fill[\stepThreeColor] (2.75,-0.75) rectangle (3,0.25);
+    \fill[\stepThreeColor] (2,1) rectangle (2.5, 1.25);
+    \fill[\stepThreeColor] (0.5,1.5) rectangle (1.5,1.75);
+    \fill[\stepThreeColor] (0.5,1.75) rectangle (0.75, 2);
+    \fill[\stepThreeColor] (0,2) rectangle (0.5, 2.25);
+    \fill[\stepThreeColor] (-1,2.5) rectangle (-0.5, 2.75);
+    \fill[\stepThreeColor] (-1.75,2.5) rectangle (-1.5, 3);
+    \fill[\stepThreeColor] (-2.5, 2.5) rectangle (-1.75,2.75);
+    \fill[\stepThreeColor] (-2.75,2) rectangle (-2.5, 2.5);
+    \fill[\stepThreeColor] (-3,2) rectangle (-2.75, 2.25);
+    \fill[\stepThreeColor] (-3.25,1.25) rectangle (-3,2);
+    \fill[\stepThreeColor] (-3,1.25) rectangle (-1.5,1.5);
+    \fill[\stepThreeColor] (-1.75,0.75) rectangle (-1.5, 1.25);
+    \fill[\stepThreeColor] (-1.5, -0.25) rectangle (-1,0);
+    \fill[\stepThreeColor] (-1.25, -0.75) rectangle (-1,-0.25);
+    \fill[\stepThreeColor] (-1, -0.75) -- (-0.75,-0.75) -- (-0.75, -1) -- (-0.5, -1) -- (-0.5, -0.5) -- (-1, -0.5);
+
+    \draw[step=.25,gray,thin] (\xmin,\ymin) grid (\xmax,\ymax);
+
+    % Axes
+    \draw[->] (\xmin-0.2, 0) -- (\xmax+0.2, 0) node[right] {$x$};
+    \draw[->] (0, \ymin-0.2) -- (0, \ymax+0.2) node[above] {$y$};
+    
+    \draw[dashed] plot [smooth cycle, tension=1] coordinates {(-3.5,1) (-2,3) (1,2) (3,0.5) (2,-1.5) (-1,-1)  (-2,1) };
+
+    \draw[dashed, thick, black](-1.5, -0.25) -- (-1.25, -0.25) -- (-1.25, -0.75) -- (-0.75, -0.75) -- (-0.75, -1) -- (-0.5, -1) -- (-0.5, -1.25) -- (0.25, -1.25) -- (0.25, -1.5) -- (1.75, -1.5) -- (1.75, -1.25) -- (2.25, -1.25) -- (2.25, -1) -- (2.75, -1) -- (2.75, -0.75) --(3, -0.75) -- (3, 0.25) -- (2.75, 0.25) -- (2.75, 1) -- (2.5, 1) -- (2.5, 1.25) -- (2, 1.25) -- (2, 1.5) -- (1.5, 1.5) -- (1.5, 1.75) -- (0.75, 1.75) -- (0.75, 2) -- (0.5, 2) --(0.5, 2.25) -- (0, 2.25) -- (0, 2.25)-- (0, 2.5) -- (-0.5, 2.5) -- (-0.5, 2.75) -- (-1, 2.75) -- (-1, 3) -- (-1.75, 3) -- (-1.75, 3) -- (-1.75, 2.75) -- (-2.5, 2.75) -- (-2.5, 2.5) -- (-2.5, 2.75) -- (-2.5, 2.5) -- (-2.75, 2.5) -- (-2.75, 2.25) -- (-3, 2.25) -- (-3, 2) -- (-3.25, 2) -- (-3.25, 1.25) -- (-1.75, 1.25) -- (-1.75, 0.75) -- (-1.5, 0.75) -- (-1.5, -0.25);
+\end{tikzpicture}
+

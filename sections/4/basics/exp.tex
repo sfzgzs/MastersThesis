@@ -1,0 +1,19 @@
+\begin{theorem} 
+\label{thm::OEX_exponential}
+   The function $\exp(x)=e^x$ is \effectivelyOpen. 
+\end{theorem}
+\begin{proof}
+    Let us take any arbitrary open set $U$ with an effective open exhaustion.
+    Since $\exp(x)>0$, we know that $\exp^{-1}(U) = \exp^{-1}(U\cap (0, +\infty))$.
+    We want to come up with an effective open exhaustion for $\exp^{-1}(U\cap (0, +\infty))$.
+    Using Remark \ref{remark::OEX_for_interval_implies_OEX_for_all_open_sets}, we only need to prove that the preimage of any open interval $I =(a,b)$ with $a,b \in \mathbb{Q}$ has an effective open exhaustion.
+    The pre-image function for $\exp$ is $\ln$. Since $ln$ is only defined on positive reals, $\ln(I) = \ln((a,b)\cap (0, +\infty))$.\\
+    We know that
+    \begin{itemize}
+        \item The function $\ln$ is monotonically increasing.
+        \item The function $\ln$ is \WhileCC-approximable (using Theorem \ref{theorem::log}).
+        \item The function $\ln$ is defined on $(a,b)\cap (0, +\infty)$.
+    \end{itemize}
+    Hence, Theorem \ref{thm::OEX_by_WCC_approximability} gives us an open exhaustion for $ln(I)$, and this completes the proof.
+\end{proof}
+    

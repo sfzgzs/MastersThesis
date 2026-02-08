@@ -1,0 +1,93 @@
+
+\begin{lemma}[Effective open exhaustion for intersection]
+\label{thm::open_exhaustion_intersection}
+    Let $U$ and $V$ be open sets in $\Reals$ with effective open exhaustions such that $U \cap V \neq \emptyset$. Then $U \cap V$ has an effective open exhaustion.
+\end{lemma}
+\begin{proof}
+    Let $(U_1, U_2, \ldots)$ and $(V_1, V_2, \ldots)$ be effective open exhaustions for the sets $U$ and $V$, respectively.
+    Since by assumption we have $U \cap V \neq \emptyset$, we know there is some $m \in U \cap V$. We also know that both exhaustions $(U_1, U_2, \ldots)$ and $(V_1, V_2, \ldots)$ will cover $m$ at some stage with index $l_u$ resp. $l_v$. Note that we can effectively find $l_u$ resp. $l_v$ by looking through all the stages of the two exhaustions until a pair of intersecting intervals is found. Now let us take $k := \max\{l_u,l_v \}$.
+    Then
+    \[(U_k \cap V_k, U_{k+1} \cap V_{k+1}, U_{k+2} \cap V_{k+2}, ...)\]
+    is an effective open exhaustion for $U \cap V$.
+\end{proof}
+\begin{proposition}
+\label{prop::union-exhaustion}
+    Let $U, V \subseteq \Reals$. Then if $U$ and $V$ have effective open exhaustions, then $U \cup V$ has an effective open exhaustion.
+\end{proposition}
+\begin{proof}
+    Let $U, V\subseteq \Reals$ and $(U_1, U_2, \ldots)$ and $(V_1, V_2, \ldots)$ be effective open exhaustions for the sets $U$ and $V$, respectively. Then to prove $U\cup V$ has an effective open exhaustion, by Lemma \ref{lemma::simple-OEX-gives-OEX}, it suffices to give a simple effective open exhaustion. The sequence
+    \[
+    (U_0 \cup V_0, ..., U_k \cup V_k, ...)
+    \]
+    is a simple effective open exhaustion for $U\cup V$.
+    % \edcomm{WK}{Except that it probably violates the disjointness condition. Perhaps the following?
+    % \[
+    % (U_0 \cup (V_0 - \overline{U}), ..., U_k \cup (V_k - \overline{U}), ...)
+    % \]
+    % Probably still not enough for disjointness, since these $V$ parts still can get too close to $U$.}
+\end{proof}
+\begin{proposition}[Effective open exhaustion for a finite interval]
+\label{thm::open_exhaustion_finite_interval}
+    The open interval $(a,b)$
+    with $a,b\in\Rationals$ and $a<b$, has an effective open exhaustion
+    \[ \mleft( \mleft(a + \frac{{b - a}}{3}, b - \frac{{b - a}}{3}\mright), \ldots , \mleft(a + \frac{{b - a}}{n+3}, b+\frac{{b - a}}{n+3}\mright), \ldots \mright).\]
+\end{proposition}
+\begin{proposition}[Effective open exhaustion for an open interval]
+\label{thm::open_exhaustion_infy_interval}
+    The open interval $(a,+\infty)$ with $a\in\Rationals$ has an effective open exhaustion
+    \[ \mleft( \mleft(a + 1, 1\mright) ,\mleft(a + \frac{1}{2}, 2\mright) , ..., \mleft(a + \frac{1}{k+1}, k+1\mright), ... \mright).\]
+\end{proposition}
+
+\begin{lemma}[Effective open exhaustion with removing one point]
+\label{thm::open_exhaustion_removing_point}
+    Let $U \subseteq \Reals$ be an open set with an effective open exhaustion. Then for any $r \in \Rationals$, $U \setminus \{r\}$ has an effective open exhaustion.
+\end{lemma}
+\begin{proof}
+Let $(U_1, U_2, \ldots)$ be an effective open exhaustion for $U$.
+Then consider the sequence
+\[ \mleft( U_0 \setminus\brac{ r - 1, r+1}, \ldots , U_k \setminus \brac{r - \frac{1}{k+1}, r+\frac{1}{k+1}}, ... \mright). \]
+ There must be a stage $m$ at which  $U_m \setminus \brac{r - \frac{1}{m}, r+ \frac{1}{m}}$ is non-empty. Then the sequence 
+ \[ \mleft( U_m \setminus \brac{r - \frac{1}{m+1}, r+\frac{1}{m+1}}, \ldots \mright). \]
+ is clearly an effective open exhaustion that for $U \setminus \{r\}$.
+\end{proof}
+
+
+\begin{theorem}[Open exhaustion of intervals using \WhileCC-approximability]
+\label{thm::OEX_by_WCC_approximability}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating $f:\Reals\to\Reals$, and $f$ be strictly monotone on the interval $[a,b]\subseteq \dom(f)$ with $a,b \in \mathbb{Q}$. Then there is an \effectiveopenexhaustion{} for $f((a,b))$.
+% \edcomm{FG}{There is a problem with possibly too much handwaiving here (also one in section \ref{sec::acceptability_of_elem_functions}. I am technically (mis?)using the \WhileCC-procedure in this theorem as a function of type $\Rationals\times \Nats \to \Rationals$ to give me an approximation for $f(x)$ of type $x\in\Rationals\cap\dom(f)$... can I get away with this?\\
+% This is used in proof of effective openness for $\ln$, $\exp$, $\sin$, and $\arcsin$.\\
+% }
+\end{theorem}
+
+\begin{proof}
+    Here we discuss a strictly increasing function $f$. The case of a strictly decreasing function follows a similar logic.
+    We need to define intervals $U_l = (x_l, y_l)$ with endpoints in $\mathbb{Q}$ with the following properties:
+    \begin{itemize}
+        \item $f(a) <x_l < y_l < f(b)$
+        \item $\overline{(x_l, y_l)} \subseteq (x_{l+1}, y_{l+1})$
+        \item $\bigcup_{k=1}^{\infty} (x_k, y_k) = (f(a), f(b))$
+    \end{itemize}
+
+    We present an algorithm to compute the mapping $\intervals:\Nats\times \Nats \to \mathbb{I}^*$ delivering intervals in a stage. We begin by giving an informal description of the algorithm:
+    \begin{enumerate}
+        \item Start counters $n = 0$, $l = 0$.
+        \item Increase $n$ until you get an approximation $x \in F^\algebraR(a, n)$ and $y \in F^\algebraR(b, n)$ with $x + 2 ^{-n}<y - 2 ^{-n}$.
+        \item Store $x,y$ respectively in $x_0, y_0$.
+        \item Increase $n$ until new approximations $x \in F^\algebraR(a, n)$ and $y \in F^\algebraR(b, n) $ are calculated with $x + 2 ^{-n}<x_{l}$ and $y_{l}<y- 2 ^{-n}$.
+        \item Increase $l$ by one.
+        \item Store $x + 2 ^{-n}, y - 2 ^{-n}$ in $x_{l}, y_{l}$ respectively and go to step 4.
+    \end{enumerate}
+    The construction guarantees the three conditions above and equivalently outputting endpoints for one interval for each stage of the effective exhaustion for $(f(a), f(b))$. 
+    The alorithm we just defined computes the following function:
+    \begin{align*}        
+        \intervals(l,1) & = (x,y) \text{ such that }\exists n\in\Nats\ x\in F^{\algebraR}(a,n) \land y\in F^{\algebraR}(b,n) \\ & \land x+2^{-n} < y-2^{-n}\\
+        \intervals(l, i+1) & =  (x+2^{-n},y-2^{-n}) \text{ such that } \exists n\in\Nats\ x\in F^{\algebraR}(a,n) \land y\in F^{\algebraR}(b,n) \\ & \land x+2^{-n} < \textrm{fst}(\intervals(l,i)) \land y-2^{-n} > \textrm{snd}(\intervals(j,i))
+    \end{align*}
+     where $\textrm{fst}$ returns the left element in a pair and $\textrm{snd}$ returns the right element in the pair.
+\end{proof}
+
+\begin{remark}
+Theorem \ref{thm::OEX_by_WCC_approximability} is used to prove the exhaustion-reflecting property (Definition \ref{def::effectively_open_functions}) of the basic elementary functions (see Section \ref{sec4::subsection::basics}). Note that Theorem \ref{thm::OEX_by_WCC_approximability} requires the closed interval $[a,b]$ to be in the domain of $f$. We can strengthen Theorem \ref{thm::OEX_by_WCC_approximability} to only require the open interval $(a,b) \subseteq \dom(f)$, however, the proof for the strengthened version is more complicated, and the current version suffices for our purposes.
+\end{remark}
+                        

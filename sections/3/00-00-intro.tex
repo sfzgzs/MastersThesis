@@ -1,0 +1,12 @@
+In this section, we prove that the elementary functions (Definition \ref{def::elementary_functions}) are \WhileCC-approximable. Our proof is structured as follows:
+\begin{enumerate}
+    \item 
+         We first prove that basic elementary functions (constant and identity functions) are \WhileCCapproximable{}.
+    \item
+        We then prove that the composition of any elementary function with a \WhileCC-approximable function builds a \WhileCCapproximable{} function.
+    \item 
+        Using the first two parts, we can then inductively prove that all \elementaryfunctions{} are approximable by \WhileCC-programs. This gives us the main result of the current chapter in Theorem \ref{thm::elem_funcs_are_WCC_approximable}.
+\end{enumerate}
+
+
+We first define the elementary functions formally in Section \ref{sec::elementary-functions}, then we introduce some preliminary lemmas in Subsection \ref{sec4::subsection::preliminary-lemmas}. In Subsection \ref{sec4::subsection::basics} we prove that basic elementary functions (constant and identity functions) are \WhileCCapproximable{}. In subsections \ref{sec4::subsection::addition} through \ref{sec4::subsection::nth-root}, we prove that the composition of basic elementary function constructors (addition, multiplication, division, exponential, $\ln$, $\sin$, $n$th root and $\arcsin$) with other \WhileCC-approximable functions builds \WhileCC-approximable functions, and then in Section \ref{sec::conclusion::elem-funcs-are-WCC-appxmable} we conclude that all elementary functions are \WhileCC-approximable.

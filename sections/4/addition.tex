@@ -1,0 +1,88 @@
+\subsection{\EffectiveOpenness{} for addition}
+\begin{claim}
+    \label{claim::add-effectively-open}
+    The function $\Add:\Reals\times\Reals \to \Reals$ with $\Add(x,y) = x + y$ is \effectivelyOpen.
+\end{claim}
+\begin{proof}
+    Using Remark \ref{remark::OEX_for_interval_implies_OEX_for_all_open_sets}, we only need to prove that for any interval $I=(a,b)$ with rational endpoints, we have an effective open exhaustion for $f^{-1}(I)$, i.e.,  
+    \[
+    \Add^{-1}(I) = \curlybrac{(x,y)\mid x+y \in (a,b)}
+    \]
+    has an effective open exhaustion. Now using Theorem \ref{thm::rec_in_implies_OEX} we only need to present a recursive function deciding if any arbitrary $2$-cube $(x_1, x_2) \times (y_1, y_2)$ is in $\Add^{-1}[I]$. As shown in Figure \ref{Figure::helper_Add_invers}, we can define 
+    \[
+    \isIn_{\Add^{-1}(I)}(x_1, y_1, x_2, y_2) \stackrel{def}= a<x_1+y_1< b\quad \land \quad a< x_2+y_2<b.
+    \]
+    Since $x_1, y_1, x_2, y_2$ are all rational, this function is clearly recursive, and this, along with Theorem \ref{thm::rec_in_implies_OEX}, gives us an effective open exhaustion for $\Add^{-1}(I)$.
+    \input{images/4/addPlot}
+   
+\end{proof}
+
+\begin{claim}
+    \label{claim::cartprod-effectively-open}
+    Let $f,g:\Reals\to\Reals$ be effectively open. Then, the function $\CartProd:\Reals\times\Reals \to \Reals\times\Reals$ with $\CartProd(x,y) = (f(x), g(y))$ is \effectivelyOpen.
+\end{claim}
+\begin{proof}
+    In order to prove this, we need to prove that for any open $U\subseteq \Reals\times\Reals$ with an open exhaustion, the set 
+    \[
+    \CartProd^{-1}(U) = \curlybrac{(x,y)\mid (f(x), g(y)) \in U}
+    \]
+    has an effective open exhaustion. It suffices to prove that for each $2$-cube $I_1\times I_2$, 
+    \[
+    (f\times g)^{-1}(I_1\times I_2)\ = \curlybrac{(x,y) \mid (f(x), g(x)) \in I_1\times I_2}
+    \]
+    has an effective open exhaustion. We have
+    \[
+        (f\times g)^{-1}(I_1\times I_2)
+        \BLOCK{
+        =\curlybrac{(x,y) \mid (f(x), g(x)) \in I_1\times I_2}\\
+        =\curlybrac{(x,y) \mid f(x) \in I_1 \land g(x) \in I_2}\\
+        =\curlybrac{(x,y) \mid f(x) \in I_1} \ \cap\ \curlybrac{(x,y) \mid g(x) \in I_2}\\
+        =f^{-1}(I_1) \times \Reals\ \cap\ \Reals\times g^{-1}(I_2)\\
+        =f^{-1}(I_1) \times g^{-1}(I_2)
+        }
+    \]
+    Since $f,g$ are \effectivelyOpen, and $I_1, I_2$ are open finite intervals and hence have open exhaustions, $f^{-1}(I_1)$ and $g^{-1}(I_2)$ both have open exhaustions respectively $(F_0, F_1, \ldots)$ and $(G_0, G_1, \ldots)$. Then 
+    $(F_0 \times G_0, F_1 \times G_1, \ldots)$ is an effective open exhaustion for $f^{-1}(I_1) \times g^{-1}(I_2)$.
+    
+\end{proof}
+% \begin{proof}
+%     Using Remark \ref{remark::OEX_for_interval_implies_OEX_for_all_open_sets-r2}, we only need to prove that for any interval $I=(a,b)$ with rational endpoints, we have an effective open exhaustion for $f^{-1}(I)$, i.e.,  
+%     \[
+%     \Add^{-1}[I] = \curlybrac{(x,y)\mid x+y \in (a,b)}
+%     \]
+%     has an effective open exhaustion. Now using Theorem \ref{} we only need to present a recursive function deciding if $\nbox_N(a_1, a_2)$ is in $\Add^{-1}[I]$. We define 
+%     \[
+%     \isIn_{\Add^{-1}[I]}(N, a_1, a_2) \stackrel{def}= a<a_1/{2^{N}}+a_2/{2^{N}}< b\quad \land \quad a< {a_1+ a_2+2}/{2^{N}}<b.
+%     \]
+% \end{proof}
+\begin{claim}
+    \label{claim::diag-effectively-open}
+    The function $\Diag:\Reals\to \Reals\times\Reals$ with $\Diag(x) = (x,x)$ is \effectivelyOpen.
+\end{claim}
+\begin{proof}
+    In order to prove this, we need to prove that for any open $U\subseteq \Reals\times\Reals$ with an effective open exhaustion, the set 
+    \[
+    \Diag^{-1}(U) = \curlybrac{x\mid (x,x) \in U}
+    \]
+    has an effective open exhaustion.
+    We give an algorithm that outputs each stage of an effective open exhaustion for $\Diag^{-1}(U)$.
+    For any $l\in \Nats$ of the given effective open exhaustion for $U$, the stage $U_l$ consists of open $2$-cubes 
+    \[
+    (x_1^l, x_2^l)\times (y_1^l, y_2^l), \ldots, (x_{2k_l-1}^l, x_{2k_l}^l)\times (y_{2k_l-1}^l, y_{2k_l}^l).
+    \]
+    For any $2$-cubes $(x_i^l, x_{i+1}^l)\times (y_i^l, y_{i+1}^l)$ 
+    we can construct an open interval
+    \[
+    I_i^l \stackrel{def}= (x_i^l, x_{i+1}^l)\cap(y_i^l, y_{i+1}^l),
+    \]
+    as shown\footnote{In this figure, the superscript $l$ for endpoints of each interval is removed since we are only concerned with the $l$th stage at this point.} in Figure \ref{Figure::helper_Diag_invers}, and we can define $U_l \stackrel{def}= I_1^l, \ldots, I_{k_l}^l$. Then the sequence $(U_1, U_2, \ldots)$ is an open exhaustion for $\Diag^{-1}(U)$. 
+    \input{images/4/diagPlot}
+\end{proof}
+
+\begin{theorem}[Addition]
+\label{thm::addition_has_OEX}
+    Let $f,g:\Reals\to \Reals$ be \effectivelyOpen. Then $(f+g)$ is also \effectivelyOpen.
+\end{theorem}
+\begin{proof}
+    Using Theorem \ref{thm::composition_has_OEX}, we know that compositions preserve \effectivelyOpen\text{ness}. Now we know that $(f+g)$ is composed from the functions $\Add$, $\CartProd$, and  $\Diag$. Therefore Lemmas \ref{claim::add-effectively-open}, \ref{claim::cartprod-effectively-open}, and \ref{claim::diag-effectively-open} complete the proof.
+\end{proof}

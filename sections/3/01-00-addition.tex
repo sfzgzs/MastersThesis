@@ -1,0 +1,65 @@
+\section{Addition}
+\label{sec4::subsection::addition}
+In this section, we construct a \WhileCC-procedure that approximates $(f+g)(x)=f(x)+g(x)$ using \WhileCC-procedures that approximate the functions $f$ and $g$.
+
+\begin{definition}
+\label{def::addition-approximator-function}
+    Let $F,G:\real\times\nat\to\real$ be \WhileCC-procedures approximating the functions $f,g:\Reals\to\Reals$ respectively.
+    Then the \WhileCC-procedure 
+    \[
+        {(F+G)} \equiv
+                        \BLOCK{
+                        \PROC \\
+                            \INDENT{
+                            \IN  x:\real\ c:\nat\\
+                            \OUT \res:\real}\\
+                        \BEGIN \\
+                            \INDENT{
+                            \res := F(x, c+1) + G(x, c+1)}\\
+                        \END}\\
+    \]
+    \noindent
+    of type $\real\times\nat\to\real$ has the semantics
+    \[
+    (F+G)^\algebraR(x,n) = \curlybrac{y_1+y_2\mid y_1\in F^\algebraR(x,n+1) \land y_2\in G^\algebraR(x,n+1)}.
+    \]
+\end{definition}
+Note that since we want the overall error of our approximation to be less than $2^{-c}$, the idea is to define the procedure $(F+G)$ to approximate each of $f(x)$ and $g(x)$ with at most half the error bound i.e. $2^{-(c+1)}$, so that when adding the two values, the overall error would be smaller that $2^{-c}$.  We prove that the \WhileCC-procedure $(F+G)$ approximates the function $(f+g)(x) = f(x)+g(x)$.
+\begin{claim}
+\label{claim::addition::1}
+    Let $F,G:\real\times\nat\to\real$ be \WhileCC-procedures approximating the functions $f,g:\Reals\to\Reals$ respectively, and $x\in \dom(f+g)$. Then we have $(F+G)^\algebraR(x,n)\neq \emptyset$ for any $n\in \Nats$.
+\end{claim}
+\begin{proof}
+    Let us assume $x\in \dom(f+g) = \dom(f) \cap \dom(g)$. Since $F$ (resp. $G$) is the \WhileCC-procedure approximating $f$ (resp. $g$), There are $y_1 \in F^\algebraR(x,n+1)\neq \emptyset$ and respectively $y_2 \in G^\algebraR(x,n+1)\neq \emptyset$. This, by the definition of $(F+G)^\algebraR$ means that $y_1+y_2\in  (F+G)^\algebraR(x,n)$, and hence $(F+G)^\algebraR(x,n)\neq \emptyset$.
+\end{proof}
+\begin{claim}
+\label{claim::addition::2}
+     Let $F,G:\real\times\nat\to\real$ be \WhileCC-procedures approximating the functions $f,g:\Reals\to\Reals$ respectively and $x\notin \dom(f+g)$. Then we have
+     $\forall n\in \Nats \quad (F+G)^\algebraR(x,n)= \emptyset$.
+\end{claim}
+\begin{proof}
+    Assume $x\notin \dom(f+g)$. This means that at least $x\notin \dom(f)$ or $x\notin \dom(g)$. Hence at least one of the sets $F^\algebraR(x,n+1)$ or $G^\algebraR(x,n+1)$ is empty which means that $(F+G)^\algebraR(x,n) = \emptyset$.
+\end{proof}
+\begin{claim}
+\label{claim::addition::3}
+    Let $F,G:\real\times\nat\to\real$ be \WhileCC-procedures approximating the functions $f,g:\Reals\to\Reals$ respectively, and $n \in \Nats$. Then we have
+    \[(F+G)^\algebraR(x,n) \subseteq \mathbf{Nbd}((f+g)(x), 2^{-n})\]for all  $x\in \dom(f+g)$.
+\end{claim}
+\begin{proof}
+By definition of $(F+G)^\algebraR(x,n)$, for any $z\in (F+G)^\algebraR(x,n)$ there are $y_1\in F^\algebraR(x,n+1)$ and $y_2\in G^\algebraR(x,n+1)$ such that $y_1+y_2 = z$. Hence:
+   \begin{align*}
+         & y_1+y_2 = z \in (F+G)^\algebraR(x,n) & &\\
+        \then & \abs{f(x)-y_1} < 2^{-n-1} \ \land\ \abs{g(x)-y_2} < 2^{-n-1} \\
+        \then & \abs{f(x)+g(x)-y_1-y_2}<2^{-n} \\
+        \then & \abs{(f+g)(x)-(y_1+y_2)}<2^{-n} \\
+        \then & y_1+y_2 \in \mathbf{Nbd}((f+g)(x), 2^{-n}) \\
+        \then & z \in \mathbf{Nbd}((f+g)(x), 2^{-n})
+    \end{align*}             
+\end{proof}
+\begin{theorem}
+\label{theorem::addition}
+     Let $F,G:\real\times\nat\to\real$ be \WhileCC-procedures approximating the functions $f,g:\Reals\to\Reals$ respectively. Then the \WhileCC-procedure $(F+G):\real\times\nat\to\real$ \WhileCC-approximates $(f+g)(x) = f(x)+g(x)$.
+\end{theorem}
+\begin{proof}
+    Follows directly from Lemmas \ref{claim::addition::1}, \ref{claim::addition::2}, \ref{claim::addition::3}.
+\end{proof}

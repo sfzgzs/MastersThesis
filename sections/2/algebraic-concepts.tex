@@ -1,0 +1,154 @@
+\section{Basic Algebraic Concepts: Signatures and Algebras}
+\label{sec::Preliminaries::BasicConcepts::SignaturesAndAlgebras}
+\begin{definition}[Many-sorted signatures, \citep{ComputableFunctionsAndSemicomputableSetsOnManySortedAlgebras-TuckerAndZucker_Handbook_2001}]
+    A \signature{} $\Sigma$ is a pair $\langle \Sort(\Sigma), \Func(\Sigma)\rangle$ where
+    \begin{itemize}
+        \item $\Sort(\Sigma)$ is a finite set of sorts, and
+        \item $\Func(\Sigma)$ is a finite set of (primitive or basic) function symbols, where each $F \in \Func(\Sigma)$ has a type
+        $s_{1} \times \cdots \times s_{n} \to t$ 
+        where the arity of $F$ is $n$ and $s_1, s_2, \ldots, s_n, t \in \Sort(\Sigma)$. We write $F:s_{1} \times \cdots \times s_{n} \to t$.
+        The case $n = 0$ corresponds to constant symbols and can be written as $F:{\to t}$ or $F:t$.
+    \end{itemize}
+\end{definition}
+
+\begin{definition}[$\Sigma$-algebras, \citep{ComputableFunctionsAndSemicomputableSetsOnManySortedAlgebras-TuckerAndZucker_Handbook_2001}]
+    A partial \sigmaalgebra{} $A$ has
+    \begin{itemize}
+        \item a non-empty set $A_{s}$, the \textit{carrier of sort $s$}, for each $s \in \Sort(\Sigma)$, and
+        \item a (possibly partial) function ${F}^A:A_{s_{1}}\times \cdots \times A_{s_{m}} \to A_{t}$, the \textit{interpretation of $F$}, for each basic function symbol $F:s_{1} \times \cdots \times s_{m} \to t$ in $\Func(\Sigma)$.
+    \end{itemize}
+    % \edcomm{WK}{The arrow here is just a symbol, and not related with the arrows in section 2.1.}
+
+    % \edcomm{WK}{Note that a pair of sets contains no arity and type information\ldots}
+\end{definition}
+
+\begin{definition}[Topological partial algebras, \citep{ComputableFunctionsAndSemicomputableSetsOnManySortedAlgebras-TuckerAndZucker_Handbook_2001}]
+    A \textit{\topologicalpartialalgebra{}}
+    is a partial \sigmaalgebra{} with topologies on the carriers
+    such that each basic function symbol's interpretation 
+    is continuous on its domain, and the carriers $\Bools$ and $\Nats$ (if present) have discrete topology. 
+\end{definition}
+\begin{definition}[Signature of booleans: $\Sigma(\algebraB)$, \citep{ComputableFunctionsAndSemicomputableSetsOnManySortedAlgebras-TuckerAndZucker_Handbook_2001}]
+    The \signature{} $\Sigma(\algebraB)$ below is the signature of \textit{booleans}:
+    \begin{center}
+    \fbox{
+        \begin{tabular}{ll}
+             signature &  $\Sigma(\algebraB)$ \\
+             sorts & $\mathsf{bool}$ \\
+             functions & $\mathsf{true, false: {\to bool}}$\\
+              & $\mathsf{and, or: bool\times bool\to bool}$\\
+              & $\mathsf{not: bool\to bool}$\\
+              end &
+        \end{tabular}
+        }
+    \end{center}
+\end{definition}
+
+% \edcomm{WK}{This arrow is not allowed by Def.~2.1.
+% If you want to use that arrow in signatures, you have to change Def.~2.1.}
+
+% \begin{definition}[The algebra of booleans: $\algebraB$]
+%     The algebra \algebraB of booleans, with signature $\Sigma(\algebraB)$, has the carrier $\Bools = \{\true, \false\}$ of sort $\mathsf{bool}$, and, as constants and functions, the standard interpretations of the function and constant symbols of $\Sigma(\algebraB)$. Thus, for example, $\mathsf{true}^{\algebraB} = \true$ and $\mathsf{false}^{\algebraB} = \false$.
+% \end{definition}
+
+\begin{definition}[Standard \signature{}, \citep{ComputableFunctionsAndSemicomputableSetsOnManySortedAlgebras-TuckerAndZucker_Handbook_2001}]
+    A \signature{} $\Sigma$ is a \textit{\standardsignature{}}, if:
+    \begin{itemize}
+        \item $\Sigma(\algebraB)\subseteq \Sigma$, and
+        \item for all $s\in \Sort(\Sigma) \setminus \Sigma(\algebraB)$, the function symbols of $\Sigma$ include a \textit{discriminator} $\mathsf{if}_s: \mathsf{bool} \times s \times s \to s$.
+        % \begin{itemize}
+        %     \item a \textit{discriminator} $\mathsf{if}_s: \mathsf{bool} \times s \times s \to s$,
+        %     and
+        %     \item (optionally) \textit{equality} $\mathsf{eq}_s: s \times s \to \mathsf{bool}$.
+        %       \edcomm{WK}{Do you want something like
+        %         ``if the function symbols of $\Sigma$ include $\mathsf{eq}_s$,
+        %           then it has to have type $s\times s \to \mathsf{bool}$''?}
+        % \end{itemize} 
+        \item if the function symbols of $\Sigma$ include $\mathsf{eq}_s$,
+                  then it has to have type $s\times s \to \mathsf{bool}$.
+    \end{itemize}
+\end{definition}
+\begin{definition}[Standard algebra, \citep{ComputableFunctionsAndSemicomputableSetsOnManySortedAlgebras-TuckerAndZucker_Handbook_2001}]
+    Given a \standardsignature{} $\Sigma$, a \sigmaalgebra{} $A$ is a \textit{\standardalgebra{}}, if:
+    \begin{itemize}
+        \item $A$ has the carrier $\Bools = \{\true, \false\}$ for sort $\mathsf{bool}$,
+        \item $A$ has the standard interpretations of the function and constant symbols of $\Sigma(\algebraB)$. Thus, for example, $\mathsf{true}^{A} = \true$ and $\mathsf{false}^{A} = \false$, and
+        \item the discriminators and equality operators have their standard interpretation in $A$; i.e., for $b\in \Bools$ and $x,y \in A_s$
+        \begin{equation*}
+        \mathsf{if_s}(b,x,y) =
+        \begin{cases*}
+            x & if $b = \true$ \\
+            y & if $b = \false$, 
+        \end{cases*}
+       \end{equation*}
+       and
+       \item for each sort $s$ for which the function symbol $\mathsf{eq_s}$ is present, it is interpeted as the identity relation on $s$.
+       % \edcomm{WK}{``equality sort'' is undefined.}
+    \end{itemize}
+\end{definition}
+% \begin{definition}[\Nstandardsignature{}, \citep{ComputableFunctionsAndSemicomputableSetsOnManySortedAlgebras-TuckerAndZucker_Handbook_2001}]
+%     A \standardsignature{} $\Sigma$ is called an \textit{\Nstandardsignature{}}, if it includes (as well as $\mathsf{bool}$) the \textit{numerical sort} $\nat$, as well as function symbols for the \textit{standard operations} of \textit{zero, successor, order, discriminator, and equality} on the naturals:
+%     \begin{center}
+%         \fbox{
+%         \begin{tabular}{ll}
+%            $\mathsf{0}$ &: \ $\to \nat$ \\ 
+%            $\mathsf{S}$  &: $\nat \to \nat$\\
+%            $\mathsf{<_{nat}}$ &: $\nat \times \nat \to \mathsf{bool}$\\
+%            $\mathsf{if_{nat}}$ &: $\mathsf{bool} \times \nat \times \nat \to \nat$\\
+%            $\mathsf{=_{nat}}$ &: $\nat \times \nat \to \mathsf{bool}$
+%         \end{tabular}
+%         }
+%     \end{center}
+%     \end{definition}
+
+% \begin{definition}[N-standard algebra, \citep{ComputableFunctionsAndSemicomputableSetsOnManySortedAlgebras-TuckerAndZucker_Handbook_2001}]
+%     Given an \Nstandardsignature{} $\Sigma$, a \sigmaalgebra{} $A$ is a \textit{\Nstandardalgebra}, if the carrier $A_{\nat}$ is the set of natural numbers $\Nats=\{0,1,2,...\}$, and the standard operations on $\Nats$ have their standard interpretations.
+% \end{definition}
+\begin{definition}[The topological partial algebra \mathcalR{}]
+    The following algebra $\algebraR$ is a topological, partial, and standard algebra that we will be working with, in this document:
+    \begin{center}
+        \fbox{
+        \begin{tabular}{ll}
+             algebra & $\algebraR$ \\
+             carriers & $\Reals$, $\Nats$, $\Bools$ \\
+             functions & $\realZero$, $\realOne$, $\realMinusOne$ : $\ \totalTo \mathbb{R}$ \\
+              & $\realPlus$, $\realTimes$ : $\Reals\times\Reals\totalTo\Reals$\\
+              & $\natPlus$, $\natTimes$ : $\Nats\times\Nats\totalTo\Nats$\\
+              
+              & $\realInv$ : $\Reals\to\Reals$ \\
+              & $\natZero$ : $\ \totalTo \Nats$ \\
+              & $\natSuc$ : $\Nats\totalTo\Nats$ \\
+              & $\true$, $\false$ : $\ \totalTo\Bools$ \\ 
+              & $\boolAnd$, $\boolOr$ : $\Bools\times\Bools\totalTo\Bools$ \\
+              & $\boolNot$ : $\Bools\totalTo\Bools$ \\
+              & $\natEq$, $\natLess$ : $\Nats\times\Nats\totalTo\Bools$ \\
+              & $\mathsf{=_{real}}$, $\realLess$ : $\Reals\times\Reals \to\Bools$ 
+        \end{tabular}    
+        }
+    \end{center}
+\end{definition}
+\noindent
+The signature \SigmamathcalR{} with sorts $\real, \bool, \nat$ can be inferred from this.
+The functions commonly known as inverse, equality and order are not continuous.
+Since the concepts of \While{}-computability and \WhileCC-computability
+We are using here have been designed to make all expressed functions continuous on their domains \citep{ComputableFunctionsAndSemicomputableSetsOnManySortedAlgebras-TuckerAndZucker_Handbook_2001, AbstractVSConcreteComputationOnMetricPartialAlgebras_TuckerZucker_2004},
+the discontinuities in conventional models of equality, order, and inverse
+have been resolved by making the functions in $\mathcal{R}$ undefined there:
+\begin{align*}
+\realInv(x) = &
+    \begin{cases*}
+        1/x & if $x \neq 0$\\
+        \uparrow & otherwise
+    \end{cases*}\\
+\mathsf{=_{real}}(x,y) = &
+    \begin{cases*}
+        \false\ & if $x \neq y$\\
+        \uparrow\ & otherwise
+    \end{cases*}\\
+\realLess(x,y) = &
+    \begin{cases*}
+        \true\ & if $x<y$\\
+        \false\ & if $x>y$\\
+        \uparrow & if $x=y$\\
+    \end{cases*}
+\end{align*}

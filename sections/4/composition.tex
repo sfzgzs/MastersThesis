@@ -1,0 +1,10 @@
+\section{Composition of Functions}
+\label{sec5::subsection::composition}
+In this section, we prove that the composition of two \effectivelyOpen{} functions is \effectivelyOpen{}.
+\begin{theorem} 
+\label{thm::composition_has_OEX}
+    Let $f:\Reals^n\to \Reals^k$ and $g:\Reals^m\to \Reals^n$ be \effectivelyOpen, then $f\circ g:\Reals^m\to \Reals^k$ is also \effectivelyOpen.
+\end{theorem}
+\begin{proof}
+    Let $U\subseteq \Reals^k$ be an open set with an effective open exhaustion. Then by assumption on $f$, $f^{-1}(U) \subseteq \Reals^n$ has an effective open exhaustion, and hence $g^{-1}(f^{-1}(U)) \subseteq \Reals^m$ has an effective open exhaustion.
+\end{proof}

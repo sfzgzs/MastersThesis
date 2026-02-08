@@ -1,0 +1,34 @@
+
+\section{Addition and Multiplication}
+\label{sec5::subsection::addition-multiplication}
+In this section we prove that the addition and multiplication of two \effectivelyOpen{} functions $f,g:\Reals\to\Reals$, defined as $(f+g)(x)=f(x)+g(x)$ and $(f\ldots g)(x)=f(x)\cdot g(x)$ respectively, are \effectivelyOpen{}.
+In order to do this, we first break down the addition and multiplication into atomic functions (that when composed together give us our original addition and multiplication) and prove that each of these atomic functions are \effectivelyOpen{}. Then using Theorem \ref{thm::composition_has_OEX}, we can immediately imply that our original addition and multiplication are \effectivelyOpen{}.
+\subsection{Deconstruction of Addition and Multiplication}
+\label{sec::deconstruction-addition-multiplication}
+In order to prove properties about addition ($(f+g)(x) = f(x)+g(x)$) we deconstruct $(f+g)(x)$ into the composition of
+    \begin{itemize}
+        \item addition: $\Add(x,y) = x + y$,
+        \item cartesian product: $\CartProd(x,y) = (f(x),g(y))$, 
+        \item diagonal: $\Diag(x) = (x,x)$.
+    \end{itemize}
+This gives us 
+\begin{align*}
+    \Add(\CartProd(\Diag(x))) & = (\Add(\CartProd(x,x)))\\
+    & = (\Add(f(x),g(x)))\\
+    & = f(x)+g(x)
+\end{align*}
+Similarly, in order to prove properties about multiplication ($(f\cdot g)(x) = f(x)\cdot g(x)$) we deconstruct $(f\cdot g)(x)$ into the composition of
+    \begin{itemize}
+        \item multiplication: $\Mult(x,y) = x \cdot y$,
+        \item cartesian product: $\CartProd(x,y) = (f(x),g(y))$, 
+        \item diagonal: $\Diag(x) = (x,x)$.
+    \end{itemize}
+This gives us 
+\begin{align*}
+    \Mult(\CartProd(\Diag(x))) & = (\Mult(\CartProd(x,x)))\\
+    & = (\Mult(f(x),g(x)))\\
+    & =f(x)\cdot g(x)
+\end{align*}
+
+\input{sections/4/addition}
+\input{sections/4/multiplication}

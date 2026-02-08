@@ -1,0 +1,63 @@
+\subsection{Odd root}
+First of all, let us define a \WhileCC-procedure that approximates $\sqrt[n]{f(x)}$ for odd $n$s.
+\begin{definition}
+\label{def::nth-root_more-than-zero}
+   Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and and $x\in \Reals$. Then the \WhileCC-procedure 
+   \[ 
+    \mathsf{oddRoot}_{n,F} \equiv
+                    \BLOCK{
+                    \PROC \\
+                        \INDENT{
+                        \IN x:\real\ n:\nat \\
+                        \AUX \res:\real}\\
+                    \BEGIN \\
+                        \INDENT{                           
+                        \res := \CHOOSE (y:\real): y^n < F(x) < (y+2^{-m})^n \\
+                        \RETURN \true}\\
+                    \END}\\
+    \] of type $\real\times\nat\to\real$ has the semantics
+    
+    \begin{center}$\mathsf{oddRoot}_{n,F}^\algebraR(x,m) = \{ y \in \mathbb{Q} \mid
+    \ (y^n < F(x))^\algebraR = \{ \true\} \land (F(x) < (y + 2^{-m})^n)^\algebraR = \{\true\}\}$
+    \end{center}
+\end{definition}
+We prove that $\mathsf{oddRoot}$ approximates $\sqrt[n]{f(x)}$ for odd $n$s.
+\begin{claim}
+\label{claim::odd-nth-root::1}
+   Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and $x \in \dom(f)$, then for any odd $n\in\Nats$, we have $\mathsf{oddRoot}_{n,F}^\algebraR(x,m)\neq \emptyset$ for any $n,m\in \Nats$.
+\end{claim}
+\begin{proof}
+     We need to show that $\mathsf{oddRoot}_{n,F}^\algebraR(x,m) \neq \emptyset$. 
+     Since $n$ is odd, we can always  choose a rational $y$ such that $y^n < f(x) < (y + 2^{-m})^n$. Hence $\mathsf{oddRoot}_{n,F}(x,m)\neq \emptyset$.
+\end{proof}
+
+\begin{claim}
+\label{claim::odd-nth-root::2}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and $x \notin \dom(f)$. Then we have $\mathsf{oddRoot}_{n,F}^\algebraR(x,m)= \emptyset$ for any $n,m\in \Nats$.
+\end{claim}
+\begin{proof}
+    Since $x \notin \dom(f)$, the comparison procedure $(- < F(-))$ with the second argument being $x$ does not terminate and hence we can conclude that $\mathsf{oddRoot}_{n,F}^\algebraR(x,m) = \emptyset$.
+\end{proof}
+
+\begin{claim}
+\label{claim::odd-nth-root::3}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$.
+    For any odd $n\in \Nats$, we have $\forall x\in \dom(f) ,\ \forall m \in \Nats,\ \forall y\in \mathsf{oddRoot}_{n,F}^\algebraR(x,m) :$
+    \[
+     \abs{\text{root}_{n,f}(x) - y} < 2^{-n}.
+    \]
+\end{claim}
+\begin{proof}
+    For arbitrary $x\in \dom(f)$, odd $n \in \Nats$, and for any $ y\in \mathsf{oddRoot}_{n,F}^\algebraR(x,n)$, we have 
+    \begin{align*}
+                 & y^n < f(x) < (y + 2^{-m})^n\\
+                \then & \abs{\sqrt[n]{f(x)} - y} < 2^{-m}
+        \end{align*}
+\end{proof}
+\begin{theorem}
+\label{theorem::odd-nth-root}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$. Then $ \mathsf{oddRoot}_{n,F}^\algebraR$ \WhileCC-approximates the function $\text{root}_{n,f}(x)$ for any odd $n\in \Nats$.
+\end{theorem}
+\begin{proof}
+    Follows directly from Lemmas \ref{claim::odd-nth-root::1}, \ref{claim::odd-nth-root::2}, and \ref{claim::odd-nth-root::3}.
+\end{proof}

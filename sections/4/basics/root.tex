@@ -1,0 +1,19 @@
+\begin{theorem} 
+\label{thm::OEX_natural_root}
+   Let $f(x) = root_{n, id}(x)$ as defined in subsection \ref{sec4::subsection::nth-root}. Then $f$ is \effectivelyOpen{}. 
+\end{theorem}
+\begin{proof}
+Let us assume $U$ is an open set with an open exhaustion $X$.
+Now, let us consider the parity of $n$:
+\begin{itemize}
+    \item Case of odd $n$: Since we have the effective open exhaustion $X$, we can go through each stage, and compute the corresponding stage.\\
+    At stage $k$, we go through the endpoints of intervals, and for each $(a_i, b_i)$ we encounter, we write $(a_i^n, b_i^n)$.
+    \item Case of even $n$: Since we have the effective open exhaustion $X$, again we can go through each stage.
+    At each stage, we go through the endpoints of the intervals in that stage, and for each $(a_i, b_i)$ we encounter, we have three possibilities:
+     \begin{itemize}
+         \item Case $a_i, b_i$ are both positive: we write $(a_i^n, b_i^n)$.
+         \item Case $a_i, b_i$ are both negative: we ignore the interval since this interval does not fall under the image of $root_{n, id}$ for our even $n$.
+         \item Case $a_i$ is negative, but $b_i$ is positive: here we need to accommodate the modifications we made in section \ref{sec4::subsection::nth-root}, so we write $(-k, b_i^n)$ so that all negative numbers are eventually covered.
+     \end{itemize}
+\end{itemize}
+\end{proof}

@@ -1,0 +1,19 @@
+
+\begin{theorem}
+\label{thm::OEX_inv}
+   Let $\inv(x)=\frac{1}{x}$. Then $\inv(x)$ is \effectivelyOpen.
+\end{theorem}
+\begin{proof}
+    Using Remark \ref{remark::OEX_for_interval_implies_OEX_for_all_open_sets}, it suffices to show that, for any non-empty interval $I =(a,b)\subseteq \Reals$ with $a,b \in \mathbb{Q}$, we have an open exhaustion for
+    $\inv^{-1}(I)$.
+    We prove this by cases:
+    \begin{itemize}
+        \item $a = 0$: Proposition \ref{thm::open_exhaustion_finite_interval} gives us an effective open exhaustion for $\inv^{-1}(I) = (0,\frac{1}{b})$.
+        \item $b = 0$: Proposition \ref{thm::open_exhaustion_finite_interval} gives us an effective open exhaustion for $\inv^{-1}(I) = (\frac{1}{a},0)$.
+        \item $a<0$ and $b>0$: Proposition
+        \ref{thm::open_exhaustion_finite_interval} gives us an effective open exhaustion for $\inv^{-1}(I) = (\frac{1}{a},0) \cup (0, \frac{1}{b})$. Then, we can construct an effective open exhaustion for the union of the two sets using Proposition \ref{prop::union-exhaustion}.
+        \item $a,b<0$ or $a,b>0$: Proposition
+        \ref{thm::open_exhaustion_finite_interval} gives us effective open exhaustions for $\inv^{-1}(I) = (\frac{1}{b}, \frac{1}{a})$.
+        
+        \end{itemize}
+\end{proof}

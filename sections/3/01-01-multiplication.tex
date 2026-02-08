@@ -1,0 +1,115 @@
+\section{Multiplication}
+\label{sec4::subsection::multiplication}
+In this section, we construct a \WhileCC-procedure that approximates $(f\cdot g)(x)=f(x)\cdot g(x)$ using \WhileCC-procedures that approximate the functions $f$ and $g$.
+\begin{definition}
+\label{def::multiplication-approximator-function}
+    Let $F,G:\real\times\nat\to\real$ be \WhileCC-procedures approximating the functions $f,g:\Reals\to\Reals$ respectively.
+    Then the \WhileCC-procedure
+    \[
+        (F\cdot G) \equiv 
+                \BLOCK{
+                \PROC \\
+                    \INDENT{
+                    \IN x:\real\ n:\nat \\
+                    \AUX m_1:\nat\ m_2:\nat\ y_1:\real\ y_2:\real}\\
+                \BEGIN\\
+                    \INDENT{
+                    m_1 := \CHOOSE (k : \nat) : F(x) <  2^{-n-1+k} \boolAnd F(x) > -2^{-n-1+k}\\
+                    y_1 := G(x, m_1)\\
+                    m_2 := \CHOOSE (k : \nat) : {y_1}^{2} < 2^{-2n-2+k}\\
+                    y_2 := F(x, m_2)\\
+                    \RETURN y_1 \times y_2}\\
+                \END}\\
+    \]
+    \noindent
+    of type $\real\times\nat\to\real$ has the semantics
+    \[
+    (F\cdot G)^\algebraR(x,n)  = \{ y_1\cdot y_2 \mid
+    \begin{aligned}[t]
+        & \exists m_1, m_2 \in \Nats \quad y_1 \in G^\algebraR(x,m_1) \land y_2 \in F^\algebraR(x,m_2) \land {} \\
+        & \abs{f(x)} < 2^{-n-1+{m_1}} \land y_1^2 < 2^{-2n-2+m_2} \}.
+    \end{aligned}
+    \]
+\end{definition}
+
+Note that the idea here is to compute ``how precise'' the approximations of $f(x)$ and $g(x)$ need to be, so that the product of the outputs of those approximations ($y_1$ and $y_2$) gives us the requested precision ($2^{-n}$):
+\begin{lemma}
+\label{lemma::condition-multiplication}
+    Let $F,G:\real\times\nat\to\real$ be \WhileCC-procedures approximating the functions $f,g:\Reals\to\Reals$ respectively. Then for any $y_1 \in G^\algebraR(x,m_1)$ and $y_2 \in F^\algebraR(x,m_2)$ with 
+    \begin{enumerate}[(i)]
+        \item 
+            \label{mult-cond-1}
+            $\abs{f(x)} < 2^{-n-1+{m_1}} \phantom{a}$, and 
+        \item
+            \label{mult-cond-2}
+            $y_1^2 < 2^{-2n-2+m_2}$
+    \end{enumerate}
+    we have:
+    \[
+    \abs{y_1y_2 - f(x)g(x)} < 2^{-n}.
+    \]
+\end{lemma}
+\begin{proof}
+     To prove $\abs{y_1y_2 - f(x)g(x)}<2^{-n}$, first we prove that
+     \[
+     \abs{y_1y_2 - f(x)g(x)} < 2^{-m_2}\abs{y_1} + 2^{-m_1}\abs{f(x)}.
+     \]
+     Then we need to show that each of the terms $2^{-m_2}\abs{y_1}$ and $2^{-m_1}\abs{f(x)}$ are less than $2^{-n-1}$.
+     
+     To show that $\abs{y_1y_2 - f(x)g(x)} < 2^{-m_2}\abs{y_1} + 2^{-m_1}\abs{f(x)}$:
+    \begin{align*}
+        \abs{y_1y_2 - f(x)g(x)}= &\ \abs{y_1y_2 - f(x)y_1 + f(x)y_1 - f(x)g(x)}\\
+        \leq &\ \abs{y_1y_2 - f(x)y_1} + \abs{f(x)y_1 - f(x)g(x)}\\
+        = &\ \abs{y_1(y_2 - f(x))} + \abs{f(x)(y_1 - g(x))}\\
+        = &\ \abs{y_1}\abs{y_2 - f(x)} + \abs{f(x)}\abs{y_1 - g(x)}\\
+        < &\ 2^{-m_2}\abs{y_1} + 2^{-m_1}\abs{f(x)}. \tag{since $y_1 \in G^\algebraR(x,m_1)$, $y_2 \in F^\algebraR(x,m_2)$}
+    \end{align*}
+
+    Now to show that $2^{-m_2}\abs{y_1}<2^{-n-1}$, using (\ref{mult-cond-2}), we have:
+    \begin{align*}
+            y_1^2 < 2^{-2n-2+m_2} \then & y_1^2 < 2^{-2n-2+2m_2}\\
+            \then & \abs{y_1} < 2^{-n-1+m_2}\\
+            \then & 2^{-m_2}\abs{y_1}<2^{-n-1}.
+    \end{align*}
+    Now using (\ref{mult-cond-1}), we have $\abs{f(x)} < 2^{-n-1+m_1}$ and hence $2^{-m_1}\abs{f(x)} < 2^{-n-1}$.    
+     This proves that $2^{-m_2}\abs{y_1} + 2^{-m_1}\abs{f(x)} < 2^{-n}$.
+\end{proof}
+Now, we go on to prove that the \WhileCC-procedure $(F\cdot G)$ approximates the function $(f\cdot g)(x) = f(x)\cdot g(x)$. 
+\begin{claim}
+\label{claim::multiplication::1}
+    Let $F,G:\real\times\nat\to\real$ be \WhileCC-procedures approximating the functions $f,g:\Reals\to\Reals$ respectively, and $x\in \dom(f\cdot g)$. Then we have $(F\cdot G)^\algebraR(x,n)\neq \emptyset$ for any $n\in \Nats$.
+\end{claim}
+\begin{proof}
+    Since $x\in \dom(f\cdot g) = \dom(f) \cap \dom(g)$ and $F^\algebraR, G^\algebraR$ approximate $f,g$ respectively, for any $n\in \Nats$ we have $F^\algebraR(x,n) \neq \emptyset$ and $G^\algebraR(x,n)\neq \emptyset$. This means that since $x \in \dom(f)$, we can choose $m_1$ sufficiently large so that $2^{-n-1+m_1}$ is larger than $\abs{f(x)}$. The trick here is to break the comparison to $\abs{f(x)}$ into two comparisons: $f(x)< 2^{-n-1+m_1}$ and $f(x)>-2^{-n-1+m_1}$. \\
+    Now with fixed $m_1$ we can choose $y_1\in G^\algebraR(x,m_1)$ and we can find $m_2$ sufficiently large that $y_1^2 < 2^{-2n-2+m_2} $ and a $y_2 \in F^\algebraR(x,m_2)$. Now, since multiplication is total, $y_1 y_2$ can be computed and hence $(F\cdot G)^\algebraR(x,n)\neq \emptyset$.
+    
+\end{proof}
+
+\begin{claim}
+\label{claim::multiplication::2}
+    For any real $x \notin \dom(f\cdot g)$ and for any $n\in \Nats$, we have $(F\cdot G)^\algebraR(x,n) =\emptyset$.
+\end{claim}
+\begin{proof}
+    Assume $x\notin \dom(f\cdot g)$. This means that at least $x\notin \dom(f)$ or $x\notin \dom(g)$. 
+    \begin{itemize}
+        \item 
+        If $x\notin \dom(f)$ then the comparison procedure $(F(-)<-)$ will not terminate and hence $(f\cdot g)(x, n)= \emptyset$.
+        \item
+        If $x\in \dom(f)$ but $x\notin \dom(g)$, then no $y_1 \in G^\algebraR(x,m_1)$ can be found since $G^\algebraR(x,m_1) = \emptyset$.
+    \end{itemize}
+    and hence $(F\cdot G)^\algebraR(x,n) = \emptyset$ in either of the cases.
+\end{proof}
+\begin{claim}
+\label{claim::multiplication::3}
+    For any real $x \in \dom(f\cdot g)$ and for any $n\in \Nats$, we have $(F\cdot G)^\algebraR(x,n)\subseteq \mathbf{Nbd}(f(x)\cdot g(x), 2^{-n})$.
+\end{claim}
+\begin{proof}
+    Using the definition of the procedure $(F\cdot G)$, Lemma \ref{lemma::condition-multiplication} immediately implies that $(F\cdot G)^\algebraR(x,n)\subseteq \mathbf{Nbd}(f(x)\cdot g(x), 2^{-n})$.
+\end{proof}
+\begin{theorem}
+\label{theorem::multiplication}
+     Let $F,G:\real\times\nat\to\real$ be \WhileCC-procedures approximating the functions $f,g:\Reals\to\Reals$ respectively. Then the \WhileCC-procedure $(F\cdot G):\real\times\nat\to\real$ \WhileCC-approximabtes $(f\cdot g)(x) = f(x)\cdot g(x)$.
+\end{theorem}
+\begin{proof}
+    Follows directly from Lemmas \ref{claim::multiplication::1}, \ref{claim::multiplication::2}, \ref{claim::multiplication::3}.
+\end{proof}

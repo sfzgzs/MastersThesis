@@ -1,0 +1,80 @@
+
+\subsection{Some Basic Functions}
+\label{sec::some-basic-functions}
+Using $\realTimes$ we can define the procedure $\realtoNatPow : \real \times \nat \to \real$ as:
+
+\[
+    \mathsf{pow} \equiv  \\
+        \BLOCK{
+        \PROC \\
+            \INDENT{
+            \IN a:\real\ n:\nat \\
+            \AUX  \counter:\nat\ r:\real }\\
+        \BEGIN \\
+            \INDENT{
+            r := \realOne \\
+            \counter := \natZero \\
+        
+            \WHILE \counter \natLess n \DO \\
+                \INDENT{
+                r := r \times a   \\
+                \counter := \counter + 1 }\\
+            \OD \\
+            \RETURN r }\\
+        \END}\\
+\]
+
+This lets us use $x^n$ as a shorthand for $\realtoNatPow(x,n)$ and $x^{-n}$ for $\realInv (\realtoNatPow(x,n))$ with $x$ being of type $\real$ and $n$ of type $\nat$.\\
+We can also define the \WhileCC-procedure $\factorial : \nat \to \nat$ as below:
+\[
+   \mathsf{Factorial} \equiv \\
+                \BLOCK{
+                \PROC \\
+                    \INDENT{
+                    \IN n:\nat \\
+                    \AUX \counter:\nat\ \res:\nat}\\
+                \BEGIN \\
+                    \INDENT{
+                    \res := \natOne \\
+                    \counter := \natOne \\
+                    \WHILE \counter \natLess n + 1 \DO \\
+                        \INDENT{
+                        \res := \res \times \counter   \\
+                        \counter := \counter + 1}\\
+                    \OD \\
+                    \RETURN \res }\\
+                \END}\\
+\]
+
+\begin{proposition}
+    We can add the operator $\mathsf{abs}$ defined as
+    \begin{equation*}
+    \mathsf{abs}(x) \simeq
+        \begin{cases*}
+            x & if $x > 0$\\
+            -x & if $x < 0$\\
+            \uparrow & if $x=0$\\
+        \end{cases*}
+    \end{equation*}
+    to our algebra without strengthening it since it can easily be computed using:
+    \[
+        \mathsf{abs} \equiv  \\
+        \BLOCK{
+        \PROC \\
+            \INDENT{
+            \IN x:\real \\
+            \AUX r:\real}\\
+        \BEGIN \\
+            \INDENT{
+            \IF 0 \realLess x \THEN \\
+                \INDENT{
+                r := x}\\
+            \ELSE \\
+                \INDENT{
+                r := -x}\\
+            \FI \\
+            \RETURN r}\\
+        \END}\\
+    \]
+\end{proposition}
+

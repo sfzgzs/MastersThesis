@@ -1,0 +1,79 @@
+\subsection{Open Exhaustion Lemmas for $\Reals$}
+\label{sec::simple-effective-open-exhaustion}
+We begin by defining a simplified form of an effective open exhaustion called a ``simple effective open exhaustion'' (Definition \ref{def::effecive-open-exhaustion}).
+We prove that we can compute an effective open exhaustion from a simple effective open exhaustion. Simple effective open exhaustions are more convenient for the constructions in the remainder of Chapter \ref{sec::open_exhaustion_for_domain_of_elem_functions}.
+
+
+\begin{definition}[Simple effective open exhaustion]
+\label{def::simple-effecive-open-exhaustion}
+A sequence $(U_1, U_2, \ldots)$ of open sets in $\Reals$ is called a \textit{\simpleeffectiveopenexhaustion{}} for an open set $U$ if 
+\begin{itemize}
+    \item
+        $ U = \bigcup_{i=0}^\infty U_i$,
+    \item 
+        for each $l \in \Nats$,
+          $U_l$ is a finite union of non-empty open finite intervals $I_1^l, I_2^l,...,I_{k_l}^l $ whose closures are \emph{not necessarily disjoint}, and
+    \item (eventual covering property)
+        for any $i,l\in \Nats$ there is some index $l'>l$ such that $\overline{U_l} = \bigcup_{i=0}^{k_l} \overline{I_i^l} \subseteq U_{l'}$ and also $U_l \subseteq U_{l+1}$,
+    \item the map
+    \[l\mapsto ( a_1^l , b_1^l, ...,
+     a_{k_l}^l, b_{k_l}^l) \]
+    which delivers the sequence of endpoints of the stage $U_l = I_1^l\cup ...\cup I_{k_l}^l$ for any $l\in\Nats$, is recursive.
+\end{itemize}
+\end{definition}
+\begin{remark}
+    Note that the definition of ``simple effective open exhaustion'' is different from ``effective open exhaustion'' in three aspects:
+    \begin{itemize}
+        \item the closures of intervals in each stage of a simple effective open exhaustion are \emph{not necessarily disjoint},
+        \item the closure of each stage of a simple effective open exhaustion is not necessarily contained in the next stage, instead it is replaced with the \emph{eventual covering property}, and
+        \item the map delivering the endpoints in each stage of a simple effective open exhaustion does not necessarily give us the intervals \emph{in order}. 
+    \end{itemize}
+\end{remark}
+
+\begin{lemma}
+\label{lemma::simple-OEX-gives-OEX}
+    There is a recursive function that given a simple open effective exhaustion for an open set, returns an effective open exhaustion for the same open set.
+\end{lemma}
+\begin{proof}
+    Let us take a simple effective open exhaustion for a set $U$. We give an algorithm to compute an effective open exhaustion for $U$. This algorithm consists of two steps:
+    \begin{enumerate}
+        \item merging and fixing the order 
+        \item containing the closure in the immediate next stage 
+    \end{enumerate}
+    \begin{itemize}
+        \item \textbf{Step 1.}
+            In any stage with index $l\in \Nats$, we first get all the finitely many open intervals and for overlapping intervals, we merge them into one open interval.
+            Then we sort the intervals by their endpoints. This gives us the intervals 
+            \[
+            (a_1^l, b_1^l), \ldots, (a_{n_l}^l, b_{n_l}^l) 
+            \]
+            where ${n_l}$ is the number of intervals we are left with, after merging all the intersecting ones.
+            This sorting guarantees that 
+            \[
+            a_1^l<b_1^l\leq a_2^l<b_2^l \leq \cdots \leq a_{{n_l}-1}^l<b_{{n_l}-1}^l\leq a_{n_l}^l<b_{n_l}^l,
+            \]
+            while preserving the eventual covering property.
+
+            We now need to make sure that the strict inequality 
+            \[
+            a_1^l<b_1^l<a_2^l<b_2^l< \cdots<a_{{n_l}-1}^l<b_{{n_l}-1}^l<a_{n_l}^l<b_{n_l}^l
+            \]
+            holds, guaranteeing that the closure of these intervals are also disjoint.
+            Now, taking any two intervals $(a_k^l, b_k^l)$
+            and $(a_{k+1}^l, b_{k+1}^l)$ that we have $a_k^l<b_k^l=a_{k+1}^l<b_{k+1}^l$, using the eventual covering property, this means the point $b_k^l$ is covered in some later stage since it is contained in the closure of $(a_k^l, b_k^l)$.
+            This lets us merge any such two intervals $(a_k^l, b_k^l)$ and $(a_{k+1}^l, b_{k+1}^l)$.
+            This gives us a new set of intervals $({c}_1^l, {d}_1^l), \ldots, ({c}_{m_l}^l, {d}_{m_l}^l)$ with $m_l\leq n_l$ with 
+            \[
+                {c}_1^l<{d}_1^l<{c}_2^l<{d}_2^l< \cdots<{c}_{{m_l}-1}^l<{d}_{{m_l}-1}^l<{c}_{m_l}^l<{d}_{m_l}^l
+            \]
+            which again preserves the eventual covering property.
+            For the rest of this proof, we refer to the map generated after applying this step to each stage as the ``transformed map''.
+        \item \textbf{Step 2.}
+            Since the transformed map has the eventual covering property, this gives us a function $C:\Rationals\totalTo\Nats$ that gives us, for any $q\in\Rationals$, the index of the first stage where $q$ is covered. We define the map outputting the stages of the effective open exhaustion $(U_1, U_2, \ldots)$ of this algorithm inductively.
+            For stage with index $1$, we output the first stage of the transformed map.
+            For stage with index $l$, let $n_{l-1}$ be the number of intervals in the stage with index $l-1$ after the transformation. Our new stage with index $l$ will be the transformed stage with index 
+            \[
+            \max\{ C({c}_1^l), C({d}_1^l), \ldots, C({c}_{n_{l-1}}^l), C({d}_{n_{l-1}}^l)\}.
+            \]
+    \end{itemize}
+\end{proof}

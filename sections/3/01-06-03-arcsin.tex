@@ -1,0 +1,252 @@
+\section{Arcsine}
+
+\label{sec4::subsection::arcsine}
+As mentioned in Definition \ref{def::elementary_functions}, we would like to modify the common definition of $\arcsin(x)$ to a totalized version
+\[\arcsin'(x) \stackrel{def}=
+    \begin{cases*}
+        \frac{\pi}{2} & if $x > 1$\\
+        \arcsin(x) & if $-1 < x < 1$\\
+        -\frac{\pi}{2} & if $x<-1$
+    \end{cases*}\\
+\]
+to obtain a continuous function with an open domain. In this section, the ultimate goal is to prove \WhileCCapproximability{} of the function $\arcsin'(f(x))$ for any \WhileCC-approximable function $f$.
+
+Starting with $\arcsin(x)$, in order to approximate $\arcsin'(x)$, we cannot simply compare the value of $x$ against the endpoints and define constant functions outside the borders of the interval $(-1,1)$. Intuitively, since our definition of comparison ($x < -1$ and $ x > 1$) is ``partial'' and undefined on $x = -1, 1$, we would have undefined holes in $x = -1,1$. \\
+
+The idea here would be to find overlapping intervals and approximate functions defined on those overlapping intervals using the $\chooseOp$ operator.
+
+In order to create ``overlapping'' intervals, we need to compute bounds such that approximating arcsine of any value closer than the bounds to the endpoints($x = -1, 1$) would be a ``good-enough'' approximation of arcsine of the endpoints $-1, 1$.
+
+Let us define the \WhileCC-procedure $\mathsf{isCloseEnough}$ of type $\real\times\nat\to\bool$ as
+\[ 
+        \mathsf{isCloseEnough}\equiv
+                        \BLOCK{
+                        \PROC  \\
+                            \INDENT{
+                            \IN y:\real\ k:\nat \\
+                            \AUX n:\nat}\\
+                        \BEGIN \\
+                            \INDENT{
+                                b := ((\Sine\cdot \Sine)({2}^{-k})) > 1 - y \times y\\
+                                \RETURN b}\\
+                        \END}\\
+\] 
+with the semantics
+\[
+\mathsf{isCloseEnough}^\algebraR(y,k)=((\Sine\cdot \Sine)(2^{-k})>1- y^2)^\algebraR 
+\]
+of type $\real\times\nat\to\bool$.
+This is the bound computed for $y$ being a ``good-enough'' of approximation for the endpoints calculated below:\\
+\begin{lemma}[Bounds for arcsin]
+\label{lemma::arcsin::bound}
+    For any $k\in \Nats$ and any $y \in \Reals$:
+    \begin{enumerate}
+        \item 
+            $0 < y < 1\ \land \ \mathsf{isCloseEnough}^\algebraR(y,k) = \{ \true\} \then \abs{\frac{\pi}{2} - \arcsin(y)} < 2^{-k}$.
+        \item 
+            $-1 < y < 0 \ \land \ \mathsf{isCloseEnough}^\algebraR(y,k) = \{ \true\} \then \abs{-\frac{\pi}{2} - \arcsin(y)} < 2^{-k}$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \begin{enumerate}
+        \item Let us assume $k\in \Nats$ and $0 < y < 1$ and hence $0<\arcsin(y)<\frac{\pi}{2}$:
+            \begin{align*}
+                & \mathsf{isCloseEnough}^\algebraR(y,k) = \{ \true\}\\
+                \iff {\ } & 1- y^2 < \sin^2(2^{-k})\\
+                \then & \sqrt{1- y^2} < \sin(2^{-k}) \tag{since $0 < y < 1$}\\
+                \iff {\ } & \cos(\arcsin(y)) < \sin(2^{-k})\\
+                \iff {\ } & \sin(\frac{\pi}{2})\cos(\arcsin(y)) < \sin(2^{-k})\\
+                \iff {\ } & \sin(\frac{\pi}{2})\cos(\arcsin(y)) - \cos(\frac{\pi}{2}) \sin(\arcsin(y)) < \sin(2^{-k}) \\
+                \iff {\ } & \sin(\frac{\pi}{2} - \arcsin(y))< \sin(2^{-k}) \\
+                \iff {\ }  & \frac{\pi}{2} - \arcsin(y)< 2^{-k} \tag{$\sin$ is strictly increasing on $[ 0,\frac{\pi}{2}]$}\\
+                \then & \abs{\frac{\pi}{2} - \arcsin(y)}< 2^{-k}
+            \end{align*}
+            \item Similar to the first part, we assume $k\in \Nats$ and $-1 < y < 0$ and hence $-\frac{\pi}{2}<\arcsin(y)<0$:
+            \begin{align*}
+                & \mathsf{isCloseEnough}^\algebraR(y,k) = \{ \true\}\\
+                \iff {\ } & 1- y^2 < \sin^2(2^{-k})\\
+                \then & \sqrt{1- y^2} < \sin(2^{-k}) \tag{since $-1 < y < 0$}\\
+                \iff {\ } & \cos(\arcsin(y)) < \sin(2^{-k})\\
+                \iff {\ } & \sin(\frac{\pi}{2})\cos(\arcsin(y)) < \sin(2^{-k})\\
+                \iff {\ } & \sin(\frac{\pi}{2})\cos(\arcsin(y)) + \cos(\frac{\pi}{2}) \sin(\arcsin(y)) < \sin(2^{-k}) \\
+                \iff {\ } & \sin(\frac{\pi}{2} + \arcsin(y))< \sin(2^{-k}) \\
+                \iff {\ }  & \frac{\pi}{2} + \arcsin(y)< 2^{-k} \tag{$\sin$ is strictly increasing on $[ 0,\frac{\pi}{2}]$}\\
+                \then & \abs{-(\frac{\pi}{2} + \arcsin(y))}< 2^{-k} \tag{$\arcsin(y) > -\frac{\pi}{2}$}\\
+                \then & \abs{-\frac{\pi}{2} - \arcsin(y)}< 2^{-k} \\
+            \end{align*}
+    \end{enumerate}
+\end{proof}
+
+
+
+Now, we need to define a \WhileCC-program approximating $\arcsin(f(x))$ for $-1<f(x)<1$ itself.
+\begin{definition}
+\label{def::arcsin_minusOne_to_one}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and and $x\in \Reals$. Then the \WhileCC-procedure 
+    \[ 
+    \mathsf{pArcSine}_F \equiv
+                    \BLOCK{
+                    \PROC \\
+                        \INDENT{
+                        \IN x:\real\ n:\nat \\
+                        \AUX i:\nat\ dist:\real\ \res:\real}\\ 
+                    \BEGIN \\
+                        \INDENT{
+                        \res, i := 
+                        \CHOOSE
+                        \BLOCK{(y : \real, m : \nat) :\\
+                                \BLOCK{
+                                \Sine(y)<F(x)< \Sine(y+{2}^{-m})}}\\
+                        \RETURN \res}\\
+                    \END}\\
+    \]
+    of type $\real\times\nat\to\real$ has the semantics
+    \[
+        \mathsf{pArcSin_F}^\algebraR(x,n) = \{ y \in \mathbb{Q} \mid
+          \ \sin(y) < f(x) < \sin(y + 2^{-n}) \}
+    \]
+    \end{definition}
+The \WhileCC-procedure $\mathsf{pArcSine}_F$ outputs values sufficiently close to $\arcsin(f(x))$ only for $-1<f(x)<1$. The behaviour of $\mathsf{pArcSine}_F$ on $f(x)\in(-\infty,-1)$ or $f(x)\in (1, +\infty)$ is unknown.
+Now, incorporating the procedure $\isCloseEnough$ into the \WhileCC-procedure, we get a procedure for \WhileCC-approximating the totalized version $\arcsin'(f(x))$. 
+\begin{definition}
+        Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and and $x\in \Reals$. Then the \WhileCC-procedure 
+        \[ 
+         \mathsf{ArcSin_F}\equiv
+                    \BLOCK{
+                    \PROC  \\
+                        \INDENT{
+                        \IN x:\real\ c:\nat \\
+                        \AUX \chosenVal:\nat\ u:\real\ l:\real\ r:\real }\\
+                    \BEGIN \\
+                        \INDENT{
+                        u := \CHOOSE (q:\real) :
+                                                \BLOCK{
+                                                0<q<1
+                                                \boolAnd \isCloseEnough(q, c+1)}\\
+                        l:= \CHOOSE (q:\real) :
+                                                \BLOCK{
+                                                -1<q<0
+                                                \boolAnd \isCloseEnough(q, c+1)}\\
+                         \\
+                        \chosenVal := \CHOOSE (k : \nat) :
+                                \BLOCK{
+                                \PROC \\
+                                    \INDENT{
+                                    \IN k:\nat\ x:\real \\
+                                    \AUX \res:\real}\\
+                                \BEGIN \\
+                                \INDENT{
+                                    \IF k \natEq 1 \THEN \\
+                                        \INDENT{
+                                        \res := -1<F(x)<1}\\
+                                    \ELSE \IF k \natEq 2 \THEN \\
+                                        \INDENT{
+                                        \res := F(x)>u}\\
+                                    \ELSE \IF k \natEq 3 \THEN \\
+                                        \INDENT{
+                                        \res := F(x)<l}\\
+                                    \ELSE \\
+                                        \INDENT{
+                                        \res := \false}\\
+                                    \FI \\
+                                    \RETURN \res} \\
+                                \END}\\
+                        \IF \chosenVal \natEq 1 \THEN \\
+                            \INDENT{
+                            r := \mathsf{pArcSin}_F(x,c)}\\
+                        \ELSE \IF \chosenVal \natEq 2 \THEN \\
+                            \INDENT{
+                            r := \mathsf{pArcSin}_F(u, c)}\\
+                        \ELSE \IF \chosenVal \natEq 3 \THEN \\
+                            \INDENT{
+                            r := \mathsf{pArcSin}_F(l, c)}\\
+                        \FI \\
+                        \RETURN r}\\
+                    \END}\\
+    \] 
+    \end{definition}
+    of type $\real\times\nat\to\real$ has the semantics
+        \begin{align*}
+        \mathsf{ArcSin}_F^\algebraR(x,n) \stackrel{def}= \ 
+        & \{ y \in \mathsf{pArcSin}_F^\algebraR(x,n) 
+           \mid -1 < f(x) < 1 \} \cup {} \\
+        & \{ y \in \mathsf{pArcSin}_F^\algebraR(u, n) 
+           \mid \mathsf{isCloseEnough}^\algebraR(u,n) = \{ \true\} \\
+        & \quad\land \ 0 < u < 1 \land f(x) > u \} \cup {} \\
+        & \{ y \in \mathsf{pArcSin}_F^\algebraR(l, n) 
+           \mid \mathsf{isCloseEnough}^\algebraR(l,n) = \{ \true\} \\
+        & \quad\land -1 < l < 0 \land f(x) < l \}
+    \end{align*}
+Now, we need to prove that $\mathsf{ArcSin}_F$ approximates $\arcsin(f(x))$.
+\begin{claim}
+\label{claim::arcsin::1}
+         Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and $x \in \dom(f)$, then we have $\mathsf{ArcSin}_F^\algebraR(x,n)\neq \emptyset$ for any $n\in \Nats$.
+\end{claim}
+\begin{proof}
+    Let $f$ be a \WhileCC-approximable function, and $x \in \dom(f)$ and $n\in\Nats$. Then we have different possible cases based on the value of $f(x)$, 
+    \begin{itemize}
+        \item $-1<f(x)<1$: In this case, it suffices to show that $\{ \mathsf{pArcSin}_F^\algebraR(x,n) \} \neq \emptyset$. Since the interval $(-1,1)$ is an open interval, $f(x)$ is an inner point, and $\sin$ is strictly increasing on $(-1,1)$, it means there is a rational $y$ such that $ -1 < \sin(y) < f(x) <  \sin(y+2^n)< 1$, and hence $\mathsf{ArcSin}_F^\algebraR(x,n)\neq \emptyset$.
+        
+        \item $f(x) \geq 1$: In this case, we need to show 
+        \[\{y\in \mathsf{pArcSin}_F^\algebraR(u, n) \mid \cos^2(2^{-n}) < u^2 \land 0<u<1 \land f(x)> u\} \neq \emptyset.
+        \]
+        It suffices to show that there is some $u \in \Reals$ with $0<u<1\leq f(x)$ such that $\cos^2(2^{-n}) < u^2$ and since $2^{-(n+1)} >0$ meaning $\cos^2(2^{-n})\neq 1$, there is a rational number $0<u<1$ such that $\cos^2(2^{-n})<u^2<1$. Now that we found such $u$, by part 1, we can see that $\mathsf{pArcSin}_F^\algebraR(u,n) \neq \emptyset$.
+        
+        \item $f(x) \leq -1$: We need to show 
+        \[\{y\in \mathsf{pArcSin}_F^\algebraR(l, n) \mid \cos^2(2^{-n}) < l^2 \land f(x)\leq-1<l<0 \land f(x)<l \} \neq \emptyset.
+        \]
+        It suffices to show that there is some $l \in \Reals$ such that $\cos^2(2^{-n}) < l^2$ and also $-1<l<0$. 
+        since $2^{-n} >0$, meaning $\cos^2(2^{-n})\neq 1$, this means there is a rational numbers $-1<l<0$ such that $\cos^2(2^{-n})<l^2<1$.
+        Having found $-1<l<0$, by part 1, we can see that  $\mathsf{pArcSin}_F^\algebraR(l,n) \neq \emptyset$.
+    \end{itemize}
+\end{proof}
+
+\begin{claim}
+\label{claim::arcsin::2}
+     Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$. For any  $x \notin \dom(f)$, we have $\mathsf{ArcSin}_F^\algebraR(x,n)= \emptyset$ for any $n\in \Nats$.
+\end{claim}
+\begin{proof}
+
+    Let $f$ be a \WhileCC-approximable function, and $x \notin \dom(f)$ and $n\in\Nats$. Since $f(x)$ is not defined, based on the definition of the procedure and using Lemma \ref{def::fIsLessThan-fIsMoreThan}, $F(x)<b$ would not terminate on any bound $b$. Hence we can conclude that $\mathsf{ArcSin}_F^\algebraR(x,n) = \emptyset$.
+\end{proof}
+
+\begin{claim}
+\label{claim::arcsin::3}
+     Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$. We have $\forall x\in \dom(f) ,\ \forall n \in \Nats,\ \forall y\in \mathsf{ArcSin}_F^\algebraR(x,n) :$
+    \[
+     \abs{{\arcsin'}(f(x)) - y} < 2^{-n}.
+    \]
+\end{claim}
+\begin{proof}
+    For arbitrary $x\in \dom(f)$, $n \in \Nats$, and for any $ y\in \mathsf{ArcSin}_F^\algebraR(x,n)$, we have 3 cases to consider:
+    \begin{itemize}
+        \item $-1 < f(x) < 1:$ In which case $ y  \in \mathsf{pArcSin}_F^\algebraR(x,n)$. Then by definition of $\mathsf{pArcSin}_F$:
+        \begin{align*}
+                &  -1 < f(x) < 1 \land \sin(y) < f(x) < \sin(y + 2^{-n})\\
+                \then & y <  {\arcsin}(f(x)) < y + 2^{-n}\\
+                \then & \arcsin(f(x)) > y \ \land \ \ {\arcsin}(f(x)) - y < 2^{-n}\\
+                \then & \abs{{\arcsin}(f(x)) - y} < 2^{-n}\\
+                \then & \abs{{\arcsin'}(f(x)) - y} < 2^{-n}.
+        \end{align*}
+        
+        \item $f(x)> u$: for some $0<u<1$ in which case $y \in \{ \ y\in \mathsf{pArcSin}_F^\algebraR(u, n) \mid \cos^2(2^{-n}) < u^2$ \}, hence:
+        \begin{align*}
+                &  1-\sin^2(2^{-k}) < u^2 \land 0<u<1 \land f(x)> u\\
+                \then & \abs{\frac{\pi}{2} - y} < 2^{-n} \tag{by Lemma \ref{lemma::arcsin::bound} part (1)}\\
+                \then & \abs{{\arcsin'}(f(x)) - y} < 2^{-n} 
+        \end{align*}
+        \item $f(x)<l$ for some $l$ satisfying $\cos^2(2^{-n}) < l^2 \land -1<l<0$: We would have  $y \in\mathsf{pArcSin}_F^\algebraR(l, n)$, in which case:
+        \begin{align*}
+                &  1-\sin^2(2^{-k}) < l^2 \land -1<l<0 \land f(x)> l\\
+                \then & \abs{-\frac{\pi}{2} - y} < 2^{-n} \tag{by Lemma \ref{lemma::arcsin::bound} part (2)}\\
+                \then & \abs{{\arcsin'}(f(x)) - y} < 2^{-n}
+        \end{align*}
+    \end{itemize}
+\end{proof}
+\begin{theorem}
+\label{theorem::arcsine}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$. Then the \WhileCC-procedure $\mathsf{ArcSin}_F^\algebraR$ approximates $\arcsin'(f(x))$.
+\end{theorem}
+\begin{proof}
+    Follows from Lemmas \ref{claim::arcsin::1}, \ref{claim::arcsin::2}, and \ref{claim::arcsin::3}.
+\end{proof}

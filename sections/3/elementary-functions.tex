@@ -1,0 +1,49 @@
+\section{Elementary Functions}
+\label{sec::elementary-functions}
+Elementary functions appear in different computational contexts. 
+\begin{definition}[Elementary functions]
+\label{def::elementary_functions}
+    The \elementaryfunctions{} on $\Reals$ \cite[page 17]{OrdinaryDifferentialEquations_Morris_Tenenbaum_1985} are partial functions deﬁned by expressions built up from 
+    \begin{itemize}
+        \item \alphacomputablereals{} (see Remark \ref{why-alpha-computable} and Section \ref{sec::alpha-computability}), and
+        \item the variable $x$
+    \end{itemize}
+    and, by applying (repeatedly) the basic operations below on elementary functions $f,g$:
+    \begin{enumerate}[(i)]
+        \item
+        addition %\footnote{$\simeq$ used from here on
+        % \edcomm{WK}{Are previous uses, e.g., in $\mathcal{R}$, something different?}
+        % is the Kleene equality, meaning either both sides of the equality are defined and are equal, or both sides are undefined. \edcomm{WK}{\ldots{} and you are using some funny symbol to indicate undefinedness\ldots}} 
+        (i.e. $(f+g)(x) = f(x) + g(x)$) 
+        \item
+        multiplication (i.e. $(f\cdot g)(x) = f(x)g(x)$)
+        \item
+        division  (i.e. $\division_f(x) = \frac{1}{f(x)}$ where $\frac{1}{0}$ is undefined) 
+        \item
+        exponential (i.e. $\exp_f(x) = e^{f(x)}$)
+        \item
+        logarithm (i.e. $\ln_f(x) = \ln(f(x))$
+        \item
+        $\sin_f(x) = \sin(f(x))$
+        \item
+        $n$-th roots: root\(_{n,f}(x) = \sqrt[n]{f(x)}\) where $0< n \in \Nats$
+        \item
+        $\arcsin_f(x) = \arcsin(f(x))$
+    \end{enumerate}
+\end{definition}
+In this thesis, we make the following modifications to the natural definition of some of the functions above,
+to work with a computable part of $\Reals$, and also to make sure the domains of those functions are open:
+\begin{itemize}
+    \item We define $\sqrt[n]{x} = 0$ for $x < 0$ when $n$ is even.
+    \item We extend the definition of $\arcsin(x)$ to be $\frac{\pi}{2}$ for $x > 1$ and to be $-\frac{\pi}{2}$ for $x<-1$.
+\end{itemize}
+From here on, the term \textit{elementary functions} will be used to refer to the modified version of unary elementary functions.
+
+\begin{remark}
+\label{why-alpha-computable}
+    Note that the original definition of elementary functions by \cite[page 17]{OrdinaryDifferentialEquations_Morris_Tenenbaum_1985}
+    involves expressions built up from arbitrary (possibly non-computable) constants.
+    We cannot approximate non-computable constants,
+    so we choose to omit them from our definition of \elementaryfunctions{}
+    and only work with \alphacomputablereals{}.
+\end{remark}

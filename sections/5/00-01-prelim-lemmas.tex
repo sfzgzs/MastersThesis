@@ -1,0 +1,114 @@
+
+\section{Preliminary Lemmas}
+The following theorem lets us use a simpler characterization for effective locally uniform continuity of a function
+that does not depend on any effective open exhaustion.
+Leveraging this characterization,
+we can reduce the problem of proving effective local uniform continuity w.r.t an open exhaustion for its domain, to a simpler problem.
+This characterization is especially used later in Theorems \ref{thm::effective_local_uniform_continuity_addition} and \ref{thm::effective_local_uniform_continuity_multiplication}
+for proving effective local uniform continuity of the addition and multiplication of functions.
+% \edcomm{WK}{(Just curious: Is this still different from effective non-local uniform continuity?)}
+
+\begin{definition}[Local continuity witness]
+\label{def::local-continuity-witness}
+    Let $f:\Reals\to\Reals$. A recursive function $N:\Rationals\times\Rationals\times\Nats\to\Nats$ is called a \emph{local continuity witness for $f$}\index{local continuity witness} iff for any $a,b\in\Rationals$ with $[a,b]\subseteq\dom(f)$ and $k\in\Nats$, we have
+    \[ 
+        \forall x,y \in (a,b) \quad \abs{x-y}<2^{-N(a,b,k)} \then \abs{f(x)-f(y)}<2^{-k}.
+    \] 
+\end{definition}
+
+\begin{theorem}[Alternative characterization of effective local uniform continuity]
+    \label{thm::alternative_characterization_for_eluc}
+    Let $f:\Reals\to\Reals$ have an open domain with an open exhaustion $(U_1, U_2, \ldots)$. Then
+    $f$ is effectively locally uniformly continuous with respect to $(U_1, U_2, \ldots)$ if and only if there is a local continuity witness for $f$.
+\end{theorem}
+\begin{proof}
+    \begin{itemize}
+        \item[($\Rightarrow$)]
+            Assuming $f$ is effectively locally uniformly continuous with respect to an open exhaustion $(U_1, U_2, \ldots)$ for $\dom(f)$, we get a recursive function $M:\Nats\times\Nats\to\Nats$ such that for all $k,i\in \Nats$ and all $x,y \in U_i$, 
+            \[
+            \abs{x-y}<2^{-M(k,i)} \then \abs{f(x) - f(y)}< 2^{-k}.
+            \]
+            We need to prove the existense of a local continuity witness for $f$. To do this, we present an algorithm computing a recursive function $N:\Rationals\times\Rationals\times\Nats\to\Nats$ that takes $a,b\in \Rationals$ and $k\in \Nats$ with $[a,b]\subseteq \dom(f)$ as inputs and returns a natural number such that 
+            \[
+                \abs{x-y}<2^{-N(a,b,k)} \then \abs{f(x) - f(y)}< 2^{-k}.
+            \]
+            Since $(U_i)_{i \in \Nats}$ covers $\dom(f)$, there is a stage in which $[a,b]$ is covered. By definition of an effective open exhaustion, there is a recursive map which delivers the sequence of stages of $(U_i)_{i \in \Nats}$. Hence we can enumerate all stages until we find a stage $s$ which contains $[a,b]$, and then we can output $N(a,b,k) = M(k,s)$. This guarantees that 
+            \[
+            \forall x,y \in (a,b) \quad \abs{x-y}<2^{-N(a,b,k)} \then \abs{f(x)-f(y)} < 2^{-k}.
+            \]
+        \item[($\Leftarrow$)]
+            Let us assume $f$ has a local continuity witness $N:\Rationals\times\Rationals\times\Nats\to\Nats$.
+            We need to define a recursive function $M:\Nats\times\Nats\to\Nats$ such that 
+            \[
+                \forall x,y\in U_i \quad \abs{x-y}<2^{-M(k,i)} \then \abs{f(x)-f(y)} < 2^{-k}.
+            \]
+            Since we have an open exhaustion for $\dom(f)$, we have a recursive function listing the intervals in each stage. Let $(a_1, b_1, \ldots, a_{n_s}, b_{n_s})$ be the endpoints of the components of stage $s$.
+            Let us enumerate the gaps between intervals as $g_1, g_{n_s-1}$ with $g_j\in\Rationals$ for each $j\in \{1, \ldots, n_s-1\}$. 
+            Then, we define 
+            \[
+            M(k,s) \stackrel{def}= \max (\curlybrac{N(a_m, b_m, k) \mid 1<m<n_s}\cup \{ \lceil 1/g_j \rceil \mid 1\leq j \leq n_s-1 \}).
+            \]
+            Consider $x,y \in  U_s$. Then if $\abs{x-y}<2^{-M(k,s)}$, this means that $x$ and $y$ must be on the same interval in the open exhaustion. We also have that $\abs{x-y}<2^{-N(a_m, b_m, k)}$ for $1<m<n_s$, this guarantees that $\abs{f(x)-f(y)} < 2^{-k}$,
+            and hence, proves that $f$ is locally uniformly continuous with respect to $(U_i)_{i \in \Nats}$.
+    \end{itemize}
+\end{proof}
+                
+\noindent
+We take this theorem as justification for being able to talk about just
+``effective local uniform continuity'',
+instead of having to talk about ``effective local uniform continuity w.r.t an open exhaustion''.
+
+Theorem \ref{thm::alternative_characterization_for_eluc} gives us an alternative characterization of acceptable functions, i.e.:
+\begin{corollary}
+    A function $f:\Reals\to\Reals$ is \emph{acceptable} iff:
+    \begin{enumerate}[(i)]
+        \item The domain of $f$ is the union of an effective open exhaustion, and
+        \item The function $f$ has a local continuity witness. \index{local continuity witness}
+    \end{enumerate}
+\end{corollary}
+\begin{lemma}
+\label{lemma::WCC-approximation-gives-rec-func--for-cont-on-monotone-intervals}
+% \edcomm{FG}{There is a problem with possibly too much handwaiving here (also in \ref{thm::OEX_by_WCC_approximability}). I am technically (mis?)using the \WhileCC-procedure in this theorem as a function of type $\Rationals\times \Nats \to \Rationals$ to give me an approximation for $f(x)$ om $x\in\Rationals\cap\dom(f)$... can I get away with this?}
+% \edcomm{WK}{I think, yes: You are implicitly using that recursive interpreter of WhileCC that I mentioned.}
+% \edcomm{FG}{Do I need to formally define the recursive interpreter then?}
+% \edcomm{WK}{I currently don't think you'd nbeed that.}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, with $f$ monotone on its domain, then $f$ is effectively locally uniformly continuous.
+\end{lemma}
+\begin{proof}
+    By Theorem \ref{thm::alternative_characterization_for_eluc}, it suffices to give a recursive function $N:\Rationals\times\Rationals\times\Nats\to\Nats$ that for any $a,b,\in \Rationals$ with $[a,b]\subseteq \dom(f)$ satisfies 
+    \[
+        \forall x,y \in (a,b) \quad \abs{x-y}<2^{-N(a,b,k)} \then \abs{f(x)<f(y)}<2^{-k}.
+    \]
+    We present an algorithm to compute $N(a,b,k)$ for any $a,b\in\Rationals$ with $[a,b]\subseteq \dom(f)$.
+    We begin by giving an informal description of the algorithm:
+    \begin{enumerate}
+        \item 
+            Start with a counter $c = 0$.
+        \item
+            Divide $[a,b]$ into segments $[a_1, a_2],[a_2, a_3], \cdots, [a_{c_n-1}, a_{c_n}]$ of length at most $2^{-c}$.
+        \item
+            Check whether for all $i\in\{1,\ldots, c_n-1\}$,
+            there exists some $q_1 \in F^{\algebraR}(a_i, c)$
+            and $q_2\in F^{\algebraR}(a_{i+1}, c)$ where
+            \[
+                \abs{q_2 - q_1}+2^{-c-1}<2^{-k}.
+            \]
+            If this is not satisfied, increase $c$ by one, and go to step 2. Otherwise, return $c$.
+    \end{enumerate}
+    The algorithm we just defined computes the following functions:
+    \begin{align*}
+        \textrm{intervals}(a,b,i,c) & =
+            \begin{cases*}
+                [a+2^{-c}i, a+2^{-c}(i+1)] & if $2^{-c}(i+1) < b$\\
+                [a+2^{-c}i, b] & otherwise\\
+            \end{cases*}\\
+        N(a,b,k) & = \min_{c\in\Nats}\ \forall i \in \{0,\ldots, \lceil(b-a)/2^{-c}\rceil \} \\ 
+        & \qquad\exists q_1\in F^{\algebraR}(\textrm{intervals}(a,b,i,c), c)\\
+        & \qquad \exists q_2\in F^{\algebraR}(\textrm{intervals}(a,b,i+1,c), c)\\
+        & \qquad \abs{q_2 - q_1}+2^{-c-1}< 2^{-k}.
+    \end{align*}
+    Intuitively, $\textrm{intervals}(a, b, i, c)$ divides the interval $[a, b]$ into a finite set of sub-intervals of maximum length $2^{-c}$, returning the $i$th such interval. Note that $\abs{q_2 - q_1}+2^{-c-1}$ is an overestimation of how much the value of $f$ changes within the interval $[a_i, a_{i+1}]$. Since the function is monotone over $I$, the maximum change in any interval of length at least $2^{-c}$ is less than the estimation, and hence step 3 will guarantee that 
+    \[
+     \forall x,y \in (a,b) \quad \abs{x-y}<2^{-N(a,b,k)} \then \abs{f(x)-f(y)}<2^{-k}.
+    \]
+\end{proof}

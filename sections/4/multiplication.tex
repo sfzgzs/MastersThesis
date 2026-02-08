@@ -1,0 +1,27 @@
+\subsection{\EffectiveOpenness{} for multiplication}
+\begin{claim}
+\label{claim::mult-effectively-open}
+    The function $\Mult:\Reals\times\Reals \to \Reals$ with $\Mult(x,y) = x \cdot y$ is \effectivelyOpen.
+\end{claim}
+\begin{proof}
+    In order to prove this, we need to prove that for any open $U\subseteq \Reals$, the set 
+    \[
+    \Mult^{-1}(U) = \curlybrac{(x,y)\mid x\cdot y \in U}
+    \]
+    has an effective open exhaustion. Now using Theorem \ref{thm::rec_in_implies_OEX} we only need to present a recursive function deciding if any arbitrary $2$-cube $(x_1, x_2) \times (y_1, y_2)$ is in $\Mult^{-1}[I]$. Since $x\cdot y$ is a continuous function over the rectangle, its maximum value occurs at one of the corners. This means we can define 
+    \begin{align*}
+    \isIn_{\Mult^{-1}(I)}(x_1, y_1, x_2, y_2) \stackrel{def}= &
+    a<x_1\cdot y_1< b\ \land \ a< x_1\cdot y_2<b\ \land \\
+    & a<x_2\cdot y_1<b \ \land\ a<x_2\cdot y_2<b.
+    \end{align*}
+    Since $x_1, y_1, x_2, y_2$ are all rational, this function is clearly recursive and this, along with Theorem \ref{thm::rec_in_implies_OEX}, gives us an effective open exhaustion for $\Mult^{-1}(I)$.
+    % \input{images/4/multPlot}
+
+\end{proof}
+\begin{theorem}[Multiplication]
+\label{thm::multiplication_has_OEX}
+     Let $f,g:\Reals\to \Reals$ be \effectivelyOpen. Then $(f\cdot g)$ is also \effectivelyOpen.
+\end{theorem}
+\begin{proof}
+       Using Theorem \ref{thm::composition_has_OEX}, we know that compositions preserve \effectivelyOpen\text{ness}. Now we know that $(f\cdot g)$ is composed from the functions $\CartProd$, $\Diag$, and $\Mult$. Therefore Lemmas \ref{claim::cartprod-effectively-open}, \ref{claim::diag-effectively-open}, and \ref{claim::mult-effectively-open} complete the proof.
+\end{proof}

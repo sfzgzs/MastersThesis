@@ -1,0 +1,98 @@
+
+\section{Computability on other domains: Realizability theory}
+\label{sec::realizability}
+In this section, we formally define computability of functions over sets other than $\Nats$. This is used implicitly throughout this paper. These definitions are based on \citet{bauer2022notes}.
+\begin{definition}[Realizability relation]
+    A relation ${\Vdash_X} \subseteq \Nats \times X$ is called a \emph{\realizabilityrelation{} on $X$}, if $\Vdash_X$ is surjective and univalent. For any $x\in X$, and $n\in\Nats$,
+    We say $n$ \emph{realizes}, or \emph{represents} $x$, if $n\Vdash_X x$.
+\end{definition}
+
+\begin{definition}[Assembly]
+    We call the pair $(X, \Vdash_X)$ an \emph{\assembly{}} if $\Vdash_X$ is a \realizabilityrelation{} on $X$.
+\end{definition}
+\begin{definition}[\Computabilityonassemblies{}]
+\label{def::computability-on-assemblies}
+    Let $(A, \Vdash_A), (B,\Vdash_B)$ be assemblies. Then 
+    A function $f:A\to B$ is \emph{computable} (or \emph{recursive}) \emph{with respect to $\Vdash_A$ and $\Vdash_B$}, if there is a recursive function $f':\Nats\to \Nats$ with:
+    \[
+        \forall a\in \dom(f)\quad \forall n\in \Nats \quad n \ \Vdash_{A} a \ \then \ f'(n) \Vdash_{B} f(a)
+    \]
+\end{definition}
+
+The following realizability relations will be assumed by default when discussing computability on rationals, pairs and finite sequences without mentioning the respective realizability relations:
+\begin{definition}[\Realizabilityrelationonnats{}]
+\label{def::realizability-on-nats}
+    We define the \realizabilityrelation{} ${\Vdash_\Nats}$ as the smallest relation satisfying $n \Vdash_\Nats n$ for all $n\in \Nats$.
+\end{definition}
+
+\begin{definition}[\RealizabilityrelationonRationals{}]
+    Let us consider Godel's pairing function $g(x/y)=2^x(2y+1)-1$.
+    We define the \realizabilityrelation{} ${\Vdash_\Rationals}$ as:
+    \[
+        n \Vdash_{\Rationals} \frac{p}{q} {\ifff} \gcd(p,q)=1 \quad \land \quad n =
+        \begin{cases*}
+            2(g(p/q)+1)-1 & if $p/q>0$ \\
+            2g(p/q) & if $p/q<0$, 
+        \end{cases*}
+    \]
+\end{definition}
+
+
+\begin{definition}[\RealizabilityrelationonCartesianproduct{}]
+    Let $(A, \Vdash_A)$ and $(B, \Vdash_B)$ be assemblies.
+    % Then we define the realizability relation ${\Vdash_{A \times B}}$ as
+    % \[
+    % n \Vdash_{A\times B} (a,b) \ifff  \exists m,m' \in \Nats \quad n = 2^{m}3^{m'}\ \land\ m\Vdash_A a \ \land\ m' \Vdash_B b
+    % \]
+     Then we define the \realizabilityrelation{} ${
+    \Vdash_{A\times B}}$ as the smallest relation satisfying
+    \[
+    \infer{
+        m_1\Vdash_A a \and m_2 \Vdash_B b
+    }
+    {
+        2^{m_1} 3^{m_2} \Vdash_{A\times B} (a,b)
+    }
+    \enskip.
+    \]
+\end{definition}
+
+
+\begin{definition}[\Realizabilityrelationonsequences{}]
+\label{def::realizability-on-sequences}
+    Let $(A, \Vdash_A)$ be an assembly and $A^*$ represent the set of all finite sequences on $A$.
+    % Then we define the realizability relation ${\Vdash_{A^*}}$ as
+    % \[
+    % x \Vdash_{A^*} (a_1,\ldots a_n) \ifff
+    % \exists m_1, \ldots,m_n \in \Nats \quad
+    % \BLOCK{ x = p_1^{m_1}\cdots p_n^{m_n}\
+    % \land\\
+    % m_1\Vdash_A a_1 \ \land \ \cdots \ \land m_n \Vdash_A a_n}
+    % \]
+    % where $p_i$ is the $i$th prime number. 
+    We define the realizability relation ${
+    \Vdash_{A^*}}$ as the smallest relation satisfying
+    \[
+    \infer{
+        m_1\Vdash_A a_1 \ \and \ \cdots \ \and m_n \Vdash_A a_n
+    }
+    {
+        p_1^{m_1}\cdots p_n^{m_n} \Vdash_{A^*} (a_1,\ldots a_n)
+    }\enskip,
+    \]
+    where $p_i$ is the $i$th prime number.
+\end{definition}
+\begin{definition}[Realizability relation on functions\index{realizability relation!on Functions}]
+    Let $(A, \Vdash_A)$ and $(B, \Vdash_B)$ be assemblies.
+    Then we define the \realizabilityrelation{} ${
+    \Vdash_{A\to B}}$ as the smallest relation satisfying\index{$\phi$}
+    \[
+    \infer{
+        \forall n\in\Nats\ \forall x\in A\ (n \Vdash_A x \then \phi_i(n) \Vdash_B f(x)) 
+    }
+    {
+        i \Vdash_{A\to B} f
+    }
+    \]
+    
+\end{definition}

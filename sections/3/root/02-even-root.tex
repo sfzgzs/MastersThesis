@@ -1,0 +1,155 @@
+\subsection{Even root}
+In this section, we construct a \WhileCC-procedure that approximates $\sqrt[n]{f(x)}$ for even $n$s.
+Having the modifications in equation \ref{eq::root-modification} in mind, the trick here is to find a bound for $f(x)$ such that, for any value less than this bound, approximating the $n$-th root of that value by outputting $0$ is sufficiently accurate.
+\begin{definition}
+    
+    Let us define the \WhileCC-procedure $\mathsf{isCloseEnough}$ of type $\real\times\nat\times\nat\to\bool$ below:
+    \[ 
+    \mathsf{isCloseEnough}\equiv
+                    \BLOCK{
+                    \PROC \\
+                        \INDENT{
+                        \IN y:\real\ n:\nat\ k:\nat}\\
+                    \BEGIN \\
+                        \INDENT{
+                        \RETURN 0<y \boolAnd
+                                y<1\slash{2}^{nk}}\\
+                    \END}\\
+    \] 
+    with the semantics
+    \[
+    \mathsf{isCloseEnough}^\algebraR(y,n,k)=\{ \true \mid (0<y)^\algebraR = \{\true\} \land (y<1\slash2^{nk})^\algebraR = \{\true\}\} 
+    \]
+\end{definition}
+\begin{lemma}[Bounds for Natural Root]
+\label{lemma::nth-root::bound}
+    For any even $n\in \Nats$, $y\in \Reals$ and $k\in \Nats$:
+    \[ \mathsf{isCloseEnough}^\algebraR(y,n,k) = \{\true\} \then \abs{\sqrt[n]{y}} < 2^{-k}.\]
+\end{lemma}
+\begin{proof}
+    Let us assume $y\in \Reals$, $k\in \Nats$ . Then,
+     \begin{align*}
+                &\mathsf{isCloseEnough}^\algebraR(y,n,k) = \{\true\} \\
+                \then & 0<y< 2^{-nk} \\
+                \then & \abs{y} < 2^{-nk} \tag{since $0<y$} \\
+                \then & \abs{\sqrt[n]{y}} < 2^{-k} 
+            \end{align*}
+\end{proof}
+So if $\mathsf{isCloseEnough}^\algebraR(y,n,k)$ outputs $\true$, we can use the fact that $\sqrt[n]{y}$ is at most $2^{-k}$ away from $0$. 
+\begin{remark}
+    For any even $n$ and fixed $k\in \Nats$, there is always an $y\in \Reals$ such that 
+    \[
+    \mathsf{isCloseEnough}^\algebraR(y,n,k) =\{ \true\}.
+    \]
+\end{remark}
+Now let us define the \WhileCC-procedure for approximating an even root of $f(x)$ for any \WhileCC-approximable function $f:\Reals\to\Reals$.
+\begin{definition}
+    Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and and $x\in \Reals$. Then the \WhileCC-procedure
+    \[ 
+    \mathsf{evenRoot}_{n,F}\equiv
+                        \BLOCK{
+                        \PROC  \\
+                            \INDENT{
+                            \IN n:\nat\ x:\real\ c:\nat \\
+                            \AUX \chosenVal:\nat\ l:\real\ r:\real}\\
+                        \BEGIN \\
+                            \INDENT{
+                            l := \CHOOSE (q:\real) :
+                                                \BLOCK{
+                                                \isCloseEnough(q, c, n)} \\
+                             \\
+                            \chosenVal := \CHOOSE (k : \nat) :
+                                    \BLOCK{
+                                    \PROC \\
+                                        \INDENT{
+                                        \IN k:\nat\ x:\real \\
+                                        \AUX \res:\real}\\
+                                    \BEGIN \\
+                                        \INDENT{    
+                                        \IF k \natEq 1 \THEN \\
+                                            \INDENT{
+                                            \res := 0<F(x)}\\
+                                        \ELSE \IF k \natEq 2 \THEN \\
+                                            \INDENT{
+                                            \res := F(x)<l}\\
+                                        \ELSE \\
+                                            \INDENT{
+                                            \res := \false}\\
+                                        \FI \\
+                                        \RETURN \res}\\
+                                    \END}\\
+                            \IF \chosenVal \natEq 1 \THEN \\
+                                \INDENT{
+                                r := \mathsf{oddRoot}_{n,F}(x,c)}\\
+                            \ELSE \IF \chosenVal \natEq 2 \THEN \\
+                                \INDENT{
+                                r := 0}\\
+                            \FI \\
+                            \RETURN r}\\
+                        \END}\\
+    \] 
+    of type $\real\times\real\to\nat$, has the semantics 
+     \[
+    \begin{aligned}[t]
+        \mathsf{evenRoot}_{n,F}^\algebraR(x,m) = 
+        \{ &\ y \in  \mathsf{oddRoot}_{n,F}^\algebraR(x,m) \mid (0<F(x))^\algebraR=\{\true\}\} \cup {}\\
+        \{ &\ 0 \mid \exists l\in\Rationals\quad \mathsf{isCloseEnough}(l,m,n)=\{\true\} \land f(x)<l \}
+        \end{aligned}
+    \]
+\end{definition}
+    The procedure above reuses the \WhileCC-procedure $\mathsf{oddRoot}$, originally defined for approximating odd roots, to approximate even roots since $\mathsf{oddRoot}$ happens to work for when $n$ is even on $(0, +\infty)$. 
+    We now prove that $\mathsf{oddRoot}$ approximates $\sqrt[n]{f(x)}$ for even $n$s.
+
+    \begin{claim}
+    \label{claim::even-nth-root::1}
+        Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, $n$ some even number, and $x \in \dom(f)$. Then we have $\mathsf{evenRoot}_{n,F}(x,m)\neq \emptyset$ for any $m\in \Nats$.
+    \end{claim}
+    \begin{proof}
+        Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, $x \in \dom(f)$ and $n\in\Nats$. We have two cases based on the value of $f(x)$: 
+        \begin{itemize}                
+            \item $0 < f(x)$:
+            We need to show that $\mathsf{oddRoot}_{n,F}(x,m)\neq \emptyset$.  Since the interval $(0, +\infty)$ is an open interval, $f(x)$ is an inner point, and the power function is strictly increasing on $(0, +\infty)$, we can choose a rational $y$ such that $y^n < f(x) < (y + 2^{-m})^n$. Hence $\mathsf{oddRoot}_{n,F}(x,m)\neq \emptyset$.
+     
+            \item $f(x) \leq 0$: In this case,
+            there is always a rational $l$ such that 
+            \[
+            \mathsf{isCloseEnough}(l,m,n) = \{\true\}.
+            \] This means that the set $\{ \ 0 \mid \mathsf{isCloseEnough}(l,m,n)=\{\true\} \land f(x)<l \}$ is non-empty, and so is $\mathsf{evenRoot}_{n,F}(x,m)$.
+        \end{itemize}
+    \end{proof}
+    
+    \begin{claim}
+    \label{claim::even-nth-root::2}
+        Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$, and $x \notin \dom(f)$. Then we have $\mathsf{evenRoot}_{n,F}(x,m)= \emptyset$ for any $n,m\in \Nats$.
+    \end{claim}
+    \begin{proof}
+        Since $x \notin \dom(f)$, the comparison procedure $(- < F(-))$ with the second argument being $x$ does not terminate and hence we can conclude that $\mathsf{evenRoot}_{n,F}(x,m) = \emptyset$.
+    \end{proof}
+    
+    \begin{claim}
+    \label{claim::even-nth-root::3}
+        Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$. Then for any even $n$, we have  $\forall x\in \dom(f) ,\ \forall m \in \Nats,\ \forall y\in \mathsf{evenRoot}_{n,F}(x,m) :$
+        \[
+         \abs{\text{root}_{n,f}(x) - y} < 2^{-n}.
+        \]
+    \end{claim}
+    \begin{proof}
+        We have two cases:
+        \begin{itemize}
+            \item $y \in  \mathsf{oddRoot}_{n,F}^\algebraR(x,m)$ and $ (0<F(x))^\algebraR=\{\true\}$:
+            Then, by the definition of $\mathsf{oddRoot}_{n,F}(x,m)$:
+            \begin{align*}
+                     & y^n < f(x) < (y + 2^{-m})^n\\
+                    \then & \abs{\sqrt[n]{f(x)} - y} < 2^{-m}.
+            \end{align*}
+            \item $ y = 0 \land \exists l\in\Rationals\quad \mathsf{isCloseEnough}(l,m,n)=\{\true\} \land f(x)<l$:
+            Immediately follows from Lemma \ref{lemma::nth-root::bound} that $\abs{\sqrt[n]{l}}<2^{-nm}$ and hence $\abs{\text{root}_{n,f}(x) - y} < 2^{-n}$.
+        \end{itemize}
+    \end{proof}
+    \begin{theorem}
+    \label{theorem::even-nth-root}
+        Let $F:\real\times\nat\to\real$ be a \WhileCC-procedure approximating the function $f:\Reals\to\Reals$. Then the \WhileCC-procedure $\mathsf{evenRoot}_{n,F}(x,m)$ approximates $\text{root}_{n,f}(x)$.
+    \end{theorem}
+    \begin{proof}
+        Follows directly from Lemmas \ref{claim::even-nth-root::1}, \ref{claim::even-nth-root::2}, and \ref{claim::even-nth-root::3}.
+    \end{proof}

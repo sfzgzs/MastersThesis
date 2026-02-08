@@ -1,0 +1,42 @@
+\section{Continuity for Multiplication of Functions}
+
+\begin{theorem}[Continuity for multiplication]
+\label{thm::effective_local_uniform_continuity_multiplication} 
+    Let $f,g:\Reals\to\Reals$ be effectively locally uniformly continuous with respect to effective open exhaustions for their domains, respectively.
+    Then $(f\cdot g)(x) = f(x)\cdot g(x)$ is effectively locally uniformly continuous w.r.t. any effective open exhaustion for $\dom(f\cdot g)$.
+\end{theorem}
+\begin{proof}
+    In this proof, we only work with the alternative characterization of effective local uniform continuity (Theorem \ref{thm::alternative_characterization_for_eluc}).
+    Let $f,g:\Reals\to\Reals$ be effectively locally uniformly continuous with recursive functions $N_f, N_g:\Rationals\times\Rationals\times\Nats\to\Nats$ in the alternative characterization, respectively.
+    We need to present a recursive function $N:\Rationals\times\Rationals\times\Nats\to\Nats$ that for all $a,b\in \Rationals$ with $[a,b]\subseteq \dom(f \cdot g)$ satisfies
+    \[
+        \abs{x-y}<2^{-N(a,b,k)} \then \abs{(f \cdot g)(x) - (f \cdot g)(y)}<2^{-k}
+    \]
+    making the function $f \cdot g$ effectively locally uniformly continuous.
+
+    Let us take an arbitrary $k\in\Nats$. For any $a,b\in \Rationals$, if $[a,b]\subseteq \dom(f \cdot g)$ then $[a,b]\subseteq \dom(f)$ and $[a,b]\subseteq\dom(g)$.
+    We need to present some recursive function $N:\Rationals\times\Rationals\times\Nats\to\Nats$
+    satisfying for $x,y\in (a,b)$ 
+    \[
+        \abs{x-y}<2^{-N(a,b,k)} \then \abs{(f \cdot g)(x) - (f \cdot g)(y)}<2^{-k}.
+    \]
+    We define the function $N$ as follows:
+    \[
+        N(a,b,k) \stackrel{def}= \max\curlybrac{N_f(a,b,m), N_g(a,b,m)}
+    \]
+    where $m$ is computed using 
+    \[
+        m = \min_{m_1\in \Nats}\curlybrac{2^{-m_1}(\Max_{\abs{f}}(a,b,0)+ \Max_{\abs{g}}(a,b,0)+2)<2^{-k}}
+    \]
+    where $\Max_{\abs{f}}(a,b,0)$ and $\Max_{\abs{g}}(a,b,0)$ are overestimations for the maximum values of $\abs{f}(x) = \abs{f(x)}$ and $\abs{g}(x) = \abs{g(x)}$ on $[a,b]$ (Definition \ref{def::estimate_max_min_eluc_function_over_iunteval}). Note that such an $m$ must exist, and we can compute it by checking each natural number in ascending order.
+    This gives us:
+    \begin{align*}
+        \abs{(f \cdot g)(x) - (f \cdot g)(y)} &= \abs{g(x)f(x) - f(y)g(x) + f(y)g(x) - f(y)g(y)}\\
+        &\leq \abs{g(x)(f(x) - f(y)) + f(y)(g(x) - g(y))}\\
+        &\leq \abs{g(x)(f(x) - f(y))} + \abs{f(y)(g(x) - g(y))}\\
+        &\leq 2^{-m}\abs{g(x)} + 2^{-m}\abs{f(y)}\\
+        &\leq 2^{-m}(\abs{g(x)} + \abs{f(y)})\\
+        &\leq 2^{-m}(\Max_{\abs{g}}(a,b,0)+\Max_{\abs{f}}(a,b,0)+2)\\
+        & < 2^{-k}.  \tag{by defintion of $N(a,b,k)$}
+    \end{align*}
+\end{proof}

@@ -1,0 +1,41 @@
+\section{Continuity for Addition of Functions}
+
+\begin{theorem}[Continuity for addition]
+    \label{thm::effective_local_uniform_continuity_addition}
+    Let $f,g:\Reals\to\Reals$ be effectively locally uniformly continuous with respect to effective open exhaustions for their domains, respectively.
+    Then $(f+g)(x) = f(x)+g(x)$ is effectively locally uniformly continuous w.r.t. any effective open exhaustion for $\dom(f+g)$.
+\end{theorem}
+\begin{proof}
+    In this proof, we only work with the alternative characterization of effective local uniform continuity (Theorem \ref{thm::alternative_characterization_for_eluc}).
+    Let $f,g:\Reals\to\Reals$ be effectively locally uniformly continuous with recursive functions $N_f, N_g:\Rationals\times\Rationals\times\Nats\to\Nats$ in the alternative characterization, respectively.
+    We need to present a recursive function $N:\Rationals\times\Rationals\times\Nats\to\Nats$ that for all $a,b\in \Rationals$ with $[a,b]\subseteq \dom(f+g)$ satisfies
+    \[
+        \abs{x-y}<2^{-N(a,b,k)} \then \abs{(f+g)(x) - (f+g)(y)}<2^{-k}
+    \]
+    making the function $f+g$ effectively locally uniformly continuous.
+
+    Let us take an arbitrary $k\in\Nats$. For any $a,b\in \Rationals$, if $[a,b]\subseteq \dom(f+g)$ then $[a,b]\subseteq \dom(f)$ and $[a,b]\subseteq\dom(g)$.
+    This means that the function
+    \[
+        N(a,b,k) \stackrel{def}= N_f(a,b,k+1)+N_g(a,b,k+1)+1
+    \]
+    satisfies for $x,y\in (a,b)$ 
+    \[
+        \abs{x-y}<2^{-N(a,b,k)} \then \abs{(f+g)(x) - (f+g)(y)}<2^{-k}
+    \]
+    since for any $x,y \in (a,b)$ with $\abs{x-y}< 2^{-N(a,b,k)}= 2^{-(N_f(a,b,k+1)+N_g(a,b,k+1)+1)}$, we have 
+    \begin{equation*}
+        \abs{x-y}< 2^{-N_f(a,b,k+1)},
+    \end{equation*}
+    and 
+    \begin{equation*}
+        \abs{x-y}< 2^{-N_g(a,b,k+1)},     
+    \end{equation*}
+    hence:
+    \begin{align*}
+        \abs{(f+g)(x) - (f+g)(y)} &= \abs{f(x) + g(x) - f(y) - g(y)}\\
+        & \leq \abs{f(x) - f(y)} + \abs{g(x) - g(y)}\\
+        & < 2^{-k-1} + 2^{-k-1}\\
+        & =2^k
+    \end{align*}
+\end{proof}

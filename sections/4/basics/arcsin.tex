@@ -1,0 +1,38 @@
+
+\begin{theorem}
+    \label{thm::OEX_arcsin}
+       The function $\arcsin'$ is \effectivelyOpen{}. 
+    \end{theorem}
+    \begin{proof}
+        It suffices to show that $f(x) = \arcsin'(x)/\pi$ is \effectivelyOpen. 
+        Using Remark \ref{remark::OEX_for_interval_implies_OEX_for_all_open_sets},
+        we only need to prove that if $f^{-1}(I)$ has an effective open exhaustion for any $I =(a,b)$ with $a< b \in \mathbb{Q}$.
+       Let us consider the value of $a$ and $b$:
+        \begin{itemize}
+            \item $-1/2<a<b<1/2$:
+                The pre-image function for $\arcsin'$ is $\sin$. So we just need to construct an open exhaustion for $\sin(I)$.
+                We know that
+                \begin{itemize}
+                    \item The function $\sin$ is monotonically increasing on $(a,b)$.
+                    \item The function $\sin$ is \WhileCC-approximable (using Theorem \ref{theorem::log}).
+                    \item The function $\sin$ is defined on $(a,b)$.
+                \end{itemize}
+                Hence, Theorem \ref{thm::OEX_by_WCC_approximability} gives us an open exhaustion for $\sin(I)$.
+            \item $a,b> 1/2$ or $a,b<-1/2$:
+            Since $\arcsin'(x)\in [-\frac{\pi}{2}, \frac{\pi}{2}]$, we know that 
+            \[
+            (\arcsin')^{-1}(U) = (\arcsin')^{-1}(U\cap [-\frac{\pi}{2}, \frac{\pi}{2}]).
+            \]
+            So for such $I = (a,b)$, $(\arcsin')^{-1}(I) = \emptyset$.
+            \item $-1/2 <a < 1/2<b$:
+            We can use the Theorem \ref{thm::OEX_by_WCC_approximability} to get an open exhaustion for $\sin(I)$, but then at each stage, modify all the intervals $(a_i,b_i)$ to $(a_i, i+1)$ to cover $(1, +\infty)$.
+            \item $a < -1/2 <b < 1/2$:
+            We can use the Theorem \ref{thm::OEX_by_WCC_approximability} to get an open exhaustion for $\sin(I)$, but then at each stage, modify all the intervals $(a_i,b_i)$ to $(-i-1, b_i)$ to cover $(-\infty,-1)$.
+            \item $a < -1/2$ and $1/2<b$:
+            In this case, the open exhaustion is
+            \[
+            ((-1,1), \ldots, (-k-1, k+1), \ldots).
+            \]
+        \end{itemize}
+        This gives us an effective open exhaustion for $(\arcsin')^{-1}(U)$.
+    \end{proof}

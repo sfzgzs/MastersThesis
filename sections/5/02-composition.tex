@@ -1,0 +1,26 @@
+\section{Continuity for Composition of Functions}
+\label{sec::continuity_for_composition}
+In this section, we prove that the composition of any two effectively locally uniformly continuous functions is effectively locally uniformly continuous w.r.t the domain of the composition. In order to prove this, we first need to prove that the following forward coverage property follows from uniform local continuity.
+\input{sections/5/02-01-forward-coverage-property}
+\begin{theorem}[Continuity for composition]
+\label{thm::effective_local_uniform_continuity_composition} 
+    Let $f,g:\Reals\to\Reals$ be \WhileCC-approximable and effectively locally uniformly continuous w.r.t effective open exhaustions for their domains respectively.
+    Let $X$ be an effective open exhaustion for $\dom(f\circ g)$. Then the function $f\circ g$ is effectively locally uniformly continuous with respect to $X$.
+\end{theorem}
+\begin{proof}
+    Let $f,g:\Reals\to\Reals$ be \WhileCC-approximable and effectively locally uniformly continuous with respect to effective open exhaustions $(U^g_n)_{n\in\Nats}$ and $(U^f_n)_{n\in\Nats}$ with recursive functions $N_f, N_g$ respectively.
+    Let $X=(U_1, U_2, \ldots)$ be an effective open exhaustion for $\dom(f\circ g)$. Then we need to show that there is a recursive function $N:\Nats\times\Nats\to\Nats$ that for $x,y\in U_l$ satisfies
+    \[
+    \abs{x-y}<2^{-N(k,l)} \then \abs{f(g(x)) - f(g(y))}<2^{-k}
+    \]
+    making the function $f\circ g$ effectively locally uniformly continuous with respect to $X$.
+    Let $x,y\in U_l$ for some $l\in\Nats$. Since $\dom(f\circ g) \subseteq \dom(g)$, for any $l\in \Nats$, the $l$th stage of our exhaustion for $\dom(f\circ g)$ is contained in some stage with index $l'$ of the exhaustion for $U^g$. Note that the index $l'$ can be found recursively by going through each stage of $U^g$ and checking whether it contains all the intervals in $U_l$.
+    Also, let $l''$ be the index of some stage of the exhaustion for $U^f$ such that $g(U_l) \subseteq U_{l''}^f$. By Corollary \ref{corollary::eluc_functions_satisfy_forward_coverage_property}, such $l''$ is recursively attainable from $l$.
+    Let us define $N(k,l) \stackrel{def}= N_g(N_f(k,l''),l')$. Then 
+    \begin{align*}
+        &\abs{x-y}<2^{-N(k,l)} = 2^{-N_g(N_f(k,l''),l')}\\
+        \then & \abs{g(x)-g(y)} < 2^{-N_f(k,l'')}\\
+        \then & \abs{f(g(x))-f(g(y))}<2^{-k}
+    \end{align*}
+    which gives us effective local uniform continuity of $f\circ g$.
+\end{proof} 
